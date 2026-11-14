@@ -36,7 +36,7 @@ function PieceShape({ p, x, y, r, color }: { p: PieceDef; x: number; y: number; 
   }
 }
 
-export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; st: GState; viewer: number | 'all'; canAct: boolean; onInput: (i: Input) => void }) {
+export function GameView({ def, st, viewer, canAct, onInput, onExplain }: { def: GameDef; st: GState; viewer: number | 'all'; canAct: boolean; onInput: (i: Input) => void; onExplain?: (i: Input) => void }) {
   const lang = useLang(), t = useT();
   const [sel, setSel] = useState<number | null>(null);
   /** A card waiting for its cell, in games where cards are played onto the board. */
@@ -60,6 +60,7 @@ export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; s
     if (sel !== null && targets.has(i)) return send({ k: 'move', from: sel, to: i });
     if (clicks.has(i)) return send({ k: 'click', cell: i });
     if (froms.has(i)) return setSel(sel === i ? null : i);
+    if (canAct && onExplain) onExplain(sel !== null ? { k: 'move', from: sel, to: i } : { k: 'click', cell: i });
     setSel(null);
   };
 

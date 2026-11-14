@@ -1,14 +1,16 @@
 import './workshop.css';
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useLang, useT } from '../core/i18n';
 import { sfx } from '../core/sound';
 import { loadJSON, saveJSON } from '../core/storage';
 import { Pick, Seg } from '../ui/bits';
 import { chooseInput, LEVELS } from './ai';
-import { apply, canon, newGame, txt, validate, type GameDef, type GState, type Input } from './engine';
+import { applyTraced, canon, explainInput, newGame, txt, validate, type GameDef, type GState, type Input } from './engine';
 import { EXAMPLES } from './examples';
 import { GameView, playerColor, playerName } from './GameView';
 import { MaterialsEditor } from './MaterialsEditor';
+import { decodeGame, encodeGame, shareLink } from './share';
+import { WatchLog, WhyPanel, type LogEntry, type Why } from './Watch';
 
 type Seat = 'h' | number;
 // Blockly is large, so the block editor loads only when its tab is opened.
@@ -24,7 +26,7 @@ const BLANK: GameDef = {
   rules: [{ on: 'click', when: { op: 'empty', cell: { op: 'get', name: 'cell' } }, do: [{ op: 'place', piece: 'stone', cell: { op: 'get', name: 'cell' } }, { op: 'if', test: { op: 'line', cell: { op: 'get', name: 'cell' }, n: 4 }, then: [{ op: 'win' }] }] }],
 };
 
-export function Workshop() {
+export function Workshop({ incoming }: { incoming?: string }) {
   const t = useT(), lang = useLang();
   const [mine, setMine] = useState<GameDef[]>(() => loadJSON<GameDef[]>(MINE, []));
   const all = useMemo(() => [...EXAMPLES, ...mine], [mine]);
@@ -44,6 +46,18 @@ export function Workshop() {
   const [src, setSrc] = useState('');
   const [errs, setErrs] = useState<string[]>([]);
   const [note, setNote] = useState('');
+  // Watching rules: a log of what each move triggered, and why a tap did nothing.
+  const [watch, setWatch] = useState(() => loadJSON<boolean>('gp.workshop.watch', false));
+  const [hold, setHold] = useState(false);
+  const [log, setLog] = useState<LogEntry[]>([]);
+  const [why, setWhy] = useState<Why | null>(null);
+  const [focus, setFocus] = useState<{ rule: number; paths: string[] } | null>(null);
+  const logId = useRef(0);
+  // Sharing.
+  const [link, setLink] = useState('');
+  const [paste, setPaste] = useState('');
+  const [shareNote, setShareNote] = useState('');
+  useEffect(() => { saveJSON('gp.workshop.watch', watch); }, [watch]);
 
   useEffect(() => { saveJSON(MINE, mine); }, [mine]);
   useEffect(() => { saveJSON('gp.workshop.pick', def.id); }, [def.id]);
@@ -54,20 +68,50 @@ export function Workshop() {
     setSrc(JSON.stringify(def, null, 2));
     setErrs([]); setNote('');
     setSt(newGame(def, n));
+    setLog([]); setWhy(null); setLink('');
   }, [def]);
+
+  /** A shared game: add it to the player's games and open it. */
+  const adopt = (d: GameDef) => {
+    const id = d.id.startsWith('ex-') ? d.id.replace(/^ex-/, 'shared-') : d.id;
+    const exists = mine.find(x => x.id === id);
+    const fresh: GameDef = exists && canon(exists) !== canon({ ...d, id }) ? { ...d, id: id + '-' + Date.now().toString(36) } : { ...d, id };
+    setMine(m => [...m.filter(x => x.id !== fresh.id), fresh]);
+    setDefId(fresh.id);
+    setTab('play');
+    setShareNote(t(`“${txt(fresh.name, 'en')}” was added to your games.`, `“${txt(fresh.name, 'zh')}”已加入你的游戏。`, `“${txt(fresh.name, 'tr')}” oyunlarına eklendi.`));
+  };
+  const took = useRef(false);
+  useEffect(() => {
+    if (!incoming || took.current) return;
+    took.current = true;
+    decodeGame(incoming).then(adopt, e => setShareNote(t('This link does not hold a game: ', '这个链接里没有游戏：', 'Bu linkte oyun yok: ') + (e as Error).message));
+    try { history.replaceState(null, '', '#workshop'); } catch { /* the address stays as it was */ }
+  }, [incoming]); // eslint-disable-line
 
   const seatOf = (p: number): Seat => (def.players.max === 1 ? 'h' : seats[p]);
   const humans = st ? Array.from({ length: st.players }, (_, p) => p).filter(p => seatOf(p) === 'h') : [];
   const aiTurn = !!st && !st.over && seatOf(st.turn) !== 'h';
   const viewer: number | 'all' = !st ? 'all' : seatOf(st.turn) === 'h' ? st.turn : humans.length ? humans[0] : 'all';
 
-  const play = (i: Input) => setGame(g => {
-    if (!g || g.def !== def) return g;
-    const s = g.st, n = apply(def, s, i);
+  const play = (i: Input) => {
+    if (!game || game.def !== def) return;
+    const s = game.st, { state: n, trace } = applyTraced(def, s, i);
     if (n.over && !s.over) sfx(n.over.winner >= 0 && seatOf(n.over.winner) === 'h' ? 'win' : n.over.winner < 0 ? 'draw' : 'lose');
     else sfx(i.k === 'roll' ? 'dice' : i.k === 'card' || i.k === 'zone' ? 'card' : 'stone', 0.6);
-    return { def, st: n, hist: [...g.hist.slice(-200), s] };
-  });
+    setGame({ def, st: n, hist: [...game.hist.slice(-200), s] });
+    setWhy(null);
+    if (watch) setLog(l => [...l.slice(-29), { id: ++logId.current, who: s.turn, input: i, trace }]);
+  };
+  /** A tap that did nothing: while watching, say which rules were asked and why none applied. */
+  const explain = (i: Input) => { if (watch && st) setWhy({ input: i, items: explainInput(def, st, i) }); };
+  const openRule = (rule: number, paths: string[] = []) => { setFocus({ rule, paths: ['r' + rule, ...paths.map(p => `r${rule}.${p}`)] }); setTab('blocks'); };
+  const share = async () => {
+    try { const code = await encodeGame(def); setLink(shareLink(code)); setShareNote(''); }
+    catch { setShareNote(t('This browser cannot make share codes.', '此浏览器无法生成分享码。', 'Bu tarayıcı paylaşım kodu oluşturamıyor.')); }
+  };
+  const copyLink = () => { navigator.clipboard?.writeText(link).then(() => setShareNote(t('Link copied.', '链接已复制。', 'Link kopyalandı.')), () => setShareNote(t('Select the link and copy it by hand.', '请手动选择并复制链接。', 'Linki seçip elle kopyala.'))); };
+  const importCode = () => { decodeGame(paste).then(d => { setPaste(''); adopt(d); }, e => setShareNote(t('Not a game code: ', '不是游戏码：', 'Oyun kodu değil: ') + (e as Error).message)); };
   /** Back to the last position where a person was to move. */
   const undo = () => setGame(g => {
     if (!g || !g.hist.length) return g;
@@ -82,11 +126,11 @@ export function Workshop() {
   const secret = Object.values(def.zones ?? {}).some(z => z.show === 'owner') && humans.length > 1;
   const passing = !!st && secret && !st.over && seatOf(st.turn) === 'h' && seenBy !== st.turn;
   useEffect(() => {
-    if (!aiTurn || !st) return;
+    if (!aiTurn || !st || hold) return;
     const level = seatOf(st.turn) as number;
     const id = setTimeout(() => { const m = chooseInput(def, st, level, { ms: 1200 }); if (m) play(m); }, 450);
     return () => clearTimeout(id);
-  }, [st, aiTurn]); // eslint-disable-line
+  }, [st, aiTurn, hold]); // eslint-disable-line
 
   const restart = () => { setSeenBy(null); setSt(newGame(def, count)); };
   const load = (save: boolean) => {
@@ -136,6 +180,7 @@ export function Workshop() {
           'Kendi oyunlarını ve bulmacalarını yap. Önce malzemeleri hazırla (boyayarak tasarladığın tahta, taşlar, kartlar, zar, sayaçlar), sonra kuralları bloklarla kur: “şu olunca, şu doğruysa, şunları yap”. Hemen bilgisayara ya da bir arkadaşına karşı dene.')}</p>
       </header>
 
+      {shareNote && tab !== 'play' && <p className="wk-msg" role="status">{shareNote}</p>}
       <div className="wk-picker" role="list">
         {all.map(d => (
           <button key={d.id} type="button" role="listitem" id={'wk-pick-' + d.id} className={'wk-pick' + (d.id === def.id ? ' on' : '')} onClick={() => setDefId(d.id)}>
@@ -159,7 +204,8 @@ export function Workshop() {
           <div className="play-main">
             <div className="statline"><span role="status" aria-live="polite">{st.players > 1 && !st.over && <i className="wk-dot" style={{ background: playerColor(def, st.turn) }} />}{status}</span>
               {st.msg && <span className="wk-msg">{txt(st.msg, lang)}</span>}</div>
-            <GameView def={def} st={st} viewer={passing ? -1 : viewer} canAct={!aiTurn && !passing} onInput={play} />
+            <GameView def={def} st={st} viewer={passing ? -1 : viewer} canAct={!aiTurn && !passing} onInput={play} onExplain={watch ? explain : undefined} />
+            {why && <WhyPanel def={def} why={why} onClose={() => setWhy(null)} onOpen={r => openRule(r)} />}
             {passing && (
               <div className="wk-pass" role="dialog" aria-modal="true" aria-labelledby="wk-pass-h">
                 <div>
@@ -190,13 +236,35 @@ export function Workshop() {
               <button type="button" className="btn" id="wk-undo" disabled={!canUndo} onClick={undo}>↶ {t('Undo', '悔棋', 'Geri al')}</button>
               <button type="button" className="btn primary" id="wk-restart" onClick={restart}>{st.over ? t('Play again', '再来一局', 'Tekrar oyna') : t('Restart', '重新开始', 'Yeniden başla')}</button>
             </div>
+            <div className="setup">
+              <h3>{t('Test', '测试', 'Test')}</h3>
+              <label className="check"><input type="checkbox" id="wk-watch" checked={watch} onChange={e => { setWatch(e.target.checked); setWhy(null); }} /> {t('Watch the rules', '观察规则', 'Kuralları izle')}</label>
+              {seats.slice(0, count).some(x => x !== 'h') && def.players.max > 1 && <>
+                <label className="check"><input type="checkbox" id="wk-hold" checked={hold} onChange={e => setHold(e.target.checked)} /> {t('Computer waits for me', '电脑等我', 'Bilgisayar beklesin')}</label>
+                {hold && aiTurn && <button type="button" className="btn" id="wk-step" onClick={() => { const m = chooseInput(def, st, seatOf(st.turn) as number, { ms: 1200 }); if (m) play(m); }}>▶ {t('Computer’s move', '电脑走一步', 'Bilgisayar oynasın')}</button>}
+              </>}
+              {watch && <WatchLog def={def} log={log} onOpen={openRule} onClear={() => setLog([])} />}
+            </div>
+            <div className="setup">
+              <h3>{t('Share', '分享', 'Paylaş')}</h3>
+              <button type="button" className="btn" id="wk-share" onClick={share}>{t('Make a share link', '生成分享链接', 'Paylaşım linki oluştur')}</button>
+              {link && <>
+                <input className="wk-linkbox" id="wk-link" readOnly value={link} onFocus={e => e.target.select()} aria-label={t('Share link', '分享链接', 'Paylaşım linki')} />
+                <button type="button" className="btn sm" id="wk-copylink" onClick={copyLink}>{t('Copy', '复制', 'Kopyala')}</button>
+                <p className="muted small">{t('Anyone who opens the link gets this game in their Workshop. The link opens the public site.', '打开链接的人会在自己的工坊里得到这个游戏。链接指向公开网站。', 'Linki açan herkes bu oyunu kendi Atölyesine alır. Link herkese açık siteyi açar.')}</p>
+              </>}
+              <label className="wk-f"><span>{t('Got a code or link? Paste it here', '有分享码或链接？粘贴到这里', 'Kod ya da link mi geldi? Buraya yapıştır')}</span>
+                <input id="wk-paste" value={paste} onChange={e => setPaste(e.target.value)} placeholder="workshop-g-…" /></label>
+              <button type="button" className="btn sm" id="wk-import" disabled={paste.trim().length < 8} onClick={importCode}>{t('Add the game', '添加游戏', 'Oyunu ekle')}</button>
+              {shareNote && <p className="muted small" role="status">{shareNote}</p>}
+            </div>
           </aside>
         </div>
       )}
 
       {tab === 'blocks' && (
         <Suspense fallback={<p className="muted">{t('Loading the block editor…', '正在加载积木编辑器…', 'Blok düzenleyici yükleniyor…')}</p>}>
-          <BlockEditor def={def} onApply={applyRules} />
+          <BlockEditor def={def} onApply={applyRules} focus={focus} />
         </Suspense>
       )}
 

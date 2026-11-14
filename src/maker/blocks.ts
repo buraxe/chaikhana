@@ -138,33 +138,34 @@ export function exprBlock(e: Expr, lang: Lang): BlockState {
   if (typeof e === 'boolean') return { type: 'lit_bool', fields: { BOOL: e ? 'TRUE' : 'FALSE' } };
   return opBlock(e as Record<string, unknown>, EXPRS, 'e_', lang);
 }
-function opBlock(n: Record<string, unknown>, table: Record<string, Spec>, prefix: string, lang: Lang): BlockState {
+function opBlock(n: Record<string, unknown>, table: Record<string, Spec>, prefix: string, lang: Lang, id?: string): BlockState {
   const spec = table[String(n.op)];
   if (!spec) return { type: 'lit_text', fields: { TEXT: `?${String(n.op)}` } };
   const fields: Record<string, unknown> = {}, inputs: Record<string, { block: BlockState }> = {}, keep: Record<string, unknown> = {};
   for (const [k, kind] of Object.entries(spec.args)) {
     const v = n[k];
     if (kind === 'e') { if (v !== undefined) inputs[k] = { block: exprBlock(v as Expr, lang) }; }
-    else if (kind === 'a') { const chain = actsChain(v as Act[], lang); if (chain) inputs[k] = { block: chain }; }
+    else if (kind === 'a') { const chain = actsChain(v as Act[], lang, id && `${id}.${k}`); if (chain) inputs[k] = { block: chain }; }
     else if (kind === 'text') { fields[k] = txt(v as Text, lang); if (typeof v === 'object' && v) keep[k] = v; }
     else fields[k] = v === undefined ? ANY : String(v);
   }
-  const b: BlockState = { type: prefix + String(n.op) };
+  const b: BlockState = { type: prefix + String(n.op), ...(id ? { id } : {}) };
   if (Object.keys(fields).length) b.fields = fields;
   if (Object.keys(inputs).length) b.inputs = inputs;
   return withData(b, keep);
 }
-export function actsChain(list: Act[] | undefined, lang: Lang): BlockState | undefined {
+/** idBase: action blocks get ids like "r0.do.1.then.0", the same paths the engine reports when watching rules. */
+export function actsChain(list: Act[] | undefined, lang: Lang, idBase?: string): BlockState | undefined {
   if (!Array.isArray(list) || !list.length) return undefined;
   let head: BlockState | undefined;
   for (let i = list.length - 1; i >= 0; i--) {
-    const b = opBlock(list[i] as unknown as Record<string, unknown>, ACTS, 'a_', lang);
+    const b = opBlock(list[i] as unknown as Record<string, unknown>, ACTS, 'a_', lang, idBase && `${idBase}.${i}`);
     if (head) b.next = { block: head };
     head = b;
   }
   return head;
 }
-export function ruleBlock(r: Rule, lang: Lang): BlockState {
+export function ruleBlock(r: Rule, lang: Lang, index?: number): BlockState {
   const fields: Record<string, unknown> = { name: txt(r.name, lang) };
   if (r.on === 'click' || r.on === 'enter') fields.cellType = r.cellType ?? ANY;
   if (r.on === 'move') { fields.reach = r.reach ?? 0; fields.anyPiece = !!r.anyPiece; }
@@ -173,12 +174,12 @@ export function ruleBlock(r: Rule, lang: Lang): BlockState {
   if (r.on === 'button') fields.button = r.button ?? ANY;
   const inputs: Record<string, { block: BlockState }> = {};
   if (r.when !== undefined) inputs.when = { block: exprBlock(r.when, lang) };
-  const chain = actsChain(r.do, lang);
+  const chain = actsChain(r.do, lang, index === undefined ? undefined : `r${index}.do`);
   if (chain) inputs.do = { block: chain };
-  return withData({ type: 'rule_' + r.on, fields, inputs }, typeof r.name === 'object' ? { name: r.name } : {});
+  return withData({ type: 'rule_' + r.on, ...(index === undefined ? {} : { id: 'r' + index }), fields, inputs }, typeof r.name === 'object' ? { name: r.name } : {});
 }
 export function rulesToWorkspace(rules: Rule[], lang: Lang): WorkspaceState {
-  return { blocks: { languageVersion: 0, blocks: rules.map((r, i) => ({ ...ruleBlock(r, lang), x: 16, y: 16 + i * 160 })) } };
+  return { blocks: { languageVersion: 0, blocks: rules.map((r, i) => ({ ...ruleBlock(r, lang, i), x: 16, y: 16 + i * 160 })) } };
 }
 
 // ───────────────────────────── Blocks → rules ─────────────────────────────

@@ -109,3 +109,25 @@ input[type=color] { width: 36px; height: 32px; padding: 2px; border: 1px solid v
 .wk-f select, .wk-item select { width: auto; max-width: 100%; flex: 0 1 auto; }
 .wk-item .wk-f { flex-direction: row; align-items: center; }
 .wk-sec > .wk-f.wide { flex: none; }
+.wk-why { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-left: 4px solid var(--lamp-on); border-radius: 4px; background: var(--surface); font-size: .9rem; }
+.wk-why > header, .wk-log > header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.wk-whylist, .wk-loglist { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.wk-whylist > li { display: flex; flex-direction: column; gap: 3px; }
+.wk-rulelink { padding: 0; border: 0; background: none; color: var(--ink); font: inherit; font-weight: 600; text-align: left; cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.wk-ok { color: #2f7d3a; } .wk-bad { color: var(--bad); }
+.wk-tree, .wk-tree ul { margin: 2px 0 0; padding-left: 14px; list-style: none; border-left: 1px dashed var(--line); }
+.wk-tl { padding: 2px 0; font-size: .84rem; }
+.wk-tl > span:first-child { margin-right: 6px; }
+.wk-tl.no > span:first-child { color: var(--bad); }
+.wk-tl.yes > span:first-child { color: #2f7d3a; }
+.wk-tv { padding: 0 4px; border-radius: 3px; background: var(--sunk); font-weight: 600; }
+.wk-tres { color: var(--muted); font-size: .8rem; }
+.wk-log { font-size: .86rem; }
+.wk-loglist { max-height: 340px; overflow-y: auto; }
+.wk-loglist > li { padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.wk-loghead { display: flex; align-items: center; gap: 6px; font-weight: 600; margin-bottom: 2px; }
+.wk-loglist ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 2px; }
+.wk-loglist li.ran .small { color: #2f7d3a; }
+.wk-loglist li.skip { opacity: .7; }
+.wk-loglist li .small { margin-left: 6px; }
+.wk-linkbox { width: 100%; min-height: 34px; padding: 4px 8px; font: .8rem ui-monospace, Menlo, monospace; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 2px; }

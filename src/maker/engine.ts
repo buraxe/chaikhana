@@ -246,7 +246,15 @@ export function zoneOfKey(key: string): [string, number] {
 
 const MAX_STEPS = 200_000, MAX_DEPTH = 24;
 class GameError extends Error {}
-interface Ctx { def: GameDef; c: Compiled; st: GState; b: Record<string, Val>; steps: { n: number }; depth: number }
+interface Ctx { def: GameDef; c: Compiled; st: GState; b: Record<string, Val>; steps: { n: number }; depth: number; rule?: number }
+
+/** What happened while an input was played: each rule looked at, and each action run, by its place in the rule. */
+export type Trace =
+  | { kind: 'rule'; rule: number; event: EventName; ran: boolean; why?: 'cellType' | 'zone' | 'button' | 'target' | 'when' | 'error' }
+  | { kind: 'act'; rule: number; path: string; op: string };
+let TRACE: Trace[] | null = null;
+const MAX_TRACE = 400;
+const note = (t: Trace) => { if (TRACE && TRACE.length < MAX_TRACE) TRACE.push(t); };
 
 function rand(st: GState): number {
   st.seed = (st.seed + 0x6d2b79f5) >>> 0;
@@ -454,9 +462,11 @@ function takeCard(st: GState, card: number) {
   for (const z of Object.values(st.zones)) { const i = z.indexOf(card); if (i >= 0) { z.splice(i, 1); return; } }
 }
 
-function run(x: Ctx, acts: unknown): void {
+function run(x: Ctx, acts: unknown, path = 'do'): void {
   if (!Array.isArray(acts)) return;
-  for (const a of acts as Act[]) {
+  for (let ai = 0; ai < acts.length; ai++) {
+    const a = acts[ai] as Act, here = `${path}.${ai}`;
+    if (x.rule !== undefined) note({ kind: 'act', rule: x.rule, path: here, op: a.op });
     if (x.st.over) return;
     if (++x.steps.n > MAX_STEPS) throw new GameError('too many steps (a rule may loop forever)');
     const n = a as Record<string, unknown>, g = (k: string) => ev(x, n[k] as Expr), gn = (k: string) => num(g(k)), st = x.st;
@@ -502,12 +512,12 @@ function run(x: Ctx, acts: unknown): void {
       case 'draw': st.over = { winner: -1 }; break;
       case 'end': st.endNow = true; break;
       case 'again': st.again = true; break;
-      case 'if': run(x, truthy(g('test')) ? n.then : n.else); break;
-      case 'repeat': { const k = Math.min(1000, gn('times')), was = x.b.i; for (let i = 1; i <= k && !st.over; i++) { x.b.i = i; run(x, n.do); } x.b.i = was; break; }
-      case 'while': { for (let k = 0; k < 1000 && !st.over && truthy(g('test')); k++) run(x, n.do); break; }
+      case 'if': { const yes = truthy(g('test')); run(x, yes ? n.then : n.else, here + (yes ? '.then' : '.else')); break; }
+      case 'repeat': { const k = Math.min(1000, gn('times')), was = x.b.i; for (let i = 1; i <= k && !st.over; i++) { x.b.i = i; run(x, n.do, here + '.do'); } x.b.i = was; break; }
+      case 'while': { for (let k = 0; k < 1000 && !st.over && truthy(g('test')); k++) run(x, n.do, here + '.do'); break; }
       case 'forDirs': {
         const all = x.c.hex ? HEX_DIRS : SQ_DIRS, was = x.b.dir;
-        for (const d of dirsOf(x.c, n.orth !== undefined && truthy(g('orth')))) { if (st.over) break; x.b.dir = all.indexOf(d); run(x, n.do); }
+        for (const d of dirsOf(x.c, n.orth !== undefined && truthy(g('orth')))) { if (st.over) break; x.b.dir = all.indexOf(d); run(x, n.do, here + '.do'); }
         x.b.dir = was;
         break;
       }
@@ -522,12 +532,12 @@ function run(x: Ctx, acts: unknown): void {
         for (let c = 0; c < x.c.cells; c++) {
           if (x.c.hole[c]) continue;
           const inner: Ctx = { ...x, b: { ...x.b, it: c } };
-          if (n.where === undefined || truthy(ev(inner, n.where as Expr))) run(inner, n.do);
+          if (n.where === undefined || truthy(ev(inner, n.where as Expr))) run(inner, n.do, here + '.do');
           if (st.over) return;
         }
         break;
       case 'forPlayers':
-        for (let p = 0; p < st.players && !st.over; p++) run({ ...x, b: { ...x.b, p } }, n.do);
+        for (let p = 0; p < st.players && !st.over; p++) run({ ...x, b: { ...x.b, p } }, n.do, here + '.do');
         break;
       case 'let': x.b[String(n.name)] = g('value'); break;
       case 'fill': {
@@ -572,20 +582,23 @@ function fire(x: Ctx, rules: Rule[], cell = -1, zone = '', button = '', tgt: boo
   let k = 0;
   for (const r of rules) {
     if (x.st.over) break;
-    if (!matches(x, r, cell, zone, button, tgt)) continue;
+    const why = whyNot(x, r, cell, zone, button, tgt), idx = x.def.rules.indexOf(r);
+    note({ kind: 'rule', rule: idx, event: r.on, ran: why === null, ...(why ? { why } : {}) });
+    if (why) continue;
     k++;
-    run({ ...x, b: { ...x.b } }, r.do);
+    run({ ...x, b: { ...x.b }, rule: idx }, r.do);
   }
   return k;
 }
-/** tgt: for cards, whether the input names a cell (only rules with target "cell" take one). */
-function matches(x: Ctx, r: Rule, cell: number, zone: string, button: string, tgt: boolean | null = null): boolean {
-  if (tgt !== null && (r.target === 'cell') !== tgt) return false;
-  if (r.cellType !== undefined && (cell < 0 || x.c.type[cell] !== r.cellType)) return false;
-  if (r.zone !== undefined && r.zone !== zone) return false;
-  if (r.button !== undefined && r.button !== button) return false;
-  return r.when === undefined || truthy(ev(x, r.when));
+/** Why a rule does not apply right now (null when it does). tgt: for cards, whether the input names a cell. */
+function whyNot(x: Ctx, r: Rule, cell: number, zone: string, button: string, tgt: boolean | null = null): 'cellType' | 'zone' | 'button' | 'target' | 'when' | null {
+  if (tgt !== null && (r.target === 'cell') !== tgt) return 'target';
+  if (r.cellType !== undefined && (cell < 0 || x.c.type[cell] !== r.cellType)) return 'cellType';
+  if (r.zone !== undefined && r.zone !== zone) return 'zone';
+  if (r.button !== undefined && r.button !== button) return 'button';
+  return r.when === undefined || truthy(ev(x, r.when)) ? null : 'when';
 }
+const matches = (x: Ctx, r: Rule, cell: number, zone: string, button: string, tgt: boolean | null = null) => whyNot(x, r, cell, zone, button, tgt) === null;
 
 // ───────────────────────────── Game flow ─────────────────────────────
 
@@ -739,6 +752,48 @@ export function apply(def: GameDef, st0: GState, inp: Input): GState {
     settle(def, st);
   });
   return st;
+}
+
+/** Plays one input and also reports which rules were looked at and which actions ran. */
+export function applyTraced(def: GameDef, st: GState, inp: Input): { state: GState; trace: Trace[] } {
+  TRACE = [];
+  try { const state = apply(def, st, inp); return { state, trace: TRACE }; } finally { TRACE = null; }
+}
+
+/** A condition taken apart: each block's inputs and the value it came to. */
+export interface ExprTree { op: string; value: Val; args: Record<string, ExprTree | Val>; text?: Record<string, string> }
+function treeOf(x: Ctx, e: Expr, depth: number): ExprTree | Val {
+  let value: Val;
+  try { value = ev(x, e); } catch { value = '?'; }
+  if (typeof e !== 'object' || e === null) return value;
+  const n = e as Record<string, unknown>, spec = EXPRS[String(n.op)], args: Record<string, ExprTree | Val> = {}, text: Record<string, string> = {};
+  // Inside "any direction" the parts depend on a direction that only exists while it loops; show just the result.
+  const loops = n.op === 'anyDir' || n.op === 'sumDirs';
+  if (spec) for (const [k, kind] of Object.entries(spec.args)) {
+    if (n[k] === undefined || (loops && (k === 'test' || k === 'value'))) continue;
+    if (kind === 'e') args[k] = depth > 0 ? treeOf(x, n[k] as Expr, depth - 1) : (() => { try { return ev(x, n[k] as Expr); } catch { return '?'; } })();
+    else text[k] = String(n[k]);
+  }
+  return { op: String(n.op), value, args, text };
+}
+export interface Explained { rule: number; why: 'cellType' | 'zone' | 'button' | 'target' | 'when' | null; cond?: ExprTree | Val }
+/** For an input that did nothing (or might): each rule it could trigger and why it does or does not. */
+export function explainInput(def: GameDef, st: GState, inp: Input): Explained[] {
+  const c = compile(def), x = ctx(def, st);
+  let ev2: EventName, cell = -1, zone = '', button = '', tgt: boolean | null = null;
+  switch (inp.k) {
+    case 'click': ev2 = 'click'; cell = inp.cell; x.b = { cell }; break;
+    case 'move': ev2 = 'move'; cell = inp.from; x.b = { from: inp.from, to: inp.to }; break;
+    case 'roll': ev2 = 'roll'; break;
+    case 'card': ev2 = 'card'; zone = zoneOfKey(inp.zone)[0]; cell = inp.cell ?? -1; tgt = inp.cell !== undefined; x.b = { card: inp.card, zone, cell }; break;
+    case 'zone': ev2 = 'zone'; zone = zoneOfKey(inp.zone)[0]; x.b = { zone }; break;
+    case 'button': ev2 = 'button'; button = inp.id; x.b = { button }; break;
+  }
+  return c.byEvent[ev2].map(r => {
+    let why: Explained['why'];
+    try { why = whyNot(x, r, cell, zone, button, tgt); } catch { why = 'when'; }
+    return { rule: def.rules.indexOf(r), why, ...(r.when !== undefined ? { cond: treeOf(x, r.when, 4) } : {}) };
+  });
 }
 
 /** Each human-facing seat: does the player see this zone's cards? */

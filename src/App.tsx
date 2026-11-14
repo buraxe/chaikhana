@@ -40,7 +40,8 @@ export default function App() {
 
   const gameId = route.replace(/-daily$/, '');
   const lesson = route.startsWith('learn-') ? route.slice(6) : '';
-  const section = PLAYABLE.has(gameId) ? '' : lesson ? 'learn' : route === 'tournament' ? 'local-play' : route;
+  const shared = route.startsWith('workshop-g-') ? route : '';
+  const section = PLAYABLE.has(gameId) ? '' : lesson ? 'learn' : route === 'tournament' ? 'local-play' : shared ? 'workshop' : route;
   let page;
   if (PLAYABLE.has(gameId)) page = <GamePage key={route} id={gameId} daily={route.endsWith('-daily')} />;
   else if (route === 'puzzles') page = <Library key="p" title={t('Puzzles', '谜题', 'Bulmacalar')} categories={['logic', 'spatial', 'chinese']} />;
@@ -52,7 +53,7 @@ export default function App() {
   else if (route === 'profile') page = <ProfilePage />;
   else if (route === 'coffeehouse') page = <Coffeehouse />;
   else if (route === 'tournament') page = <Tournament />;
-  else if (route === 'workshop') page = <Workshop />;
+  else if (route === 'workshop' || shared) page = <Workshop incoming={shared || undefined} />;
   else page = <Home />;
 
   return (

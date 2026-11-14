@@ -28,7 +28,7 @@ function theme(): Blockly.Theme {
   } as Parameters<typeof Blockly.Theme.defineTheme>[1]);
 }
 
-export default function BlockEditor({ def, onApply }: { def: GameDef; onApply: (rules: Rule[]) => void }) {
+export default function BlockEditor({ def, onApply, focus }: { def: GameDef; onApply: (rules: Rule[]) => void; focus?: { rule: number; paths: string[] } | null }) {
   const lang = useLang(), t = useT();
   const host = useRef<HTMLDivElement>(null), ws = useRef<Blockly.WorkspaceSvg | null>(null);
   const [rules, setRules] = useState<Rule[]>(def.rules);
@@ -55,8 +55,10 @@ export default function BlockEditor({ def, onApply }: { def: GameDef; onApply: (
     ws.current = w;
     Blockly.serialization.workspaces.load(rulesToWorkspace(def.rules, lang) as object, w);
     w.cleanUp();
-    // Start at the top of the first rule.
-    const first = w.getTopBlocks(true)[0];
+    // Start at the top of the first rule, or of the rule being looked at from the rule log, with its blocks lit.
+    const target = focus ? w.getBlockById('r' + focus.rule) : null;
+    if (focus) for (const id of focus.paths) if (w.getBlockById(id)) w.highlightBlock(id, true);
+    const first = target ?? w.getTopBlocks(true)[0];
     if (first) { const xy = first.getRelativeToSurfaceXY(), sc = w.scale; w.scroll(-xy.x * sc + 12, -xy.y * sc + 12); }
     setRules(def.rules); setErrs([]); setLoose(0); setDirty(false);
     let timer = 0;
@@ -73,13 +75,13 @@ export default function BlockEditor({ def, onApply }: { def: GameDef; onApply: (
       timer = window.setTimeout(read, 250);
     });
     return () => { clearTimeout(timer); w.dispose(); ws.current = null; };
-  }, [def, lang, generation]);
+  }, [def, lang, generation, focus]);
 
   return (
     <div className="wk-blocks">
-      <p className="muted small">{t('Drag blocks from the left. Each rule starts with an orange “When …” block; rules run from top to bottom. The dropdowns list this game’s own pieces, zones and counters; its materials are still edited in JSON for now.',
-        '从左侧拖出积木。每条规则以橙色的“当……时”积木开头；规则自上而下依次执行。下拉菜单列出本游戏自己的棋子、区域和计数器；材料目前仍在JSON中编辑。',
-        'Blokları soldan sürükle. Her kural turuncu bir “… olunca” bloğuyla başlar; kurallar yukarıdan aşağı sırayla çalışır. Açılır listelerde bu oyunun kendi taşları, alanları ve sayaçları var; malzemeler şimdilik JSON’da düzenleniyor.')}</p>
+      <p className="muted small">{t('Drag blocks from the left. Each rule starts with an orange “When …” block; rules run from top to bottom. The dropdowns list this game’s own pieces, zones and counters, which you set up under Materials.',
+        '从左侧拖出积木。每条规则以橙色的“当……时”积木开头；规则自上而下依次执行。下拉菜单列出本游戏自己的棋子、区域和计数器，它们在“材料”中设置。',
+        'Blokları soldan sürükle. Her kural turuncu bir “… olunca” bloğuyla başlar; kurallar yukarıdan aşağı sırayla çalışır. Açılır listelerde bu oyunun Malzemeler sekmesinde tanımladığın taşları, alanları ve sayaçları var.')}</p>
       <div className="wk-blockly-wrap">
         <div ref={host} className="wk-blockly" id="wk-blockly" />
         <div className="wk-zoom" role="group" aria-label={t('Zoom', '缩放', 'Yakınlaştır')}>
