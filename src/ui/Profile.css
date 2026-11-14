@@ -1,0 +1,10 @@
+/* Styles that only ui/Profile uses; loaded with it. Split from styles.css. */
+.swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.swatch { padding: 3px; background: none; border: 2px solid transparent; border-radius: 4px; cursor: pointer; display: grid; }
+.swatch.on { border-color: var(--ink); }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0 28px; }
+.badges li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 10px; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+.badges li span { grid-column: 1; font-size: .84rem; }
+.badges li i { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-style: normal; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+.badges li.got { color: var(--ink); }
+.badges li.got i { color: var(--red); font-weight: 600; }

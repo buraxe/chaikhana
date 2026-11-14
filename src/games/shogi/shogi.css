@@ -1,0 +1,19 @@
+/* Styles that only games/shogi uses; loaded with it. Split from styles.css. */
+.sg-wood { fill: #e4c07e; }
+.sg-sq { fill: transparent; stroke: #5a3a1a; stroke-width: .025; }
+.sg-sq.last { fill: rgba(217, 195, 94, .5); }
+.sg-sq.sel { fill: rgba(143, 180, 106, .7); }
+.sg-sq.chk { fill: rgba(212, 87, 63, .55); }
+.sg-sq.hint { fill: rgba(111, 168, 214, .6); }
+.sg-star { fill: #5a3a1a; }
+.sg-pc path { fill: #f3dfb1; stroke: #6b4521; stroke-width: .03; }
+.sg-pc text { font: 700 .42px var(--cjk); text-anchor: middle; fill: #1c140c; pointer-events: none; }
+.sg-pc.pro text { fill: #b3261e; }
+.sg-dot { fill: rgba(47, 127, 184, .7); pointer-events: none; }
+.sg-cap { fill: none; stroke: rgba(47, 127, 184, .85); stroke-width: .07; pointer-events: none; }
+.sg-hand { display: flex; flex-wrap: wrap; gap: 4px; min-height: 44px; padding: 4px; margin: 4px 0; border-radius: 6px; background: var(--sunk); }
+.sg-hp { position: relative; display: flex; align-items: center; padding: 0 4px 0 0; border: 2px solid transparent; border-radius: 6px; background: none; cursor: pointer; }
+.sg-hp.sel { border-color: #2f7fb8; background: var(--surface); }
+.sg-hp:disabled { cursor: default; opacity: .8; }
+.sg-hp .num { font-size: .8rem; font-weight: 800; }
+.sg-hand.gote svg { transform: rotate(180deg); }

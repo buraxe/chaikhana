@@ -1,0 +1,9 @@
+/* Futoshiki: cells with the comparison signs in the gutters between them. */
+.fu-grid { display: grid; grid-template-columns: repeat(calc(var(--n) - 1), 1fr 0.42fr) 1fr; width: min(100%, 440px); aspect-ratio: 1; align-items: center; justify-items: center; }
+.fu-cell { width: 100%; aspect-ratio: 1; border: 2px solid var(--ink); border-radius: 4px; background: var(--surface); color: var(--ink); font: 700 clamp(1.1rem, 6vw, 1.8rem)/1 var(--display); cursor: pointer; padding: 0; }
+.fu-cell.given { background: color-mix(in srgb, var(--ink) 10%, var(--surface)); cursor: default; }
+.fu-cell.sel { background: color-mix(in srgb, var(--lamp-on) 35%, var(--surface)); }
+.fu-cell.bad { color: var(--bad); border-color: var(--bad); }
+.fu-sign { font: 700 clamp(.9rem, 4.4vw, 1.4rem)/1 var(--body); color: var(--red); }
+.fu-pad { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.fu-pad .btn { min-width: 46px; font-size: 1.1rem; }

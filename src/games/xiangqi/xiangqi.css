@@ -1,0 +1,17 @@
+/* Styles that only games/xiangqi uses; loaded with it. Split from styles.css. */
+.xq-wood { fill: #e7c98f; stroke: #7a4d22; stroke-width: .08; }
+.xq-lines line, .xq-lines path { stroke: #5a3a1a; stroke-width: .035; fill: none; }
+.xq-river { font: 700 .42px var(--cjk); fill: #7a4d22; text-anchor: middle; letter-spacing: .1em; }
+.xq-last { fill: rgba(217, 195, 94, .55); }
+.xq-hint { fill: none; stroke: #2f7fb8; stroke-width: .08; }
+.xq-pc circle { fill: #f6e7c4; stroke: #6b4521; stroke-width: .04; }
+.xq-pc .ring { fill: none; stroke-width: .025; }
+.xq-pc.r text, .xq-pc.r .ring { fill: #b3261e; }
+.xq-pc.r .ring { stroke: #b3261e; fill: none; }
+.xq-pc.b text { fill: #1c140c; }
+.xq-pc.b .ring { stroke: #1c140c; }
+.xq-pc text { font: 700 .44px var(--cjk); text-anchor: middle; pointer-events: none; }
+.xq-pc.sel circle:first-child { stroke: #2f7fb8; stroke-width: .09; }
+.xq-pc.chk circle:first-child { fill: #f2b8ae; }
+.xq-dot { fill: rgba(47, 127, 184, .7); pointer-events: none; }
+.xq-cap { fill: none; stroke: rgba(47, 127, 184, .85); stroke-width: .07; pointer-events: none; }

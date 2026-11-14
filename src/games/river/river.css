@@ -1,0 +1,20 @@
+/* River crossing: two grassy banks and a river with the boat (or a torch on a bridge). */
+.rv-scene { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, 1fr) minmax(0, 1fr); min-height: 260px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.rv-bank { display: flex; flex-direction: column; gap: 8px; padding: 10px; background: linear-gradient(#cfe3b4, #a9c98a); color: #23361a; min-width: 0; }
+.rv-bank h3 { margin: 0; font: 600 .78rem/1.2 var(--body); text-transform: uppercase; letter-spacing: .06em; }
+.rv-people { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.rv-who { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 52px; padding: 6px 4px; border: 1.5px solid rgba(35, 54, 26, .3); border-radius: 8px; background: rgba(255, 255, 255, .55); color: #23361a; cursor: pointer; }
+.rv-who:disabled { cursor: default; opacity: .85; }
+.rv-who.hint { border-color: #b3261e; box-shadow: 0 0 0 2px rgba(179, 38, 30, .35); }
+.rv-who small { font-size: .68rem; }
+.rv-icon { font-size: 1.7rem; line-height: 1; }
+.rv-water { position: relative; background: repeating-linear-gradient(180deg, #4f8fb8 0 14px, #5a9bc4 14px 28px); }
+.bridge .rv-water, .bridge5 .rv-water { background: linear-gradient(#20263a, #34405e); }
+.bridge .rv-water::after, .bridge5 .rv-water::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 12px; margin-top: -6px; background: repeating-linear-gradient(90deg, #8a5a2e 0 10px, #6b4423 10px 12px); }
+.rv-boat { position: absolute; top: 50%; left: 6%; transform: translateY(-50%); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; width: 60%; min-height: 64px; padding: 6px; border-radius: 6px 6px 40% 40%; background: #7a4b25; transition: left .45s ease; z-index: 1; }
+.bridge .rv-boat, .bridge5 .rv-boat { background: rgba(255, 220, 120, .25); border-radius: 50%; }
+.rv-boat.at-far { left: 34%; }
+.rv-lift { font-size: 1.2rem; }
+.rv-who.in { min-width: 0; padding: 2px 4px; background: rgba(255, 255, 255, .8); }
+.rv-msg { color: var(--bad); font-weight: 600; }
+@media (max-width: 560px) { .rv-who { min-width: 44px; } .rv-icon { font-size: 1.35rem; } .rv-scene { grid-template-columns: minmax(0, 1fr) 76px minmax(0, 1fr); } }

@@ -1,0 +1,51 @@
+/* Styles that only games/cards uses; loaded with it. Split from styles.css. */
+.pc-i { position: absolute; top: 3%; left: 6%; display: flex; flex-direction: column; align-items: center; line-height: .95; }
+.pc-i b { font-size: calc(var(--cw) * .27); font-weight: 800; letter-spacing: -.04em; }
+.pc-i i { font-style: normal; font-size: calc(var(--cw) * .22); }
+.pc-i.rot { top: auto; left: auto; bottom: 3%; right: 6%; transform: rotate(180deg); }
+.pc-s { position: absolute; inset: 0; display: grid; place-items: center; font-size: calc(var(--cw) * .52); }
+.pc.face .pc-s { display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1; font-size: calc(var(--cw) * .3); }
+.pc.face .pc-s em { font: 800 calc(var(--cw) * .44)/1 var(--display); font-style: normal; }
+.pc.sm .pc-i.rot, .pc.sm .pc-s { display: none; }
+.pc.sm .pc-i b { font-size: 11px; }
+.pc.sm .pc-i i { font-size: 10px; }
+.pc-btn { flex: none; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .15s; position: relative; }
+.pc-btn .pc { --cw: inherit; width: var(--cw); }
+.pc-btn + .pc-btn { margin-left: min(6px, calc((100% - var(--n) * var(--cw)) / max(1, var(--n) - 1))); }
+.pc-btn:disabled { cursor: default; }
+.pc-hand:has(.pc-btn.ok) .pc-btn:disabled { filter: brightness(.82) saturate(.6); }
+.pc-btn.ok:hover, .pc-btn.ok:focus-visible { transform: translateY(-10px); z-index: 2; }
+.pc-btn.ok .pc { box-shadow: 0 0 0 2px var(--lamp-on), 0 4px 10px -2px rgba(0, 0, 0, .45); }
+.pc-btn.sel { transform: translateY(-12px); }
+.tt-seat { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; font-size: .82rem; text-align: center; }
+.tt-seat.p-t { grid-column: 2; grid-row: 1; }
+.tt-seat.p-l { grid-column: 1; grid-row: 2; align-self: center; }
+.tt-seat.p-r { grid-column: 3; grid-row: 2; align-self: center; }
+.tt-seat.p-b { grid-column: 2; grid-row: 3; }
+.tt-name { display: flex; align-items: center; gap: 5px; max-width: 100%; }
+.tt-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tt-seat.turn .tt-name b { color: var(--lamp-on); }
+.tt-seat.turn .tt-name::before { content: "●"; color: var(--lamp-on); animation: blink 1s steps(2) infinite; }
+.tt-info { color: #d9cfb5; font-size: .76rem; }
+.tt-backs { display: flex; }
+.tt-backs .pc + .pc { margin-left: -20px; }
+.tt-seat.p-l .tt-backs, .tt-seat.p-r .tt-backs { flex-direction: column; }
+.tt-seat.p-l .tt-backs .pc + .pc, .tt-seat.p-r .tt-backs .pc + .pc { margin-left: 0; margin-top: -34px; }
+.tt-mid { grid-column: 2; grid-row: 2; position: relative; min-height: 220px; }
+.tt-play { position: absolute; left: 50%; top: 50%; animation: dealIn .22s ease-out; }
+.tt-play.q-b { transform: translate(-50%, -8%); }
+.tt-play.q-t { transform: translate(-50%, -92%); }
+.tt-play.q-l { transform: translate(-115%, -50%) rotate(-8deg); }
+.tt-play.q-r { transform: translate(15%, -50%) rotate(8deg); }
+.tt-trump { position: absolute; top: 0; right: 0; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #f4ecd9; color: #1a1a1a; font-size: 1.3rem; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); }
+.tt-trump.red { color: #c0281f; }
+.tt-centre { position: absolute; inset: 0; display: grid; place-items: center; z-index: 3; }
+.tt-cover { margin: 10px auto; max-width: 420px; }
+@media (max-width: 560px) {
+  .tt-mid { min-height: 190px; }
+  .tt-seat { font-size: .72rem; }
+  .tt-play.q-l { transform: translate(-108%, -50%) rotate(-8deg); }
+  .tt-play.q-r { transform: translate(8%, -50%) rotate(8deg); }
+}
+.tt-centre .btn.primary { color: var(--on-red); }
+.tt-play { animation-fill-mode: both; }

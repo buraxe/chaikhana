@@ -1,0 +1,4 @@
+/* Styles that only games/boards uses; loaded with it. Split from styles.css. */
+.puz-card { padding: 12px 14px; border-radius: 6px; background: var(--paper); color: var(--paper-ink); border-top: 4px solid var(--red); display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.puz-card h3 { font: 800 1.15rem/1.2 var(--display); }
+.puz-card h3 { text-transform: none; letter-spacing: 0; color: var(--paper-ink); }

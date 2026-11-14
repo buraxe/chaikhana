@@ -1,0 +1,11 @@
+/* Hidato: a snake of numbers, its ends in red. */
+.hd-grid { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 3px; width: min(100%, 460px); aspect-ratio: 1; }
+.hd-cell { border: 1.5px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); font: 700 clamp(.85rem, 4.6vw, 1.45rem)/1 var(--display); cursor: pointer; padding: 0; }
+.hd-cell.given { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 8%, var(--surface)); cursor: default; }
+.hd-cell.end { color: var(--red); border-color: var(--red); }
+.hd-cell.near { background: color-mix(in srgb, var(--lamp-on) 22%, var(--surface)); }
+.hd-cell.both { background: color-mix(in srgb, var(--lamp-on) 50%, var(--surface)); }
+.hd-cell.link { box-shadow: 0 0 0 2px var(--lamp-on); }
+.hd-cell.bad { color: var(--bad); border-color: var(--bad); }
+.hd-cur { display: flex; align-items: center; gap: 12px; margin-top: 10px; font-size: 1rem; }
+.hd-cur b { font-size: 1.4rem; display: inline-block; min-width: 2ch; text-align: center; }

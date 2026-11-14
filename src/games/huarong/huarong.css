@@ -1,0 +1,19 @@
+/* Styles that only games/huarong uses; loaded with it. Split from styles.css. */
+.hr-frame { width: min(100%, 400px); padding: 12px 12px 0; background: var(--wood-line); border-radius: 4px 4px 0 0; position: relative; }
+.hr-board { position: relative; aspect-ratio: 4 / 5; max-width: 100%; background: var(--sunk); touch-action: none; }
+.hr-piece { position: absolute; padding: 3px; border: 0; background: none; cursor: grab; transition: left .14s ease, top .14s ease; touch-action: none; }
+.hr-piece > span { display: grid; place-items: center; width: 100%; height: 100%; border-radius: 6px; background: linear-gradient(145deg, var(--wood-1), var(--wood-2)); box-shadow: inset 0 -3px 0 rgba(60, 35, 10, .25), inset 0 2px 0 rgba(255, 255, 255, .25); color: var(--wood-line); font: 600 clamp(.8rem, 2.6vw, 1.05rem)/1.1 var(--display); text-align: center; }
+:root:lang(zh-Hans) .hr-piece > span { font-family: var(--cjk); font-size: clamp(1rem, 3.4vw, 1.4rem); writing-mode: vertical-rl; }
+:root:lang(zh-Hans) .hr-piece.t-H > span, :root:lang(zh-Hans) .hr-piece.t-C > span, :root:lang(zh-Hans) .hr-piece.t-S > span { writing-mode: horizontal-tb; }
+.hr-piece.t-C > span { background: linear-gradient(145deg, color-mix(in srgb, var(--red) 80%, #fff), var(--red)); color: var(--on-red); font-size: clamp(1.1rem, 4vw, 1.6rem); }
+.hr-piece.t-S > span { background: linear-gradient(145deg, var(--wood-2), color-mix(in srgb, var(--wood-2) 80%, #000)); }
+.hr-piece.sel > span { outline: 3px solid var(--gold); outline-offset: -3px; }
+.hr-piece.hint > span { outline: 3px dashed var(--red); outline-offset: -3px; }
+.hr-piece:focus-visible { outline: none; }
+.hr-piece:focus-visible > span { outline: 3px solid var(--ink); outline-offset: -3px; }
+.hr-piece.free { animation: escape 1.2s ease-in .2s forwards; }
+.hr-ghost { position: absolute; border: 3px dashed var(--red); border-radius: 6px; pointer-events: none; }
+.hr-exit { width: 50%; margin: 0 auto; height: 18px; background: var(--bg); border: 2px solid var(--wood-line); border-top: 0; display: grid; place-items: center; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--red); transform: translateY(2px); }
+@media (prefers-reduced-motion: reduce) {
+  .hr-piece.free { animation: none; }
+}

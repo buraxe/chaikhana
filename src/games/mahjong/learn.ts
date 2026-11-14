@@ -1,0 +1,82 @@
+import type { Lesson } from '../../core/learn';
+export const lesson: Lesson = {
+  names: { en: 'Chinese Mahjong', zh: '麻将', tr: 'Mahjong (麻将)', pinyin: 'Májiàng', trad: '麻將' },
+  en: {
+    summary: 'Four players draw and discard tiles until one of them holds four sets and a pair. China’s great table game, played here the plain mainland way.',
+    history: 'Mahjong took its modern form in the Yangtze delta in the second half of the nineteenth century, growing out of older card games played with suits of coins and strings. By the 1920s it had spread from Shanghai and Ningbo across China and, briefly, became a craze in America and Britain. Every region now plays its own rules, from Sichuan’s fast "bloody battle" to the elaborate national competition rules of 1998. This table plays a simple common form: 136 tiles, chow, pung and kong, and a short list of fan.',
+    culture: 'In China mahjong is a family and neighbourhood game more than a gambling one: four generations around a folding table at Spring Festival, retirees in a park pavilion, the rattle of tiles being washed between hands. Its words have entered everyday speech: 杠上开花, "a flower blooming on the kong", is a stroke of luck on top of luck.',
+    rules: [
+      '136 tiles: characters (万), dots (筒) and bamboo (条) numbered 1–9, the four winds (東南西北) and three dragons (中 red, 發 green, 白 white), four of each.',
+      'Everyone takes 13 tiles. The dealer, East, draws a 14th and opens by discarding. Play then passes to the right.',
+      'On your turn, draw a tile from the wall and discard one face up. Your hand always returns to 13.',
+      'Sets are a chow (three consecutive numbers in one suit), a pung (three of a kind) or a kong (four of a kind). A complete hand is four sets and a pair, or seven pairs.',
+      'Anyone may claim a discard for a pung (碰) or kong (杠); only the next player may claim it for a chow (吃). Claimed sets are laid face up. A win (胡) beats every other claim; pung and kong beat chow.',
+      'With four of a kind in hand you may declare a concealed kong; with an exposed pung you may add the fourth tile. Either way you draw a replacement tile.',
+      'Win on a discard (点炮) or on your own draw (自摸). Fan: win 1, self-drawn +1, concealed hand +1, all simples +1, each pung of dragons or of your own or the round’s wind +1, all pungs +2, half flush +2, seven pairs +3, full flush +5, all honours +8, and +1 each for winning off a kong or on the last tile.',
+      'A self-drawn win costs each other player the fan; a win on a discard costs the discarder double. If the wall runs out, nobody scores. Four hands make a round, and the deal passes every hand.',
+    ],
+    basics: [
+      'Throw lone winds and dragons first, unless you hold a pair of them: a dragon pung is worth a fan.',
+      'Keep pairs and two-sided pairs like 4–5, which wait for either 3 or 6, and let go of edge waits like 1–2.',
+      'Claiming a chow or pung speeds you up but shows your hand and loses the concealed fan; claim when it really brings you closer.',
+    ],
+    advanced: [
+      'Count what is gone: a wait on a tile that already lies three times in the rivers is dead.',
+      'Once a player has three sets showing, discard tiles that player has already thrown, which they cannot win on.',
+      'With nine or ten tiles of one suit, aim for a flush; it is worth more than several small hands.',
+    ],
+    mistakes: ['Breaking a ready hand to chase a bigger one late in the wall.', 'Feeding the next player the suit they are clearly chowing.', 'Holding honours that are already gone: a pair of 白 is useless if the other two are in the rivers.'],
+  },
+  zh: {
+    summary: '四人轮流摸牌、打牌，谁先凑成四副牌加一对将就胡牌。这里打的是大陆最常见的简单玩法。',
+    history: '麻将的现代形式出现在十九世纪后半叶的长江三角洲，源自更早的以“万、饼、条”为花色的纸牌游戏。到二十世纪二十年代，它从上海、宁波传遍全国，还一度在英美风靡。如今各地规则不一，从四川的“血战到底”到1998年的国标麻将。本桌采用一种简单通行的打法：136张牌，可吃、碰、杠，番种不多。',
+    culture: '在中国，麻将更多是家庭和邻里的游戏：春节时几代人围着折叠桌，退休老人在公园凉亭里，洗牌时哗啦啦的声音。麻将的说法也进入了日常口语，比如“杠上开花”，指好运之上又添好运。',
+    rules: [
+      '136张牌：万、筒、条各1到9，东南西北四种风牌，中、发、白三种箭牌，每种四张。',
+      '每人13张。庄家（东）多摸一张，先打出一张。之后按逆时针轮到右手边的下家。',
+      '轮到你时，从牌墙摸一张，再打出一张。手牌始终回到13张。',
+      '牌组有顺子（同花色三张连号）、刻子（三张相同）和杠（四张相同）。四副牌加一对将，或七对，即可胡牌。',
+      '任何人都可以碰或杠别人打出的牌；只有下家可以吃。吃碰杠的牌要亮出来。胡牌优先于一切，碰、杠优先于吃。',
+      '手里有四张相同可以暗杠；已经碰出的刻子摸到第四张可以加杠。杠后从牌墙尾补一张。',
+      '可以点炮胡，也可以自摸。番数：胡牌1，自摸+1，门前清+1，断幺+1，箭刻或门风、圈风刻每副+1，碰碰胡+2，混一色+2，七对+3，清一色+5，字一色+8，杠上开花、海底捞月、河底捞鱼各+1。',
+      '自摸时其他三家各付番数；点炮时由点炮者付双倍。牌墙摸完则流局，无人得分。四局为一圈，每局换庄。',
+    ],
+    basics: [
+      '先打孤张的风牌和箭牌，除非你有一对：箭刻值一番。',
+      '留对子和两面搭子（如4-5，等3或6），先拆边张（如1-2）。',
+      '吃碰能加快进度，但会暴露牌型，也失去门前清；真正能听得更近时再吃碰。',
+    ],
+    advanced: [
+      '数一数已经出现的牌：河里已有三张的牌，听它就是死听。',
+      '有人亮出三副牌后，优先打他打过的牌，他胡不了。',
+      '一门花色有九、十张时，可以做清一色，比几把小胡更值。',
+    ],
+    mistakes: ['牌墙快摸完时拆掉已经听的牌去追大牌。', '一直给下家喂他明显在吃的花色。', '留着已经绝张的字牌：如果另外两张白板都在河里，一对白板就没用了。'],
+  },
+  tr: {
+    summary: 'Dört oyuncu taş çekip atar; dört set ve bir çift toplayan eli kazanır. Çin’in büyük masa oyunu, burada anakaradaki sade hâliyle oynanıyor.',
+    history: 'Mahjong bugünkü biçimini 19. yüzyılın ikinci yarısında Yangtze deltasında aldı; para ve dizi takımlarıyla oynanan daha eski kâğıt oyunlarından doğdu. 1920’lerde Şanghay ve Ningbo’dan bütün Çin’e yayıldı, bir ara Amerika ve İngiltere’de de çılgınlık hâline geldi. Bugün her bölgenin kendi kuralları var: Sichuan’ın hızlı “kanlı savaşı”ndan 1998’in ayrıntılı ulusal turnuva kurallarına kadar. Bu masada sade ve yaygın bir biçim oynanıyor: 136 taş, çi, pong ve kong, kısa bir fan listesi.',
+    culture: 'Çin’de mahjong kumardan çok aile ve mahalle oyunudur: Bahar Bayramı’nda katlanır masanın etrafında dört kuşak, parktaki çardakta emekliler, eller arasında karılan taşların şıkırtısı. Deyimleri gündelik dile de geçmiştir: 杠上开花, “kongun üstünde açan çiçek”, şansın üstüne gelen şans demektir.',
+    rules: [
+      '136 taş: 1–9 numaralı karakterler (万), daireler (筒) ve bambular (条), dört rüzgâr (東南西北) ve üç ejder (中 kırmızı, 發 yeşil, 白 beyaz); her birinden dörder tane.',
+      'Herkes 13 taş alır. Dağıtan (Doğu) 14. taşı çeker ve bir taş atarak açar. Sıra sonra sağa geçer.',
+      'Sırası gelen duvardan bir taş çeker ve bir taşı açık atar. El hep 13’e döner.',
+      'Setler: çi (aynı türden üç ardışık sayı), pong (üç aynı taş) ve kong (dört aynı taş). Tam el dört set ve bir çifttir ya da yedi çift.',
+      'Atılan taşı pong (碰) ya da kong (杠) için herkes alabilir; çi (吃) için yalnızca sıradaki oyuncu alabilir. Alınan setler açık konur. Kazanma (胡) her talebi geçer; pong ve kong çi’yi geçer.',
+      'Elinde dört aynı taş varsa kapalı kong açabilirsin; açık bir pong’un dördüncüsünü çekersen ona ekleyebilirsin. İki durumda da yerine bir taş çekersin.',
+      'Atılan taşla (点炮) ya da kendi çektiğinle (自摸) kazanılır. Fan: kazanma 1, kendi çekişi +1, kapalı el +1, sadece 2–8 +1, ejder ya da kendi veya turun rüzgârından her pong +1, hep üçlü +2, yarım renk +2, yedi çift +3, tek renk +5, hep onur taşı +8, kongdan sonra ya da son taşla kazanmak +1.',
+      'Kendi çekişinde her rakip fan kadar öder; atılan taşla kazanılırsa atan iki katını öder. Duvar biterse kimse puan almaz. Dört el bir tur eder, dağıtan her el değişir.',
+    ],
+    basics: [
+      'Tek kalan rüzgâr ve ejderleri önce at; çiftin varsa tut, ejder pong’u bir fan eder.',
+      'Çiftleri ve 4–5 gibi iki yana açık ikilileri tut (3 ya da 6 bekler); 1–2 gibi kenar beklemelerden önce kurtul.',
+      'Çi ya da pong almak hızlandırır ama elini gösterir ve kapalı el fanını kaybettirir; gerçekten yaklaştırıyorsa al.',
+    ],
+    advanced: [
+      'Gideni say: nehirlerde zaten üç tanesi yatan bir taşı beklemek ölü beklemedir.',
+      'Bir oyuncu üç set açtıktan sonra onun daha önce attığı taşları at; onlarla kazanamaz.',
+      'Bir türden dokuz-on taşın varsa tek renge oyna; birkaç küçük elden daha değerlidir.',
+    ],
+    mistakes: ['Duvarın sonuna doğru hazır eli daha büyüğü için bozmak.', 'Sıradaki oyuncuya açıkça çi yaptığı türü yedirmek.', 'Tükenmiş onur taşlarını tutmak: diğer iki 白 nehirdeyse bir çift 白 işe yaramaz.'],
+  },
+};

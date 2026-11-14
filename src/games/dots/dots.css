@@ -1,0 +1,10 @@
+/* Styles that only games/dots uses; loaded with it. Split from styles.css. */
+.db-board { display: block; width: min(100%, 520px); height: auto; touch-action: manipulation; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+.db-dot { fill: var(--ink); }
+.db-edge { stroke-width: .09; stroke-linecap: round; }
+.db-edge.empty { stroke: var(--line); stroke-width: .03; stroke-dasharray: .05 .08; }
+.db-edge.p2 { stroke: var(--gold); }
+.db-edge.last { stroke-width: .13; }
+.db-hit { stroke: transparent; stroke-width: .34; cursor: pointer; }
+.db-hit:hover { stroke: color-mix(in srgb, var(--ink) 15%, transparent); }
+.db-box.p2 { fill: color-mix(in srgb, var(--gold) 34%, transparent); }

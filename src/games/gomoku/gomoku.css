@@ -1,0 +1,16 @@
+/* Styles that only games/gomoku uses; loaded with it. Split from styles.css. */
+.board-frame { width: min(100%, 640px); padding: clamp(4px, 1.2vw, 10px); background: var(--wood-line); border-radius: 3px; box-shadow: 0 10px 24px -14px var(--stone-shadow); }
+.goban { display: block; width: 100%; height: auto; aspect-ratio: 1; touch-action: manipulation; }
+.goban .pt { cursor: pointer; }
+.goban .no { cursor: not-allowed; }
+.goban-label { font-family: var(--body); font-weight: 600; opacity: .75; }
+.goban .drop { animation: drop .16s ease-out; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) {
+  .goban .drop { animation: none; }
+}
+.dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--muted); }
+.dot.b { background: var(--stone-b); }
+.dot.w { background: var(--stone-w-hi); }
+.move-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 2px 8px; max-height: 190px; overflow-y: auto; font-size: .86rem; }
+.move-list li span { color: var(--muted); }
+.move-list li.w { color: var(--muted); }

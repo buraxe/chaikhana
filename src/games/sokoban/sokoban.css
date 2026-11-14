@@ -1,0 +1,18 @@
+/* Styles that only games/sokoban uses; loaded with it. Split from styles.css. */
+.sk-pad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(2, 44px); gap: 6px; justify-content: center; }
+.sk-pad .btn:nth-child(1) { grid-column: 2; }
+.sk-pad .btn:nth-child(2) { grid-column: 1; grid-row: 2; }
+.sk-pad .btn:nth-child(3) { grid-column: 2; grid-row: 2; }
+.sk-pad .btn:nth-child(4) { grid-column: 3; grid-row: 2; }
+.sk-board { display: block; width: min(100%, 520px); height: auto; touch-action: none; user-select: none; }
+.sk-wall { fill: #5a3a22; stroke: #3e2716; stroke-width: .04; }
+.sk-floor { fill: #efe2c4; stroke: #e2d2ae; stroke-width: .02; cursor: pointer; }
+.sk-goal { fill: none; stroke: #a3262a; stroke-width: .07; pointer-events: none; }
+.sk-box rect { fill: #c98a3c; stroke: #7a4a16; stroke-width: .05; }
+.sk-box path { stroke: #7a4a16; stroke-width: .04; }
+.sk-box.home rect { fill: #3f8a5a; stroke: #1f5a36; }
+.sk-box.home path { stroke: #1f5a36; }
+.sk-box { cursor: pointer; transition: transform .1s; }
+.sk-me { transition: transform .1s; pointer-events: none; }
+.sk-me circle { fill: #1f3a5f; }
+.sk-me .eye { fill: #fff; }

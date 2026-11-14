@@ -1,0 +1,18 @@
+/* Styles that only games/dama uses; loaded with it. Split from styles.css. */
+.dm-board { display: block; width: min(100%, 560px); height: auto; aspect-ratio: 1; touch-action: manipulation; }
+.dm-wood { fill: var(--wood-1); }
+.dm-sq { fill: transparent; }
+.dm-sq.last { fill: rgba(255, 255, 255, .22); }
+.dm-sq.sel { fill: rgba(164, 55, 44, .35); }
+.dm-sq.target { fill: rgba(154, 122, 38, .55); }
+.dm-line line { stroke: var(--wood-line); stroke-width: .025; }
+.dm-piece circle { stroke-width: .03; }
+.dm-piece.w circle { fill: #f4efe2; stroke: #8a7d5e; }
+.dm-piece.b circle { fill: #1d1d22; stroke: #000; }
+.dm-piece .dm-shadow { fill: rgba(0, 0, 0, .3) !important; stroke: none !important; }
+.dm-piece .dm-inner { fill: none !important; stroke-width: .02; }
+.dm-piece.w .dm-inner { stroke: #b8a882 !important; }
+.dm-piece.b .dm-inner { stroke: #44444c !important; }
+.dm-crown { fill: var(--gold); }
+.dm-piece.movable circle:not(.dm-shadow):not(.dm-inner) { stroke: var(--gold); stroke-width: .05; }
+.dm-board .pt { cursor: pointer; }

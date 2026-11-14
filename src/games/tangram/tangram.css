@@ -1,0 +1,18 @@
+/* Styles that only games/tangram uses; loaded with it. Split from styles.css. */
+.tg-table { fill: var(--surface); stroke: var(--line); stroke-width: .04; }
+.tg-target { opacity: .8; }
+.tg-target polygon { fill: var(--ink); stroke: var(--ink); stroke-width: .06; stroke-linejoin: round; }
+.tg-piece { stroke: var(--surface); stroke-width: .05; stroke-linejoin: round; cursor: grab; opacity: .93; }
+.tg-piece:focus { outline: none; }
+.tg-piece.sel, .tg-piece:focus-visible { stroke: var(--gold); stroke-width: .09; }
+.tg-piece.c0 { fill: var(--red); }
+.tg-piece.c3 { fill: var(--tg4); }
+.tg-piece.c4 { fill: var(--tg5); }
+.tg-piece.c5 { fill: var(--tg6); }
+.tg-piece.c6 { fill: var(--tg7); }
+.tg-pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
+.tg-thumb { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; cursor: pointer; font-size: .74rem; color: var(--muted); }
+.tg-thumb svg { width: 48px; height: 48px; }
+.tg-thumb polygon { fill: var(--ink); stroke: var(--ink); stroke-width: .12; stroke-linejoin: round; }
+.tg-thumb.free polygon { fill: var(--gold); stroke: var(--surface); stroke-width: .08; }
+.tg-thumb.on { border-color: var(--red); box-shadow: inset 0 0 0 1px var(--red); color: var(--ink); }

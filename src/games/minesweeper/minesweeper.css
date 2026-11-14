@@ -1,0 +1,18 @@
+/* Styles that only games/minesweeper uses; loaded with it. Split from styles.css. */
+.ms-scroll { overflow-x: auto; container-type: inline-size; width: 100%; padding-bottom: 4px; }
+.ms-grid { --cs: max(28px, min(40px, calc(100cqw / var(--w)))); display: grid; grid-template-columns: repeat(var(--w), var(--cs)); width: max-content; border: 2px solid var(--ink); background: var(--line); gap: 1px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.ms-cell { width: var(--cs); height: var(--cs); padding: 0; border: 0; background: var(--ms-hidden); box-shadow: inset 2px 2px 0 var(--ms-hi), inset -2px -2px 0 var(--ms-lo); font: 700 calc(var(--cs) * .52)/1 var(--body); color: var(--ink); cursor: pointer; touch-action: manipulation; }
+.ms-cell.open { background: var(--surface); box-shadow: none; cursor: default; }
+.ms-cell.flag { color: var(--red); }
+.ms-cell.boom { background: var(--bad); color: var(--on-red); }
+.ms-cell.wrong { color: var(--bad); text-decoration: line-through; }
+.ms-cell.cur { outline: 2px solid var(--red); outline-offset: -2px; }
+.ms-cell.n1 { color: var(--n1); }
+.ms-cell.n2 { color: var(--n2); }
+.ms-cell.n3 { color: var(--n3); }
+.ms-cell.n4 { color: var(--n4); }
+.ms-cell.n5 { color: var(--n5); }
+.ms-cell.n6 { color: var(--n6); }
+.ms-cell.n7 { color: var(--ink); }
+.ms-cell.n8 { color: var(--muted); }
+.ms-grid.over .ms-cell { cursor: default; }

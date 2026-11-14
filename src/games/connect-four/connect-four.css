@@ -1,0 +1,3 @@
+/* Styles that only games/connect-four uses; loaded with it. Split from styles.css. */
+.c4-board { fill: var(--c4-board); }
+.c4-win { fill: var(--surface); }

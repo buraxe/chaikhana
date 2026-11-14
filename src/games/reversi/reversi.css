@@ -1,0 +1,10 @@
+/* Styles that only games/reversi uses; loaded with it. Split from styles.css. */
+.rv-board { display: block; width: min(100%, 520px); height: auto; aspect-ratio: 1; touch-action: manipulation; }
+.rv-felt { fill: #1f6b45; }
+.rv-line line { stroke: #0f3a25; stroke-width: .03; }
+.rv-dot { fill: #0f3a25; }
+.rv-disc { stroke-width: .03; transition: fill .25s; }
+.rv-disc.p2 { fill: #f4f1e8; stroke: #b8b0a0; }
+.rv-disc.last { stroke: var(--gold); stroke-width: .06; }
+.rv-hint { fill: rgba(255, 255, 255, .28); }
+.rv-board .pt { cursor: pointer; }

@@ -1,0 +1,11 @@
+/* Styles that only games/weiqi uses; loaded with it. Split from styles.css. */
+.go-wood { fill: #dcb36a; }
+.go-lines line { stroke: #3a2610; stroke-width: .03; }
+.go-star { fill: #3a2610; }
+.go-coord text { font: 600 .3px var(--body); fill: #5a3a1a; text-anchor: middle; }
+.go-stone.p2 { fill: #f7f4ec; stroke: #8a8070; stroke-width: .03; }
+.go-stone.dead { opacity: .4; }
+.go-last.p2 { fill: none; stroke: #18181c; stroke-width: .06; }
+.go-ghost.p2 { fill: rgba(247, 244, 236, .6); }
+.go-ghost { pointer-events: none; }
+.go-hint { fill: none; stroke: #b3261e; stroke-width: .08; }

@@ -1,0 +1,11 @@
+/* Styles that only games/pisti uses; loaded with it. Split from styles.css. */
+.ps-backs { display: flex; gap: 4px; }
+.ps-deck { position: relative; display: grid; place-items: center; }
+.ps-deck .num { position: absolute; bottom: -18px; font-size: .8rem; }
+.ps-pile { position: relative; width: 110px; height: 110px; display: grid; place-items: center; }
+.ps-stack { position: absolute; transform: translate(calc(var(--i) * 6px), calc(var(--i) * 3px)) rotate(calc(var(--i) * 7deg)); }
+.ps-empty { font-size: .8rem; opacity: .6; border: 2px dashed rgba(244, 236, 217, .4); border-radius: 8px; padding: 30px 14px; }
+.ps-count { position: absolute; right: -10px; top: -6px; padding: 1px 7px; border-radius: 9px; background: #f4ecd9; color: #1c140c; font-size: .72rem; font-weight: 800; }
+.ps-count:empty { display: none; }
+.ps-boom { position: absolute; font: 900 2rem/1 var(--display); color: var(--lamp-on); text-shadow: 0 3px 0 #1c140c; animation: fbFlash 1.4s ease-out forwards; z-index: 3; }
+.ps-result { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }

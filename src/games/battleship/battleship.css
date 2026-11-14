@@ -1,0 +1,28 @@
+/* Styles that only games/battleship uses; loaded with it. Split from styles.css. */
+.bs-boards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .75fr); gap: 18px; align-items: start; }
+.bs-sea { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bs-sea h3 { font-size: .95rem; }
+.bs-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; padding: 4px; background: color-mix(in srgb, #1f4f6e 85%, var(--ink)); border-radius: 4px; aspect-ratio: 1; }
+.bs-cell { display: block; border: 0; padding: 0; aspect-ratio: 1; background: #3a7ca5; border-radius: 2px; position: relative; }
+.bs-grid.live button.bs-cell { cursor: crosshair; }
+.bs-grid.live button.bs-cell:hover { background: #5b9cc4; }
+.bs-cell.ship { background: #8a949c; }
+.bs-cell.miss::after { content: ""; position: absolute; inset: 38%; border-radius: 50%; background: #e8eef2; }
+.bs-cell.hit { background: #c8302a; }
+.bs-cell.hit::after { content: "✕"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff3e0; font: 700 .8em/1 var(--body); }
+.bs-cell.sunk { background: #6e1a16; }
+.bs-cell.last { outline: 2px solid #f2c14e; outline-offset: -1px; z-index: 1; }
+.bs-setup { margin-top: 4px; }
+@media (max-width: 700px) {
+  .bs-boards { grid-template-columns: 1fr; }
+  .bs-sea.mine .bs-grid.small { width: 60%; margin-inline: auto; }
+}
+.bs-placer { display: flex; flex-direction: column; gap: 10px; max-width: 520px; }
+.bs-dock { display: flex; flex-wrap: wrap; gap: 6px; }
+.bs-ship { display: inline-flex; align-items: center; gap: 2px; padding: 6px 8px; border: 1px solid var(--line); background: var(--surface); border-radius: 4px; cursor: pointer; color: var(--ink); }
+.bs-ship i { width: 12px; height: 12px; background: #8a949c; border-radius: 2px; }
+.bs-ship span { margin-left: 6px; font-size: .8rem; }
+.bs-ship.on { border-color: var(--red); box-shadow: 0 0 0 2px color-mix(in srgb, var(--red) 30%, transparent); }
+.bs-cell.ghost { background: #9fd3a8; }
+.bs-cell.ghost.bad { background: #e39a92; }
+.bs-cover { display: grid; place-items: center; min-height: 360px; border: 1px dashed var(--line); border-radius: 6px; background: var(--sunk); }

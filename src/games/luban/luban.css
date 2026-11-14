@@ -1,0 +1,10 @@
+/* Lu Ban lock: wooden sticks on a pale workbench, a pad of arrows below. */
+.lb-stage { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 520px; border-radius: 10px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #f6ecd9, #dcc7a1); border: 1px solid var(--line); }
+.lb-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.lb-note { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #5a4325; }
+.lb-pad { display: grid; grid-template-columns: repeat(3, 52px); gap: 6px; justify-content: center; margin-top: 10px; }
+.lb-dir { font-size: 1.25rem; padding: 6px 0; }
+.lb-dir.out { background: #2f6b4f; color: #fff; border-color: #2f6b4f; }
+.lb-dir.hint { box-shadow: 0 0 0 3px var(--red); }
+.lb-sel { display: grid; place-items: center; }
+.lb-sel i { width: 26px; height: 26px; border-radius: 4px; border: 1px solid rgba(0, 0, 0, .3); }

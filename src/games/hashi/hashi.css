@@ -1,0 +1,9 @@
+/* Styles that only games/hashi uses; loaded with it. Split from styles.css. */
+.hs-board { display: block; width: min(100%, 540px); height: auto; user-select: none; }
+.hs-grid line { stroke: var(--line); stroke-width: .02; }
+.hs-bridge line { stroke: var(--ink); stroke-width: .07; stroke-linecap: round; }
+.hs-isl circle { fill: var(--surface); stroke: var(--ink); stroke-width: .06; cursor: pointer; }
+.hs-isl text { font: 700 .42px var(--body); text-anchor: middle; fill: var(--ink); pointer-events: none; }
+.hs-isl.sel circle { fill: var(--lamp-on); }
+.hs-isl.full circle { fill: #cfe6d6; stroke: #2f6b4f; }
+.hs-isl.over circle { fill: #f3c4bd; stroke: var(--bad); }

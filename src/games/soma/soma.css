@@ -1,0 +1,13 @@
+/* Soma cube: coloured pieces into a glass figure. */
+.sm-stage { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 500px; border-radius: 10px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #f4f1ea, #d9d3c4); border: 1px solid var(--line); }
+.sm-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.sm-note { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #4b4a45; }
+.sm-tray { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.sm-piece { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 52px; padding: 4px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.sm-piece svg { width: 38px; height: 38px; }
+.sm-piece.placed { opacity: .45; }
+.sm-piece.on { border-color: var(--ink); box-shadow: 0 0 0 2px var(--lamp-on); }
+.sm-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 10px; }
+.sm-pad { display: grid; grid-template-columns: repeat(3, 44px); gap: 5px; }
+.sm-dir { font-size: 1.15rem; padding: 5px 0; }
+.sm-rot { display: flex; flex-direction: column; gap: 5px; }

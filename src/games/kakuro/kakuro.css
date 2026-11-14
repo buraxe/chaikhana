@@ -1,0 +1,14 @@
+/* Kakuro: black clue squares split by a diagonal, white squares to fill. */
+.ka-grid { display: grid; grid-template-columns: repeat(var(--w), 1fr); width: min(100%, 460px); aspect-ratio: 1; border: 2px solid var(--ink); background: var(--ink); gap: 1px; }
+.ka-black { position: relative; background: #2b2622; color: #f4efe2; }
+.ka-black svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ka-black path { stroke: #8a7f70; stroke-width: .5; vector-effect: non-scaling-stroke; }
+.ka-r, .ka-d { position: absolute; font: 700 clamp(.55rem, 2.6vw, .9rem)/1 var(--body); }
+.ka-r { top: 12%; right: 10%; }
+.ka-d { bottom: 12%; left: 10%; }
+.ka-cell { border: 0; background: var(--surface); color: var(--ink); font: 700 clamp(1rem, 5.4vw, 1.6rem)/1 var(--display); cursor: pointer; padding: 0; }
+.ka-cell.run { background: color-mix(in srgb, var(--lamp-on) 14%, var(--surface)); }
+.ka-cell.sel { background: color-mix(in srgb, var(--lamp-on) 40%, var(--surface)); }
+.ka-cell.bad { color: var(--bad); }
+.ka-pad { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ka-pad .btn { min-width: 40px; font-size: 1.05rem; }

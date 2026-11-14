@@ -1,0 +1,11 @@
+/* Slitherlink: dots, numbers and the loop drawn in red ink. */
+.sl-board { width: min(100%, 480px); height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; touch-action: manipulation; }
+.sl-dot { fill: var(--ink); }
+.sl-clue { font: 700 20px var(--display); fill: var(--ink); }
+.sl-clue.bad { fill: var(--bad); }
+.sl-edge { cursor: pointer; }
+.sl-hit { stroke: transparent; stroke-width: 14; stroke-linecap: round; }
+.sl-edge:hover .sl-hit { stroke: color-mix(in srgb, var(--lamp-on) 30%, transparent); }
+.sl-line { stroke: var(--red); stroke-width: 4.5; stroke-linecap: round; }
+.sl-board.done .sl-line { stroke: #2f6b4f; }
+.sl-x { stroke: var(--muted); stroke-width: 1.6; }

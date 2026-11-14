@@ -1,0 +1,17 @@
+/* Styles that only games/chess uses; loaded with it. Split from styles.css. */
+.ch-sq.l { fill: #ecd9b4; }
+.ch-sq.d { fill: #a87b4f; }
+.ch-sq.last { fill: #d9c35e; }
+.ch-sq.d.last { fill: #b8a03a; }
+.ch-sq.sel { fill: #8fb46a; }
+.ch-sq.chk { fill: #d4573f; }
+.ch-sq.hint { fill: #6fa8d6; }
+.ch-coord text { font: 600 .26px var(--body); fill: var(--muted); text-anchor: middle; }
+.ch-pc { font: .86px 'DejaVu Sans', 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'Apple Symbols', serif; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke-linejoin: round; }
+.ch-pc.w { fill: #fbf7ee; stroke: #2a1c10; stroke-width: .045; }
+.ch-pc.b { fill: #1c140c; stroke: #f4ecd9; stroke-width: .02; }
+.ch-dot { fill: rgba(28, 20, 12, .35); pointer-events: none; }
+.ch-cap { fill: none; stroke: rgba(28, 20, 12, .45); stroke-width: .07; pointer-events: none; }
+.ch-pg { font: 2rem 'DejaVu Sans', 'Segoe UI Symbol', serif; }
+.ch-pg.w { color: #fff; -webkit-text-stroke: 1px #2a1c10; }
+.ch-pg.b { color: #1c140c; }

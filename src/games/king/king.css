@@ -1,0 +1,9 @@
+/* Styles that only games/king uses; loaded with it. Split from styles.css. */
+.kg-choose { flex-direction: column; align-items: stretch; }
+.kg-opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; }
+.kg-opts .btn { display: flex; flex-direction: column; gap: 1px; line-height: 1.2; }
+.kg-opts small { font-size: .7rem; opacity: .75; }
+.kg-koz { display: flex; align-items: center; justify-content: center; gap: 6px; color: #f4ecd9; font-weight: 700; }
+.kg-contract { font-weight: 700; }
+.kg-contract small { font-weight: 500; color: var(--muted); }
+.kg-choose { background: var(--navy); margin-bottom: 4px; }

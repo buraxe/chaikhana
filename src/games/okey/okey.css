@@ -1,0 +1,17 @@
+/* Styles that only games/okey uses; loaded with it. Split from styles.css. */
+.ok-seat { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: .82rem; text-align: center; }
+.ok-seat span { opacity: .8; }
+.ok-seat .turn { color: #f2c14e; font-weight: 600; opacity: 1; }
+.ok-seat.s-top { grid-column: 2; grid-row: 1; }
+.ok-seat.s-left { grid-column: 1; grid-row: 2; }
+.ok-seat.s-right { grid-column: 3; grid-row: 2; }
+.ok-seat.s-bottom { grid-column: 2; grid-row: 3; }
+.ok-rack { display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px; padding: 8px 8px 12px; background: linear-gradient(#8a5a2e, #5e3a1a); border-radius: 4px; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .25); max-width: 680px; }
+.ok-slot { aspect-ratio: 38 / 52; display: grid; place-items: center; padding: 0; background: rgba(0, 0, 0, .15); border: 0; border-radius: 3px; cursor: pointer; min-width: 0; }
+.ok-slot .ok-tile { width: 100%; height: 100%; font-size: clamp(.8rem, 2.4vw, 1.3rem); }
+.ok-slot.sel .ok-tile { transform: translateY(-6px); box-shadow: 0 0 0 2px var(--red), 0 6px 8px rgba(0, 0, 0, .35); }
+.ok-reveal-tiles { display: flex; flex-wrap: wrap; gap: 3px; }
+.ok-log { display: flex; flex-direction: column; gap: 4px; font-size: .84rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
+@media (max-width: 560px) {
+  .ok-seat { font-size: .72rem; }
+}

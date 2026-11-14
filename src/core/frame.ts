@@ -1,0 +1,58 @@
+/**
+ * Where each game keeps its own controls. The shared toolbar above every game drives them,
+ * so restart, undo and hint sit in the same place in every game without rewriting each one.
+ * again: the button shown after a game ends; fresh: the new-game button (it may ask to
+ * confirm, and confirm is that button); undo / hint as named.
+ */
+export interface FrameMap { undo?: string; hint?: string; again?: string; fresh?: string; confirm?: string }
+const match = (p: string): FrameMap => ({ undo: `#${p}-undo`, again: `#${p}-again`, fresh: `#${p}-new`, confirm: `#${p}-discard` });
+export const FRAME: Record<string, FrameMap> = {
+  sudoku: { undo: '#sdk-undo', hint: '#sdk-hint', fresh: '#sdk-new', confirm: '#sdk-discard' },
+  minesweeper: { again: '#ms-again', fresh: '#ms-restart' },
+  nonogram: { undo: '#ng-undo', hint: '#ng-hint', again: '#ng-again', fresh: '#ng-new' },
+  hanoi: { undo: '#hn-undo', hint: '#hn-hint', again: '#hn-again', fresh: '#hn-new' },
+  'lights-out': { hint: '#lo-hint', again: '#lo-again', fresh: '#lo-new' },
+  huarong: { undo: '#hr-undo', hint: '#hr-hint', again: '#hr-again', fresh: '#hr-new' },
+  tangram: { hint: '#tg-hint', fresh: '#tg-reset' },
+  rubik: { undo: '#rb-undo', fresh: '#rb-reset' },
+  mastermind: { again: '#mm-again', fresh: '#mm-new' },
+  'bulls-cows': { again: '#bc-again, #bd-again', fresh: '#bc-new, #bd-new' },
+  'minesweeper-3d': { again: '#cm-again', fresh: '#cm-new' },
+  'connect-four': match('c4'), dama: match('dm'), 'dots-boxes': match('db'), mancala: match('mg'), morris: match('nm'),
+  qubic: match('qb'), reversi: match('rv'), tictactoe: match('ttt'),
+  gomoku: { undo: '#gmk-undo', again: '#gmk-again', fresh: '#gmk-new', confirm: '#gmk-discard' },
+  tavla: { undo: '#tv-undo', again: '#tv-again', fresh: '#tv-new', confirm: '#tv-discard' },
+  okey: { again: '#ok-again', fresh: '#ok-new', confirm: '#ok-discard-game' },
+  'okey-101': { again: '#o1-again', fresh: '#o1-new', confirm: '#o1-discard-game' },
+  billiards: { fresh: '#pool-new', confirm: '#pool-discard' },
+  battleship: { again: '#bs-again', fresh: '#bs-new' },
+  'football-70': { again: '#fb-again', fresh: '#fb-quit' },
+  kenken: { undo: '#kk-undo', hint: '#kk-hint', again: '#kk-again', fresh: '#kk-new' },
+  futoshiki: { undo: '#fu-undo', hint: '#fu-hint', again: '#fu-again', fresh: '#fu-new' },
+  hidato: { undo: '#hd-undo', hint: '#hd-hint', again: '#hd-again', fresh: '#hd-new' },
+  luban: { undo: '#lb-undo', hint: '#lb-hint', again: '#lb-again', fresh: '#lb-new' },
+  kongming: { undo: '#lb-undo', hint: '#lb-hint', again: '#lb-again', fresh: '#lb-new' },
+  burr: { undo: '#lb-undo', hint: '#lb-hint', again: '#lb-again', fresh: '#lb-new' },
+  'packing-3d': { hint: '#sm-hint', again: '#sm-again', fresh: '#sm-new' },
+  'assembly-3d': { hint: '#sm-hint', again: '#sm-again', fresh: '#sm-new' },
+  soma: { hint: '#sm-hint', again: '#sm-again', fresh: '#sm-new' },
+  'snake-cube': { hint: '#sn-hint', again: '#sn-again', fresh: '#sn-new' },
+  numberlink: { undo: '#nl-undo', hint: '#nl-hint', again: '#nl-again', fresh: '#nl-new' },
+  'n-queens': { undo: '#qn-undo', hint: '#qn-hint', again: '#qn-again', fresh: '#qn-new' },
+  'river-crossing': { undo: '#rv-undo', hint: '#rv-hint', again: '#rv-again', fresh: '#rv-new' },
+  binary: { undo: '#bn-undo', hint: '#bn-hint', again: '#bn-again', fresh: '#bn-new' },
+  kakuro: { undo: '#ka-undo', hint: '#ka-hint', again: '#ka-again', fresh: '#ka-new' },
+  slitherlink: { undo: '#sl-undo', hint: '#sl-hint', again: '#sl-again', fresh: '#sl-new' },
+  'nine-rings': { undo: '#nr-undo', hint: '#nr-hint', again: '#nr-again', fresh: '#nr-new' },
+  hashi: { undo: '#hs-undo', again: '#hs-again', fresh: '#hs-new' },
+  sokoban: { undo: '#sk-undo', again: '#sk-again', fresh: '#sk-reset' },
+  g2048: { undo: '#g48-undo', again: '#g48-again', fresh: '#g48-new' },
+  chess: match('ch'), xiangqi: match('xq'), shogi: match('sg'), weiqi: match('go'),
+  pisti: { again: '#ps-again', fresh: '#ps-new', confirm: '#ps-discard' },
+  batak: { again: '#bt-again', fresh: '#bt-new', confirm: '#bt-discard' },
+  king: { again: '#kg-again', fresh: '#kg-new', confirm: '#kg-discard' },
+  poker: { again: '#pk-again', fresh: '#pk-new', confirm: '#pk-discard' },
+  mahjong: { hint: '#mj-hint', again: '#mj-again', fresh: '#mj-new', confirm: '#mj-abandon' },
+};
+/** In-game copies of undo and hint are hidden: the toolbar has them. */
+export const DUPLICATES = Object.values(FRAME).flatMap(f => [f.undo, f.hint]).filter(Boolean).flatMap(s => s!.split(',').map(x => x.trim()));

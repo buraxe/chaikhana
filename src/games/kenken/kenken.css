@@ -1,0 +1,10 @@
+/* Styles that only games/kenken uses; loaded with it. Split from styles.css. */
+.kk-grid { display: grid; grid-template-columns: repeat(var(--n), 1fr); width: min(100%, 460px); aspect-ratio: 1; border: 3px solid var(--ink); background: var(--surface); }
+.kk-cell { position: relative; border: 0 solid var(--ink); border-color: var(--ink); background: var(--surface); color: var(--ink); font: 700 clamp(1.1rem, 6vw, 1.8rem)/1 var(--display); cursor: pointer; padding: 0; }
+.kk-cell.sel { background: color-mix(in srgb, var(--lamp-on) 35%, var(--surface)); }
+.kk-cell.bad .kk-v { color: var(--bad); }
+.kk-cell.cagebad { background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
+.kk-cell.cageok .kk-v { color: #2f6b4f; }
+.kk-lab { position: absolute; top: 2px; left: 4px; font: 700 clamp(.55rem, 2.4vw, .75rem)/1 var(--body); color: var(--muted); }
+.kk-pad { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.kk-pad .btn { min-width: 46px; font-size: 1.1rem; }

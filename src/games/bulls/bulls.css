@@ -1,0 +1,32 @@
+/* Styles that only games/bulls uses; loaded with it. Split from styles.css. */
+.bc-box { display: flex; flex-direction: column; gap: 14px; align-items: center; max-width: 420px; margin-inline: auto; width: 100%; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.bc-box:focus { outline: none; }
+.bc-box:focus-visible { outline: 2px solid var(--entry); }
+.bc-rows { display: flex; flex-direction: column; gap: 6px; width: 100%; max-height: 300px; overflow-y: auto; }
+.bc-rows li { display: grid; grid-template-columns: 26px 1fr auto; align-items: center; gap: 10px; padding: 4px 8px; border-bottom: 1px dashed var(--line); }
+.bc-n { color: var(--muted); font-size: .8rem; text-align: right; }
+.bc-guess { font: 600 1.4rem/1 var(--display); letter-spacing: .3em; }
+.bc-clue { display: flex; gap: 8px; font: 700 1.05rem/1 var(--body); }
+.bc-clue .plus { color: #2f6b4f; }
+.bc-clue .minus { color: var(--red); }
+.bc-slots { display: flex; gap: 6px; }
+.bc-slot { width: 34px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); font: 600 1.4rem/1 var(--display); }
+.bc-slot.cur { border-color: var(--red); box-shadow: inset 0 -3px 0 var(--red); }
+.bc-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 300px; }
+.bc-pad button { height: 48px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); font: 600 1.3rem/1 var(--body); cursor: pointer; }
+.bc-pad button:disabled { opacity: .35; cursor: default; }
+.bc-pad .fn { font-size: 1rem; }
+.bc-pad .go { background: var(--red); color: var(--on-red); border-color: var(--red); }
+.bc-err { color: var(--bad); font-size: .88rem; text-align: center; }
+.bc-win { font: 700 2.4rem/1 var(--display); letter-spacing: .3em; color: #2f6b4f; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .bc-clue .plus, :root:not([data-theme="light"]) .bc-win { color: #79c29a; }
+}
+:root[data-theme="dark"] .bc-clue .plus, :root[data-theme="dark"] .bc-win { color: #79c29a; }
+.bd-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.bd-cols .bc-rows { max-height: 260px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; }
+.bd-cols .bc-rows.on { border-color: var(--red); }
+.bd-cols .bc-rows li { grid-template-columns: 18px 1fr auto; gap: 6px; padding: 3px 4px; }
+.bd-cols .bc-guess { font-size: 1.05rem; letter-spacing: .15em; }
+.bd-cols .bc-clue { font-size: .9rem; gap: 4px; }
+.bd-head { display: block !important; border-bottom: 1px solid var(--line) !important; font-size: .9rem; }

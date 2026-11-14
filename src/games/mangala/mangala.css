@@ -1,0 +1,15 @@
+/* Styles that only games/mangala uses; loaded with it. Split from styles.css. */
+.mg-board { display: block; width: 100%; max-width: 760px; height: auto; user-select: none; }
+.mg-wood { fill: var(--wood-2); stroke: var(--wood-line); stroke-width: .04; }
+.mg-pit, .mg-store { fill: color-mix(in srgb, var(--wood-line) 55%, var(--wood-2)); stroke: color-mix(in srgb, var(--wood-line) 80%, #000); stroke-width: .025; }
+.mg-pit.live { stroke: var(--gold); stroke-width: .05; }
+.mg-pit.last, .mg-store.last { stroke: #f2e3b5; stroke-width: .05; }
+.mg-pit.capt { fill: color-mix(in srgb, var(--red) 45%, var(--wood-line)); }
+.mg-stone { stroke: rgba(0, 0, 0, .35); stroke-width: .01; }
+.mg-stone.s0 { fill: #e9e2d0; }
+.mg-stone.s1 { fill: #4b8a8a; }
+.mg-stone.s2 { fill: #b8462f; }
+.mg-stone.s3 { fill: #d6a842; }
+.mg-count { font: 700 .24px var(--body); fill: var(--wood-line); }
+.mg-count.big { font-size: .28px; }
+.mg-board .pt { cursor: pointer; }

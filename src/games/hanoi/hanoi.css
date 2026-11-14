@@ -1,0 +1,6 @@
+/* Styles that only games/hanoi uses; loaded with it. Split from styles.css. */
+.h-base { fill: var(--wood-line); }
+.h-peg { fill: var(--wood-2); }
+.h-peg.hint { fill: var(--red); }
+.h-disk { stroke: var(--wood-line); stroke-width: .06; transition: y .12s; }
+.h-label { font: 600 .7px var(--body); fill: var(--muted); }

@@ -1,0 +1,67 @@
+/* Styles that only games/tavla uses; loaded with it. Split from styles.css. */
+.tv-frame { fill: #4a2a12; }
+.tv-felt { fill: #2c4a3a; }
+.tv-bar { fill: #3a2010; }
+.tv-pt.a { fill: #d8c49a; }
+.tv-pt.b { fill: #8a2f24; }
+.tv-pt.source { filter: brightness(1.15); }
+.tv-pt.target { fill: var(--gold); }
+.tv-num { font: 600 .45px var(--body); fill: rgba(255, 255, 255, .45); pointer-events: none; }
+.pul-off.p0 { fill: #f2ead8; }
+.pul-off.p1 { fill: #7a1f1a; }
+.tv-off { fill: #2a170a; cursor: pointer; }
+.tv-off.target { fill: var(--gold); opacity: .6; }
+.tv-count { font: 700 .6px var(--body); fill: var(--gold); pointer-events: none; }
+.tv-die.p0 { fill: #f8f4ea; }
+.tv-die.p1 { fill: #8a231d; }
+.tv-dot.p0 { fill: #1a1a1a; }
+.tv-dot.p1 { fill: #f8f4ea; }
+.tv-cube { fill: #f8f4ea; stroke: #333; stroke-width: .05; }
+.tv-cube-n { font: 700 .8px var(--body); fill: #222; }
+.tv-barsrc { fill: rgba(242, 193, 78, .22) !important; stroke: var(--gold); stroke-width: .08; cursor: pointer; }
+.tv-barsrc.sel { fill: rgba(242, 193, 78, .4) !important; }
+.tv-wrap { position: relative; width: 100%; max-width: 820px; }
+.tv-wrap.tall { max-width: 460px; margin-inline: auto; }
+.tv-wrap .tv-board { max-width: none; }
+.tv-actions, .tv-card { position: absolute; left: 23.3%; top: 50%; transform: translate(-50%, -50%); }
+.tv-wrap.tall .tv-actions, .tv-wrap.tall .tv-card { left: 50%; top: 23.3%; }
+.tv-actions { display: flex; gap: 8px; align-items: center; }
+.tv-wrap.tall .tv-actions { flex-direction: column; }
+.tv-act { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 52px; height: 52px; border-radius: 50%; border: 2px solid rgba(255, 244, 220, .75); background: rgba(24, 14, 6, .78); color: #f6ead0; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, .35); padding: 0; }
+.tv-act b { font: 700 1.15rem/1 var(--body); }
+.tv-act span { font: 600 .6rem/1 var(--body); letter-spacing: .02em; max-width: 48px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tv-act.go { width: 62px; height: 62px; background: #a3262a; border-color: #f3d79a; animation: tv-pulse 1.6s ease-in-out infinite; }
+.tv-act:disabled { opacity: .35; cursor: default; animation: none; }
+.tv-act:not(:disabled):hover { filter: brightness(1.12); }
+.die-ico { width: 24px; height: 24px; }
+.die-ico rect { fill: #f8f1e0; }
+.die-ico circle { fill: #1c140c; }
+@media (prefers-reduced-motion: reduce) {
+  .tv-act.go { animation: none; }
+}
+.tv-card { display: flex; flex-direction: column; align-items: center; gap: 8px; width: min(36%, 260px); padding: 12px; text-align: center; background: rgba(250, 243, 228, .96); color: #22180f; border: 1px solid #6b4a24; border-radius: 6px; box-shadow: 0 10px 24px rgba(0, 0, 0, .4); font-size: .88rem; line-height: 1.35; }
+.tv-wrap.tall .tv-card { width: min(84%, 300px); }
+.tv-card .btn { min-height: 36px; }
+.tv-card .row { justify-content: center; }
+.tv-card h3 { color: #6c5d48; }
+@media (max-width: 560px) {
+  .tv-act { width: 46px; height: 46px; }
+  .tv-act.go { width: 54px; height: 54px; }
+  .tv-act span { font-size: .55rem; }
+}
+:root[data-tavla="sedef"] .tv-frame { fill: #3b2a20; }
+:root[data-tavla="sedef"] .tv-felt { fill: #e9e2d2; }
+:root[data-tavla="sedef"] .tv-bar { fill: #2c1f17; }
+:root[data-tavla="sedef"] .tv-pt.a { fill: #b9a37a; }
+:root[data-tavla="sedef"] .tv-pt.b { fill: #2f5a66; }
+:root[data-tavla="sedef"] .tv-num { fill: rgba(40, 30, 20, .5); }
+:root[data-tavla="ebony"] .tv-frame { fill: #18120e; }
+:root[data-tavla="ebony"] .tv-felt { fill: #22303f; }
+:root[data-tavla="ebony"] .tv-bar { fill: #0f0b08; }
+:root[data-tavla="ebony"] .tv-pt.a { fill: #e6dcc4; }
+:root[data-tavla="ebony"] .tv-pt.b { fill: #b8892e; }
+:root[data-tavla="olive"] .tv-frame { fill: #6b5a34; }
+:root[data-tavla="olive"] .tv-felt { fill: #4b5a2a; }
+:root[data-tavla="olive"] .tv-bar { fill: #54462a; }
+:root[data-tavla="olive"] .tv-pt.a { fill: #efe3c0; }
+:root[data-tavla="olive"] .tv-pt.b { fill: #7a3b1f; }

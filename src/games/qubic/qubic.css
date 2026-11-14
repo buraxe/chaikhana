@@ -1,0 +1,14 @@
+/* Styles that only games/qubic uses; loaded with it. Split from styles.css. */
+.qb-layers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 640px; }
+.qb-layer { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.qb-lname { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.qb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 3px; background: var(--wood-2); border-radius: 4px; }
+.qb-cell { aspect-ratio: 1; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--wood-1) 70%, #fff); padding: 0; cursor: pointer; min-width: 0; }
+.qb-cell:disabled { cursor: default; }
+.qb-cell.p2 { background: #23272f; }
+.qb-cell.hov:not(:disabled) { background: #f2c14e; }
+.qb-cell.last { box-shadow: 0 0 0 2px #f2c14e inset; }
+.qb-cell.win { background: #f2c14e; box-shadow: 0 0 0 2px #8a5a00 inset; }
+@media (max-width: 560px) {
+  .qb-layers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

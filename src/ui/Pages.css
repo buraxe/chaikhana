@@ -1,0 +1,15 @@
+/* Styles that only ui/Pages uses; loaded with it. Split from styles.css. */
+.daily-card { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; padding: 24px; background: var(--navy); color: var(--on-navy); border-top: 2px solid var(--gold); }
+.daily-card .muted, .daily-card .eyebrow { color: var(--on-navy-muted); margin: 0; }
+.daily-card h2 .zh { color: var(--gold); }
+.tour-promo { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 16px; margin-bottom: 18px; border: 2px solid var(--gold); border-radius: 8px; background: var(--surface); text-decoration: none; }
+.tour-promo > span:nth-child(2) { display: flex; flex-direction: column; gap: 2px; flex: 1 1 220px; min-width: 0; }
+.tour-promo b { font: 700 1.15rem/1.2 var(--display); }
+.daily-card:has(.issue) { background: var(--paper); color: var(--paper-ink); }
+.daily-card:has(.issue) .eyebrow { color: var(--paper-muted); }
+.board-puz { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.board-puz a { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); text-decoration: none; }
+.board-puz svg { width: 40px; height: 40px; }
+.board-puz a > span:nth-child(2) { display: flex; flex-direction: column; min-width: 0; }
+.board-puz small { color: var(--muted); }
+.board-puz li.ok a { opacity: .75; }

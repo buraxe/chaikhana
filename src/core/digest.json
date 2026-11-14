@@ -1,0 +1,1263 @@
+{
+ "lessons": {
+  "sudoku": {
+   "names": {
+    "en": "Sudoku",
+    "tr": "Sudoku",
+    "zh": "数独",
+    "trad": "數獨",
+    "pinyin": "shùdú"
+   },
+   "en": {
+    "s": "Fill the grid so every row, column and box holds each symbol exactly once.",
+    "h": "The modern puzzle first appeared in 1979 in an American magazine under the name Number Place, designed by Howard Garns."
+   },
+   "zh": {
+    "s": "在格子里填数，使每一行、每一列、每一宫中每个符号都恰好出现一次。",
+    "h": "现代数独最早于1979年刊登在美国一本杂志上，名为 Number Place，设计者是霍华德·格恩斯。"
+   },
+   "tr": {
+    "s": "Izgarayı, her satırda, sütunda ve kutuda her simge tam bir kez olacak şekilde doldur.",
+    "h": "Bugünkü bulmaca ilk kez 1979’da bir Amerikan dergisinde Number Place adıyla, Howard Garns’ın tasarımıyla çıktı."
+   }
+  },
+  "gomoku": {
+   "names": {
+    "en": "Gomoku",
+    "tr": "Gomoku",
+    "zh": "五子棋",
+    "pinyin": "wǔzǐqí"
+   },
+   "en": {
+    "s": "Two players take turns placing stones. The first to line up five in a row wins.",
+    "h": "Five-in-a-row is played across East Asia on a Go board with Go stones."
+   },
+   "zh": {
+    "s": "双方轮流落子，先在一条线上连成五子的一方获胜。",
+    "h": "五子棋在东亚各地流行，用围棋的棋盘和棋子来下。"
+   },
+   "tr": {
+    "s": "İki oyuncu sırayla taş koyar. Beşini bir sıraya ilk dizen kazanır.",
+    "h": "Beşli dizme bütün Doğu Asya’da Go tahtasında, Go taşlarıyla oynanır."
+   }
+  },
+  "minesweeper": {
+   "names": {
+    "en": "Minesweeper",
+    "tr": "Mayın Tarlası",
+    "zh": "扫雷",
+    "pinyin": "sǎoléi"
+   },
+   "en": {
+    "s": "Open every safe square without touching a mine. Numbers tell you how many mines touch each square.",
+    "h": "Grid games about hidden mines appeared on home computers in the early 1980s, such as Mined-Out in 1983."
+   },
+   "zh": {
+    "s": "打开所有安全的格子，不要碰到地雷。数字表示周围有几颗雷。",
+    "h": "以隐藏地雷为主题的方格游戏在1980年代初就出现在家用电脑上，例如1983年的 Mined-Out。"
+   },
+   "tr": {
+    "s": "Bir mayına dokunmadan bütün güvenli kareleri aç. Sayılar her kareye kaç mayının değdiğini söyler.",
+    "h": "Gizli mayınlı ızgara oyunları ev bilgisayarlarında 1980’lerin başında görüldü; 1983 tarihli Mined-Out bunlardan biridir."
+   }
+  },
+  "connect-four": {
+   "names": {
+    "en": "Connect Four",
+    "tr": "Dört Bağla",
+    "zh": "四子棋",
+    "pinyin": "sìzǐqí"
+   },
+   "en": {
+    "s": "Drop discs into a 7-column, 6-row frame. Four in a row in any direction wins.",
+    "h": "Connect Four was published by Milton Bradley in 1974, designed by Howard Wexler and Ned Strongin."
+   },
+   "zh": {
+    "s": "把棋子投入7列6行的竖直棋盘，任意方向连成四子即获胜。",
+    "h": "四子棋由米尔顿·布拉德利公司于1974年出版，设计者是霍华德·韦克斯勒和内德·斯特朗金。"
+   },
+   "tr": {
+    "s": "7 sütun, 6 satırlık bir çerçeveye pul bırak. Herhangi bir yönde dördünü dizen kazanır.",
+    "h": "Dört Bağla’yı (Connect Four) Howard Wexler ve Ned Strongin tasarladı, Milton Bradley 1974’te yayımladı. 1988’de James Dow Allen ve Victor Allis oyunu birbirinden bağımsız olarak çözdü: ilk oyuncu orta sütundan başlayıp kusursuz oynarsa her zaman kazanır."
+   }
+  },
+  "tictactoe": {
+   "names": {
+    "en": "Tic-Tac-Toe",
+    "tr": "XOX",
+    "zh": "井字棋",
+    "pinyin": "jǐngzìqí"
+   },
+   "en": {
+    "s": "Two players mark a 3×3 grid in turn. Three in a row wins.",
+    "h": "Three-in-a-row games on small grids are very old, and the pencil-and-paper version was well known in Britain by the nineteenth century as noughts and crosses."
+   },
+   "zh": {
+    "s": "两人轮流在3×3的格子里画记号，先连成一条线的一方获胜。",
+    "h": "在小方格上连成三子的游戏历史悠久，纸笔版本在十九世纪的英国已广为人知。"
+   },
+   "tr": {
+    "s": "İki oyuncu sırayla 3×3’lük bir ızgaraya işaret koyar. Üçünü bir sıraya dizen kazanır.",
+    "h": "Küçük ızgaralarda üçlü dizme oyunları çok eskidir; kâğıt-kalem versiyonu on dokuzuncu yüzyılda İngiltere’de noughts and crosses adıyla iyi bilinirdi. 1952’de A."
+   }
+  },
+  "hanoi": {
+   "names": {
+    "en": "Tower of Hanoi",
+    "tr": "Hanoi Kulesi",
+    "zh": "汉诺塔",
+    "pinyin": "hànnuòtǎ"
+   },
+   "en": {
+    "s": "Move a stack of disks to another peg, one disk at a time, never putting a larger disk on a smaller one.",
+    "h": "The French mathematician Édouard Lucas invented the puzzle and published it in 1883 under the name N."
+   },
+   "zh": {
+    "s": "把一叠圆盘移到另一根柱子上，每次只能移动一个，大盘永远不能压在小盘上。",
+    "h": "这个谜题由法国数学家爱德华·卢卡斯发明，1883年以笔名 N. Claus de Siam 发表，这个名字是 Lucas d’Amiens 的字母重排。"
+   },
+   "tr": {
+    "s": "Bir disk yığınını, her seferinde bir disk taşıyarak ve büyük diski asla küçüğün üstüne koymadan başka bir çubuğa aktar.",
+    "h": "Bulmacayı Fransız matematikçi Édouard Lucas icat etti ve 1883’te Lucas d’Amiens’in harf değiştirmesi olan N."
+   }
+  },
+  "lights-out": {
+   "names": {
+    "en": "Lights Out",
+    "tr": "Işıkları Söndür",
+    "zh": "关灯游戏",
+    "pinyin": "guāndēng yóuxì"
+   },
+   "en": {
+    "s": "Switch every light off. Each press toggles a light and its four neighbours.",
+    "h": "Tiger Electronics released Lights Out as a handheld game in 1995, with a 5×5 grid of lit buttons."
+   },
+   "zh": {
+    "s": "把所有灯都关掉。每按一盏灯，它和上下左右四盏灯都会切换开关。",
+    "h": "1995年，老虎电子推出了掌上游戏 Lights Out，上面是5×5的发光按钮。"
+   },
+   "tr": {
+    "s": "Bütün ışıkları söndür. Her basış bir ışığı ve dört komşusunu değiştirir.",
+    "h": "Tiger Electronics, Lights Out’u 1995’te 5×5 ışıklı düğmeli bir el oyunu olarak çıkardı."
+   }
+  },
+  "huarong": {
+   "names": {
+    "en": "Huarong Dao",
+    "tr": "Huarong Dao",
+    "zh": "华容道",
+    "trad": "華容道",
+    "pinyin": "Huáróng Dào"
+   },
+   "en": {
+    "s": "Slide the blocks until Cao Cao, the large square, escapes through the gap at the bottom of the board.",
+    "h": "The puzzle takes its story from the Romance of the Three Kingdoms."
+   },
+   "zh": {
+    "s": "滑动木块，让最大的方块曹操从棋盘底部中间的出口逃出去。",
+    "h": "这个谜题的故事来自《三国演义》。"
+   },
+   "tr": {
+    "s": "Büyük kare olan Cao Cao tahtanın altındaki boşluktan kaçana kadar blokları kaydır.",
+    "h": "Bulmaca hikâyesini Üç Krallık Hikâyesi’nden alır. 208’deki Kızıl Kayalıklar Savaşı’nda yenilen savaş beyi Cao Cao, Guan Yu’nun askerleriyle beklediği Huarong yolundan kaçtı."
+   }
+  },
+  "tangram": {
+   "names": {
+    "en": "Tangram",
+    "tr": "Tangram",
+    "zh": "七巧板",
+    "trad": "七巧板",
+    "pinyin": "qīqiǎobǎn"
+   },
+   "en": {
+    "s": "Arrange seven flat pieces, cut from one square, to fill a silhouette exactly.",
+    "h": "The tangram grew out of earlier Chinese furniture puzzles: in the Song dynasty Huang Bosi described \"banquet tables\" that could be arranged in many shapes, and in the Ming dynasty Ge Shan made a set of triangular tables in the same spirit."
+   },
+   "zh": {
+    "s": "用一块正方形切成的七块板，不重叠地拼满给定的剪影。",
+    "h": "七巧板源自更早的中国家具拼摆：宋代黄伯思在《燕几图》中描述了可以拼成多种形状的“燕几”，明代戈汕又按同样的思路设计了三角形的“蝶几”。"
+   },
+   "tr": {
+    "s": "Tek bir kareden kesilmiş yedi düz parçayı bir silueti tam dolduracak şekilde yerleştir.",
+    "h": "Tangram daha eski Çin mobilya bulmacalarından doğdu: Song hanedanlığında Huang Bosi birçok şekilde dizilebilen “ziyafet masaları” anlattı; Ming hanedanlığında Ge Shan aynı ruhla üçgen masalardan bir takım yaptı."
+   }
+  },
+  "tavla": {
+   "names": {
+    "en": "Tavla",
+    "tr": "Tavla",
+    "zh": "双陆棋",
+    "pinyin": "shuānglùqí"
+   },
+   "en": {
+    "s": "Turkish backgammon: race your fifteen checkers around the board and bear them all off first.",
+    "h": "Tavla belongs to the \"tables\" family of race games, whose ancestors include the Roman tabula and the Persian nard."
+   },
+   "zh": {
+    "s": "土耳其双陆棋：让自己的15枚棋子绕棋盘跑一圈，最先全部移出棋盘的一方获胜。",
+    "h": "双陆棋属于“盘棋”类竞速游戏，祖先包括古罗马的 tabula 和波斯的 nard。"
+   },
+   "tr": {
+    "s": "On beş pulunu tahtanın etrafında koştur ve hepsini ilk sen topla.",
+    "h": "Tavla, ataları arasında Roma’nın tabula’sı ve İran’ın nerd’i bulunan “masa” yarış oyunları ailesindendir."
+   }
+  },
+  "dama": {
+   "names": {
+    "en": "Dama",
+    "tr": "Dama",
+    "zh": "土耳其跳棋",
+    "pinyin": "Tǔ'ěrqí tiàoqí"
+   },
+   "en": {
+    "s": "Turkish draughts: pieces move and capture straight ahead or sideways, never diagonally.",
+    "h": "Dama is the draughts of Turkey, and versions of it are played across the Middle East and the eastern Mediterranean."
+   },
+   "zh": {
+    "s": "土耳其跳棋：棋子只能直走和横走，不能斜走。",
+    "h": "土耳其跳棋是土耳其的跳棋，中东和东地中海一带也流行着它的各种版本。"
+   },
+   "tr": {
+    "s": "Türk daması: taşlar düz ileri ya da yana gider ve alır, asla çapraz gitmez.",
+    "h": "Dama Türkiye’nin dama oyunudur; çeşitleri Orta Doğu’da ve Doğu Akdeniz’de oynanır."
+   }
+  },
+  "okey": {
+   "names": {
+    "en": "Okey",
+    "tr": "Okey",
+    "zh": "Okey"
+   },
+   "en": {
+    "s": "A Turkish tile game for four: draw and discard until your fourteen tiles form complete sets.",
+    "h": "Okey is a rummy game played with numbered tiles, close to Rummikub, and it is one of the most played games in Turkish coffeehouses and homes."
+   },
+   "zh": {
+    "s": "一种四人玩的土耳其牌类游戏：不断摸牌、打牌，直到手里的14张牌全部组成牌组。",
+    "h": "Okey 是一种用数字牌玩的拉密类游戏，和 Rummikub 很像，是土耳其咖啡馆和家庭里最常玩的游戏之一。"
+   },
+   "tr": {
+    "s": "Dört kişilik bir Türk taş oyunu: on dört taşın tamamı per olana kadar çek ve at.",
+    "h": "Okey, Rummikub’a yakın, numaralı taşlarla oynanan bir oyundur ve Türk kahvehanelerinde ve evlerinde en çok oynanan oyunlardan biridir."
+   }
+  },
+  "billiards": {
+   "names": {
+    "en": "Billiards",
+    "tr": "Bilardo",
+    "zh": "台球",
+    "pinyin": "táiqiú"
+   },
+   "en": {
+    "s": "Pocket billiards: 8-ball and 9-ball on a 9-foot table, plus a practice table.",
+    "h": "Billiards grew out of a European lawn game that moved indoors onto tables, which is why the cloth is green."
+   },
+   "zh": {
+    "s": "落袋台球：在9英尺球台上玩八球、九球，还有练习模式。",
+    "h": "台球起源于欧洲的一种草地游戏，后来搬进室内、搬到桌上，所以台呢是绿色的。"
+   },
+   "tr": {
+    "s": "Cepli bilardo: 9 fitlik masada 8 top ve 9 top, artı bir antrenman masası.",
+    "h": "Bilardo, kapalı mekâna, masaların üstüne taşınan bir Avrupa çim oyunundan doğdu; çuhanın yeşil olmasının nedeni budur."
+   }
+  },
+  "okey-101": {
+   "names": {
+    "en": "101 Okey",
+    "tr": "101 Okey",
+    "zh": "101 Okey"
+   },
+   "en": {
+    "s": "The Turkish game of laying sets: open with 101 points, empty your rack, and keep your penalty total low over several rounds.",
+    "h": "101 Okey uses the same tiles as Okey but plays like a rummy where sets go down on the table."
+   },
+   "zh": {
+    "s": "土耳其的出牌组游戏：用101分开牌，把牌架出空，在几局下来尽量让罚分总数最低。",
+    "h": "101 Okey 用的牌和 Okey 一样，但玩法更像把牌组摆上桌的拉密。"
+   },
+   "tr": {
+    "s": "Per indirmenin Türk oyunu: 101 puanla aç, ıstakanı boşalt ve birkaç el boyunca ceza toplamını düşük tut.",
+    "h": "101 Okey, Okey ile aynı taşları kullanır ama perlerin masaya indirildiği bir oyun gibi oynanır."
+   }
+  },
+  "rubik": {
+   "names": {
+    "en": "Rubik's Cube",
+    "tr": "Rubik Küpü",
+    "zh": "魔方",
+    "pinyin": "mófāng"
+   },
+   "en": {
+    "s": "Turn the layers until every face shows a single colour again.",
+    "h": "The Hungarian architecture professor Ernő Rubik built the first cube in 1974 while looking for a way to explain three-dimensional movement to his students."
+   },
+   "zh": {
+    "s": "转动各层，直到每一面重新变成单一颜色。",
+    "h": "1974年，匈牙利建筑学教授鲁比克·艾尔诺为了向学生讲解三维运动，做出了第一个魔方。"
+   },
+   "tr": {
+    "s": "Her yüz yeniden tek renk olana kadar katmanları çevir.",
+    "h": "Macar mimarlık profesörü Ernő Rubik ilk küpü 1974’te, öğrencilerine üç boyutlu hareketi anlatmanın bir yolunu ararken yaptı."
+   }
+  },
+  "reversi": {
+   "names": {
+    "en": "Reversi",
+    "tr": "Reversi",
+    "zh": "黑白棋",
+    "pinyin": "hēibáiqí"
+   },
+   "en": {
+    "s": "Trap your opponent's discs between yours to flip them. The most discs at the end wins.",
+    "h": "Reversi was published in England in the 1880s, with rival claims by Lewis Waterman and John W."
+   },
+   "zh": {
+    "s": "把对方的棋子夹在自己的两枚棋子之间来翻转它们，终局时棋子多的一方获胜。",
+    "h": "黑白棋于1880年代在英国出版，刘易斯·沃特曼和约翰·莫利特都声称是发明者。"
+   },
+   "tr": {
+    "s": "Rakibinin pullarını kendi pulların arasında sıkıştırıp çevir. Sonunda en çok pulu olan kazanır.",
+    "h": "Reversi 1880’lerde İngiltere’de yayımlandı; Lewis Waterman ve John W."
+   }
+  },
+  "nonogram": {
+   "names": {
+    "en": "Nonograms",
+    "tr": "Nonogram",
+    "zh": "数织",
+    "pinyin": "shùzhī"
+   },
+   "en": {
+    "s": "Use the numbers beside each row and column to work out which cells are filled. The finished grid is a picture.",
+    "h": "Nonograms were invented independently in 1987 by Non Ishida, a Japanese graphic designer, and Tetsuya Nishio."
+   },
+   "zh": {
+    "s": "根据每行每列旁边的数字，推理出哪些格子要涂黑。完成后会得到一幅图案。",
+    "h": "数织在1987年分别由日本平面设计师石田伸和西尾彻也独立发明。"
+   },
+   "tr": {
+    "s": "Her satırın ve sütunun yanındaki sayılardan hangi karelerin dolu olduğunu bul. Tamamlanan ızgara bir resimdir.",
+    "h": "Nonogramlar 1987’de Japon grafik tasarımcı Non Ishida ve Tetsuya Nishio tarafından birbirinden bağımsız olarak icat edildi. 1990’ların başında nonogram adının da konduğu İngiliz gazetelerinde sevildi; picross, griddler ve sayılarla boyama adlarıyla da bilinir."
+   }
+  },
+  "mastermind": {
+   "names": {
+    "en": "Mastermind",
+    "tr": "Mastermind",
+    "zh": "珠玑妙算",
+    "pinyin": "zhūjī miàosuàn"
+   },
+   "en": {
+    "s": "Crack a hidden code of coloured pegs using the clues each guess earns.",
+    "h": "Mordecai Meirowitz, an Israeli postmaster and telecommunications expert, invented Mastermind in 1970, and Invicta Plastics in England published it."
+   },
+   "zh": {
+    "s": "根据每次猜测得到的提示，破解一组由彩色钉子组成的隐藏密码。",
+    "h": "1970年，以色列邮政局长、通信专家莫迪凯·梅罗维茨发明了珠玑妙算，由英国的 Invicta Plastics 公司出版。"
+   },
+   "tr": {
+    "s": "Her tahminin kazandırdığı ipuçlarıyla renkli çivilerden oluşan gizli bir şifreyi kır.",
+    "h": "İsrailli posta müdürü ve telekomünikasyon uzmanı Mordecai Meirowitz, Mastermind’ı 1970’te icat etti; İngiltere’de Invicta Plastics yayımladı."
+   }
+  },
+  "dots-boxes": {
+   "names": {
+    "en": "Dots and Boxes",
+    "tr": "Noktalar ve Kutular",
+    "zh": "点格棋",
+    "pinyin": "diǎngéqí"
+   },
+   "en": {
+    "s": "Take turns joining dots. Close a box to claim it and move again; the most boxes wins.",
+    "h": "The French mathematician Édouard Lucas, also the inventor of the Tower of Hanoi, described the game in 1889 as la pipopipette."
+   },
+   "zh": {
+    "s": "轮流连接两个点。围成一个格子就占领它并再走一次，占格多者获胜。",
+    "h": "法国数学家爱德华·卢卡斯（汉诺塔的发明者）在1889年以 la pipopipette 之名描述了这个游戏。"
+   },
+   "tr": {
+    "s": "Sırayla noktaları birleştir. Bir kutuyu kapatan onu alır ve yeniden oynar; en çok kutusu olan kazanır.",
+    "h": "Hanoi Kulesi’nin de mucidi olan Fransız matematikçi Édouard Lucas, oyunu 1889’da la pipopipette adıyla anlattı."
+   }
+  },
+  "mancala": {
+   "names": {
+    "en": "Mangala",
+    "tr": "Mangala",
+    "zh": "曼卡拉播棋",
+    "pinyin": "màn kǎ lā bō qí"
+   },
+   "en": {
+    "s": "Sow stones around a board of pits, capture by making even numbers, and fill your treasure first.",
+    "h": "Mangala belongs to the mancala family, sowing games played across Africa, the Middle East and Asia for well over a thousand years."
+   },
+   "zh": {
+    "s": "在一排排坑里播种石子，让对方的坑成双数就能吃子，先装满自己的宝库。",
+    "h": "曼卡拉播棋属于“播棋”家族，在非洲、中东和亚洲已流传一千多年。"
+   },
+   "tr": {
+    "s": "Taşları kuyulara dağıt, çift yaparak al ve hazineni önce sen doldur.",
+    "h": "Mangala, Afrika’da, Orta Doğu’da ve Asya’da bin yılı aşkın süredir oynanan dağıtma oyunları ailesindendir."
+   }
+  },
+  "morris": {
+   "names": {
+    "en": "Nine Men's Morris",
+    "tr": "Dokuz Taş",
+    "zh": "九子棋",
+    "pinyin": "jiǔ zǐ qí"
+   },
+   "en": {
+    "s": "Place nine stones each, then move them along the lines; three in a row takes an opponent stone.",
+    "h": "Boards for the game have been found cut into the roof slabs of a temple at Kurna in Egypt from about 1400 BC, on Roman buildings and in the Gokstad Viking ship."
+   },
+   "zh": {
+    "s": "每人先放下九颗棋子，再沿线移动；连成三子就能吃掉对方一颗棋子。",
+    "h": "在埃及古尔纳一座约公元前1400年的神庙屋顶石板上发现过刻出的棋盘，罗马建筑上和维京时代的科克斯塔德船上也有。"
+   },
+   "tr": {
+    "s": "Herkes dokuz taşını koyar, sonra çizgiler boyunca oynatır; üçünü bir sıraya dizen rakibin bir taşını alır.",
+    "h": "Oyunun tahtaları Mısır’da Kurna’daki yaklaşık MÖ 1400 tarihli bir tapınağın çatı taşlarında, Roma yapılarında ve Gokstad Viking gemisinde kazınmış olarak bulundu."
+   }
+  },
+  "bulls-cows": {
+   "names": {
+    "en": "Bulls and Cows",
+    "tr": "Sayı Bulmaca",
+    "zh": "猜数字",
+    "pinyin": "cāi shùzì"
+   },
+   "en": {
+    "s": "Find a hidden number with different digits; each guess tells you how many digits are right, and how many are in the right place.",
+    "h": "Bulls and Cows is an old pencil-and-paper game, probably more than a century old, and the ancestor of Mastermind."
+   },
+   "zh": {
+    "s": "猜出一个各位数字都不相同的隐藏数字；每次猜测会告诉你对了几个数字，其中几个位置也对。",
+    "h": "猜数字（又叫“公牛与母牛”）是一种古老的纸笔游戏，可能已有一百多年历史，也是珠玑妙算的前身。"
+   },
+   "tr": {
+    "s": "Rakamları farklı gizli bir sayıyı bul; her tahmin kaç rakamın doğru, kaçının doğru yerde olduğunu söyler.",
+    "h": "Sayı Bulmaca, muhtemelen yüz yılı aşkın, eski bir kâğıt-kalem oyunudur ve Mastermind’ın atasıdır; İngilizcede Bulls and Cows diye bilinir. 1960’ların sonunda ilk bilgisayarlarda Moo adıyla oynandı."
+   }
+  },
+  "battleship": {
+   "names": {
+    "en": "Battleship",
+    "tr": "Amiral Battı",
+    "zh": "海战棋",
+    "pinyin": "hǎizhàn qí"
+   },
+   "en": {
+    "s": "Hide your fleet on a grid and hunt the enemy’s, one shot at a time.",
+    "h": "Battleship began as a pencil-and-paper game around the First World War; similar games were played in Russia and France."
+   },
+   "zh": {
+    "s": "把自己的舰队藏在格子里，一炮一炮地搜寻敌方舰队。",
+    "h": "海战棋大约在第一次世界大战时期作为纸笔游戏出现，俄国和法国也有类似玩法。"
+   },
+   "tr": {
+    "s": "Filonu bir ızgaraya sakla ve düşmanınkini birer atışla avla.",
+    "h": "Amiral Battı, Birinci Dünya Savaşı sıralarında kâğıt-kalem oyunu olarak doğdu; Rusya’da ve Fransa’da da benzerleri oynanıyordu."
+   }
+  },
+  "qubic": {
+   "names": {
+    "en": "3D Tic-Tac-Toe",
+    "tr": "3B XOX",
+    "zh": "立体井字棋",
+    "pinyin": "lìtǐ jǐngzì qí"
+   },
+   "en": {
+    "s": "Four in a line on a 4×4×4 cube: rows, columns, pillars and diagonals through all three dimensions.",
+    "h": "Three-dimensional noughts and crosses was sold by Parker Brothers in 1964 as Qubic, on four clear plastic layers stacked one above the other."
+   },
+   "zh": {
+    "s": "在4×4×4的立方体上连成四子：横、竖、贯穿各层的柱，以及跨越三维的斜线。",
+    "h": "1964年，美国 Parker Brothers 公司推出了立体井字棋 Qubic，由四层上下叠放的透明塑料棋盘组成。"
+   },
+   "tr": {
+    "s": "4×4×4’lük bir küpte dört taşı bir çizgiye diz: satırlar, sütunlar, katları delen sütunlar ve üç boyutlu çaprazlar.",
+    "h": "Üç boyutlu XOX, 1964’te Parker Brothers tarafından üst üste dizilmiş dört şeffaf plastik katla Qubic adıyla satıldı."
+   }
+  },
+  "football-70": {
+   "names": {
+    "en": "7-0 Challenge",
+    "tr": "7-0 Meydan Okuması",
+    "zh": "7比0挑战",
+    "pinyin": "qī bǐ líng tiǎozhàn"
+   },
+   "en": {
+    "s": "Roll a club, take one player, fill your XI, then play a seven-match cup run. Seven wins out of seven is the 7-0.",
+    "h": "Draft games like this grew out of fantasy football and late-night arguments about all-time XIs: what if you could only take one player from each team you are dealt?"
+   },
+   "zh": {
+    "s": "抽一支球队，选一名球员，凑齐首发十一人，然后踢七场杯赛。七战全胜就是7比0。",
+    "h": "这类选人游戏源于梦幻足球，以及球迷关于“历史最佳阵容”的深夜争论：如果每抽到一支球队只能选一个人，会组成怎样的阵容？这个版本有三个非授权联赛：欧洲豪门、土耳其超级联赛和中国超级联赛。"
+   },
+   "tr": {
+    "s": "Bir kulüp çek, bir oyuncu al, ilk on birini tamamla ve yedi maçlık kupa yoluna çık. Yedide yedi galibiyet 7-0’dır.",
+    "h": "Bu tür kadro kurma oyunları fantezi futboldan ve “tüm zamanların en iyi on biri” tartışmalarından doğdu: Önüne gelen her takımdan yalnızca bir oyuncu alabilseydin nasıl bir kadro kurardın?"
+   }
+  },
+  "minesweeper-3d": {
+   "names": {
+    "en": "3D Minesweeper",
+    "tr": "3B Mayın Tarlası",
+    "zh": "3D扫雷",
+    "pinyin": "sān D sǎoléi"
+   },
+   "en": {
+    "s": "Minesweeper on the six faces of a cube: turn it in your hands and clear every safe square.",
+    "h": "Minesweeper variants on other surfaces appeared soon after the original became famous: hexagonal boards, tori where the edges wrap round, and cubes."
+   },
+   "zh": {
+    "s": "在立方体的六个面上扫雷：把它拿在手里转，扫清所有安全的方格。",
+    "h": "经典扫雷走红后不久，就出现了各种表面上的变体：六边形棋盘、边缘相连的环面，以及立方体。"
+   },
+   "tr": {
+    "s": "Bir küpün altı yüzünde Mayın Tarlası: küpü elinde çevir ve bütün güvenli kareleri aç.",
+    "h": "Klasik Mayın Tarlası ünlendikten kısa süre sonra başka yüzeylerde çeşitleri çıktı: altıgen tahtalar, kenarları birbirine bağlanan simit biçimli tahtalar ve küpler."
+   }
+  },
+  "sifeng": {
+   "names": {
+    "en": "Sì Fēng",
+    "tr": "Sì Fēng (四风)",
+    "zh": "四风",
+    "pinyin": "sì fēng"
+   },
+   "en": {
+    "s": "Saranta’s mahjong-style line game: lay tiles in rows and columns where colour, suit and number are each all the same or all different.",
+    "h": "Sì Fēng, “Four Winds”, is a house game designed by Saranta: the line-building idea of games like Iota dressed in mahjong tiles, with four colours, four suits (dots, bamboo, characters and winds), the numbers one to four and two flower jokers."
+   },
+   "zh": {
+    "s": "Saranta设计的麻将风格连线游戏：把牌摆成行或列，颜色、花色、数字每一项要么全同要么全不同。",
+    "h": "四风是Saranta设计的家庭游戏：借用Iota等游戏的连线思路，换上麻将牌——四种颜色、四种花色（筒、条、万、风）、数字一到四，外加两张花牌。"
+   },
+   "tr": {
+    "s": "Saranta’nın Mahjong tarzı çizgi oyunu: taşları sıra ve sütunlara diz; renk, takım ve sayı ya hep aynı ya hep farklı olsun.",
+    "h": "Sì Fēng, yani “Dört Rüzgâr”, Saranta’nın tasarladığı bir ev oyunudur: Iota gibi oyunların çizgi kurma fikri Mahjong taşlarıyla buluşur; dört renk, dört takım (筒 daireler, 条 bambular, 万 karakterler, 风 rüzgârlar), birden dörde sayılar ve iki çiçek joker."
+   }
+  },
+  "mahjong": {
+   "names": {
+    "en": "Chinese Mahjong",
+    "zh": "麻将",
+    "tr": "Mahjong (麻将)",
+    "pinyin": "Májiàng",
+    "trad": "麻將"
+   },
+   "en": {
+    "s": "Four players draw and discard tiles until one of them holds four sets and a pair. China’s great table game, played here the plain mainland way.",
+    "h": "Mahjong took its modern form in the Yangtze delta in the second half of the nineteenth century, growing out of older card games played with suits of coins and strings."
+   },
+   "zh": {
+    "s": "四人轮流摸牌、打牌，谁先凑成四副牌加一对将就胡牌。这里打的是大陆最常见的简单玩法。",
+    "h": "麻将的现代形式出现在十九世纪后半叶的长江三角洲，源自更早的以“万、饼、条”为花色的纸牌游戏。"
+   },
+   "tr": {
+    "s": "Dört oyuncu taş çekip atar; dört set ve bir çift toplayan eli kazanır. Çin’in büyük masa oyunu, burada anakaradaki sade hâliyle oynanıyor.",
+    "h": "Mahjong bugünkü biçimini 19. yüzyılın ikinci yarısında Yangtze deltasında aldı; para ve dizi takımlarıyla oynanan daha eski kâğıt oyunlarından doğdu. 1920’lerde Şanghay ve Ningbo’dan bütün Çin’e yayıldı, bir ara Amerika ve İngiltere’de de çılgınlık hâline geldi."
+   }
+  },
+  "futoshiki": {
+   "names": {
+    "en": "Futoshiki",
+    "zh": "不等式数独",
+    "tr": "Futoshiki",
+    "pinyin": "Bù děngshì shùdú",
+    "trad": "不等式數獨"
+   },
+   "en": {
+    "s": "A Latin square with a twist: fill the grid so each row and column holds every number once, while obeying the “greater than” and “less than” signs between neighbours.",
+    "h": "Futoshiki means “inequality” in Japanese."
+   },
+   "zh": {
+    "s": "带不等号的拉丁方：每行每列填入每个数字各一次，同时满足相邻格子之间的“大于”“小于”符号。",
+    "h": "Futoshiki在日语中意为“不等”。"
+   },
+   "tr": {
+    "s": "Farklı bir Latin karesi: her satır ve sütunda her sayı bir kez olacak şekilde ızgarayı doldur, komşu kareler arasındaki “büyüktür” ve “küçüktür” işaretlerine de uy.",
+    "h": "Futoshiki Japoncada “eşitsizlik” demektir."
+   }
+  },
+  "hidato": {
+   "names": {
+    "en": "Hidato",
+    "zh": "数字蛇",
+    "tr": "Hidato",
+    "pinyin": "Shùzì shé",
+    "trad": "數字蛇"
+   },
+   "en": {
+    "s": "Fill the grid with a chain of numbers from 1 to the last, each one touching the next sideways or diagonally, like a snake winding through every square.",
+    "h": "Hidato was invented in 2005 by the Israeli mathematician Gyora Benedek; the name comes from the Hebrew for “riddle”."
+   },
+   "zh": {
+    "s": "用一串从1到最后一个数的数字填满方格，每个数都要和下一个数横、竖或斜着相邻，像一条蛇穿过所有格子。",
+    "h": "Hidato由以色列数学家吉奥拉·贝内德克于2005年发明，名字来自希伯来语的“谜语”。"
+   },
+   "tr": {
+    "s": "Izgarayı 1’den sonuncuya kadar bir sayı zinciriyle doldur; her sayı bir sonrakine yandan ya da çaprazdan değsin, her kareden geçen bir yılan gibi.",
+    "h": "Hidato’yu 2005’te İsrailli matematikçi Gyora Benedek icat etti; adı İbranicede “bilmece” anlamına gelen kelimeden gelir. 2000’lerin sonunda gazeteler ve telefon uygulamalarıyla yayıldı; fikrin çaprazsız hâli Numbrix, bir başka adı da Hidoku’dur."
+   }
+  },
+  "luban": {
+   "names": {
+    "en": "Lu Ban Lock",
+    "zh": "鲁班锁",
+    "tr": "Lu Ban Kilidi",
+    "pinyin": "Lǔ Bān suǒ",
+    "trad": "魯班鎖"
+   },
+   "en": {
+    "s": "Six notched wooden sticks hold each other in a tight cross. Slide them one step at a time until every stick has come out.",
+    "h": "Interlocking wooden puzzles are named in China after Lu Ban, the master carpenter of the state of Lu in the fifth century BC, patron of builders, said to have invented the saw and the carpenter’s square."
+   },
+   "zh": {
+    "s": "六根带凹槽的木条紧紧地互相卡在一起。一次推动一格，直到所有木条都拆出来。",
+    "h": "中国把这类咬合的木制益智玩具以鲁班命名。"
+   },
+   "tr": {
+    "s": "Altı çentikli tahta çubuk sıkı bir haç şeklinde birbirini tutuyor. Her seferinde bir adım kaydırarak bütün çubukları çıkar.",
+    "h": "Çin’de iç içe geçen tahta bulmacalar, MÖ 5. yüzyılda Lu devletinde yaşamış usta marangoz Lu Ban’ın adını taşır; inşaatçıların piri sayılır, testereyi ve gönyeyi icat ettiği söylenir."
+   }
+  },
+  "kongming": {
+   "names": {
+    "en": "Kongming Lock",
+    "zh": "孔明锁",
+    "tr": "Kongming Kilidi",
+    "pinyin": "Kǒngmíng suǒ",
+    "trad": "孔明鎖"
+   },
+   "en": {
+    "s": "The six notched sticks lie scattered on the table. Push them in one by one, in the right order and from the right side, until they lock into a solid cross.",
+    "h": "In much of China the six-stick lock is called the Kongming lock, after Zhuge Liang (courtesy name Kongming), the strategist of the Three Kingdoms period famed for his inventions, from the wooden ox that carried grain to the repeating crossbow."
+   },
+   "zh": {
+    "s": "六根带凹槽的木条散放在桌上。按正确的顺序、从正确的方向把它们一根根推进去，直到锁成一个结实的十字。",
+    "h": "在中国很多地方，六根木条的锁被叫作孔明锁，得名于三国时期以发明著称的谋士诸葛亮（字孔明），从运粮的木牛流马到连弩都归功于他。"
+   },
+   "tr": {
+    "s": "Altı çentikli çubuk masada dağınık duruyor. Onları doğru sırayla ve doğru taraftan teker teker içeri it, ta ki sağlam bir haç olarak kilitlenene kadar.",
+    "h": "Çin’in birçok yerinde altı çubuklu kilide Kongming kilidi denir."
+   }
+  },
+  "burr": {
+   "names": {
+    "en": "Burr Puzzles",
+    "zh": "插接谜题",
+    "tr": "Geçme Bulmacalar (Burr)",
+    "pinyin": "Chājiē mítí",
+    "trad": "插接謎題"
+   },
+   "en": {
+    "s": "Harder six-piece burrs: every stick is locked until several others have shuffled aside. Five, six or seven moves pass before the first piece can come out.",
+    "h": "In Europe and America interlocking puzzles are called burrs, perhaps because the finished shape looks like a seed burr."
+   },
+   "zh": {
+    "s": "更难的六块插接锁：每根木条都被锁住，要等其他几根挪开之后才能动。拔出第一根之前要走五、六甚至七步。",
+    "h": "在欧美，这类互锁的谜题叫作burr，也许因为拼好的样子像带刺的种子。"
+   },
+   "tr": {
+    "s": "Daha zor altı parçalı geçmeler: her çubuk, başka birkaçı kenara çekilene kadar kilitli. İlk parça çıkmadan önce beş, altı ya da yedi hamle geçer.",
+    "h": "Avrupa’da ve Amerika’da iç içe geçen bulmacalara “burr” denir; belki bitmiş hâli dikenli bir tohum kozasına (burr) benzediği için."
+   }
+  },
+  "packing-3d": {
+   "names": {
+    "en": "3D Packing Puzzles",
+    "zh": "3D装箱谜题",
+    "tr": "3B Yerleştirme Bulmacaları",
+    "pinyin": "3D zhuāngxiāng mítí",
+    "trad": "3D裝箱謎題"
+   },
+   "en": {
+    "s": "Fit every piece into a box with no gaps. The first box is a famous puzzle by two Dutch mathematicians; the others were cut by computer so that only a few arrangements work.",
+    "h": "Packing problems are as old as trade, but as puzzles they flourished in the twentieth century."
+   },
+   "zh": {
+    "s": "把所有拼块无缝地装进一个盒子。第一个盒子是两位荷兰数学家设计的名题；其余的由电脑切分，只有少数几种摆法能成功。",
+    "h": "装箱问题和贸易一样古老，但作为益智游戏，它在20世纪才兴盛起来。"
+   },
+   "tr": {
+    "s": "Bütün parçaları bir kutuya boşluk bırakmadan sığdır. İlk kutu iki Hollandalı matematikçinin ünlü bulmacası; diğerlerini bilgisayar, yalnızca birkaç dizilişin işe yarayacağı şekilde kesti.",
+    "h": "Yerleştirme problemleri ticaret kadar eskidir ama bulmaca olarak 20. yüzyılda gelişti. 1970’lerde Jan Slothouber ve William Graatsma altı 1×2×2 levha ve üç tek küpten oluşan küpü tasarladı; John Conway daha zor bir 5×5×5 sürümle devam etti."
+   }
+  },
+  "assembly-3d": {
+   "names": {
+    "en": "3D Assembly Puzzles",
+    "zh": "3D拼装谜题",
+    "tr": "3B Montaj Bulmacaları",
+    "pinyin": "3D pīnzhuāng mítí",
+    "trad": "3D拼裝謎題"
+   },
+   "en": {
+    "s": "Build a figure, a cross, a chair, a bridge, a castle or a stepped pyramid, from a set of oddly shaped pieces made for it.",
+    "h": "Assembly puzzles grew from wooden building toys and from the polyomino puzzles that Solomon Golomb made famous in the 1950s."
+   },
+   "zh": {
+    "s": "用一套专门切出来的奇形拼块，搭出十字、椅子、石桥、城堡或阶梯金字塔。",
+    "h": "拼装谜题源于木制积木，也源于所罗门·格伦布在50年代推广的多联骨牌谜题。"
+   },
+   "tr": {
+    "s": "Ona özel kesilmiş tuhaf şekilli parçalardan bir figür kur: haç, sandalye, köprü, kale ya da basamaklı piramit.",
+    "h": "Montaj bulmacaları tahta yapı oyuncaklarından ve Solomon Golomb’un 1950’lerde ünlü yaptığı poliomino bulmacalarından doğdu."
+   }
+  },
+  "soma": {
+   "names": {
+    "en": "Soma Cube",
+    "zh": "索玛立方体",
+    "tr": "Soma Küpü",
+    "pinyin": "Suǒmǎ lìfāngtǐ",
+    "trad": "索瑪立方體"
+   },
+   "en": {
+    "s": "Seven pieces, every irregular shape you can make from three or four cubes, fit together into a 3×3×3 cube, and into hundreds of other figures.",
+    "h": "The Danish poet and scientist Piet Hein thought of the Soma cube in 1933 while listening to Werner Heisenberg lecture on quantum mechanics, wondering which shapes small groups of cubes could make."
+   },
+   "zh": {
+    "s": "七块拼块，包括所有能用三或四个小立方体拼成的不规则形状，可以组成一个3×3×3的立方体，以及几百种其他图形。",
+    "h": "丹麦诗人兼科学家皮特·海恩于1933年在听海森堡讲量子力学时想到了索玛立方体，他在琢磨几个小立方体能组成哪些形状。"
+   },
+   "tr": {
+    "s": "Üç ya da dört küpten yapılabilecek bütün düzensiz şekiller olan yedi parça, 3×3×3 bir küpte ve yüzlerce başka figürde birleşir.",
+    "h": "Danimarkalı şair ve bilim insanı Piet Hein, Soma küpünü 1933’te Werner Heisenberg’in kuantum mekaniği dersini dinlerken, birkaç küpün hangi şekilleri yapabileceğini düşünürken buldu."
+   }
+  },
+  "snake-cube": {
+   "names": {
+    "en": "Snake Cube",
+    "zh": "蛇形立方",
+    "tr": "Yılan Küp",
+    "pinyin": "Shéxíng lìfāng",
+    "trad": "蛇形立方"
+   },
+   "en": {
+    "s": "Twenty-seven wooden cubes threaded on an elastic cord. At some cubes the chain bends; twist the joints until the whole snake folds into a 3×3×3 cube.",
+    "h": "The snake cube is a traditional wooden toy with no known inventor, sold in Europe and Asia for generations under names like the Kibble cube and the Cubra."
+   },
+   "zh": {
+    "s": "二十七个小木块穿在一根松紧绳上。链子在某些块处可以拐弯；扭动这些关节，直到整条蛇折成一个3×3×3的立方体。",
+    "h": "蛇形立方是一种传统木制玩具，没有已知的发明者，几代人以来在欧洲和亚洲以各种名字出售。"
+   },
+   "tr": {
+    "s": "Yirmi yedi tahta küp esnek bir ipe dizilmiş. Zincir bazı küplerde kıvrılıyor; bütün yılan 3×3×3 bir küpe katlanana kadar eklemleri çevir.",
+    "h": "Yılan küp, mucidi bilinmeyen geleneksel bir tahta oyuncaktır; kuşaklardır Avrupa’da ve Asya’da Kibble küpü, Cubra gibi adlarla satılır."
+   }
+  },
+  "numberlink": {
+   "names": {
+    "en": "Numberlink",
+    "zh": "数字连线",
+    "tr": "Sayı Bağla (Numberlink)",
+    "pinyin": "Shùzì liánxiàn",
+    "trad": "數字連線"
+   },
+   "en": {
+    "s": "Join each pair of equal numbers with a line through neighbouring squares. Lines never cross or share a square, and together they fill the whole grid.",
+    "h": "Puzzles of joining pairs without crossing go back at least to Sam Loyd and Henry Dudeney around 1900."
+   },
+   "zh": {
+    "s": "把每对相同的数字用一条经过相邻格子的线连起来。线不能交叉或共用格子，所有的线合起来要铺满整个方格。",
+    "h": "不交叉地连接成对的点，这类谜题至少可以追溯到1900年前后的萨姆·劳埃德和亨利·杜德尼。"
+   },
+   "tr": {
+    "s": "Her eşit sayı çiftini komşu karelerden geçen bir çizgiyle birleştir. Çizgiler kesişmez, aynı kareyi paylaşmaz ve hep birlikte bütün ızgarayı doldurur.",
+    "h": "Çiftleri kesiştirmeden birleştirme bulmacaları en az 1900 civarına, Sam Loyd ve Henry Dudeney’e kadar uzanır."
+   }
+  },
+  "n-queens": {
+   "names": {
+    "en": "Queens",
+    "zh": "皇后谜题",
+    "tr": "Vezirler",
+    "pinyin": "Huánghòu mítí",
+    "trad": "皇后謎題"
+   },
+   "en": {
+    "s": "Two puzzles with chess queens. In the colour version, put one queen in every row, column and coloured region with no two touching. In the classic, place n queens so that none attacks another, and hunt for every arrangement.",
+    "h": "The eight queens problem was posed by the chess composer Max Bezzel in 1848."
+   },
+   "zh": {
+    "s": "两种用国际象棋皇后玩的谜题。颜色区域版：每行、每列、每种颜色各放一个皇后，皇后之间不能相邻。经典版：放n个互不攻击的皇后，并找出所有摆法。",
+    "h": "八皇后问题由国际象棋排局家马克斯·贝策尔于1848年提出。"
+   },
+   "tr": {
+    "s": "Satranç vezirleriyle iki bulmaca. Renkli sürümde her satıra, sütuna ve renk bölgesine birer vezir koy, ikisi birbirine değmesin. Klasikte n veziri hiçbiri diğerini tehdit etmeyecek şekilde yerleştir ve bütün dizilişleri bul.",
+    "h": "Sekiz vezir problemini 1848’de satranç problemcisi Max Bezzel sordu."
+   }
+  },
+  "river-crossing": {
+   "names": {
+    "en": "River Crossing",
+    "zh": "过河问题",
+    "tr": "Nehirden Geçiş",
+    "pinyin": "Guò hé wèntí",
+    "trad": "過河問題"
+   },
+   "en": {
+    "s": "Get everyone across in a boat that holds too few, without leaving the wrong pair alone on a bank. Four classics: the wolf, goat and cabbage, monks and demons, and two night-bridge puzzles against the clock.",
+    "h": "River-crossing riddles are among the oldest logic puzzles in writing: the wolf, goat and cabbage and the jealous husbands appear in Propositiones ad acuendos iuvenes, a collection attributed to Alcuin of York around 800."
+   },
+   "zh": {
+    "s": "船太小，人太多，还不能把不该放在一起的留在岸上。四个经典谜题：农夫过河、和尚与妖怪，以及两道和时间赛跑的夜过桥问题。",
+    "h": "过河谜题是最古老的书面逻辑谜题之一：狼、羊、白菜和“嫉妒的丈夫”都出现在约公元800年的《砥砺青年之题》中，相传出自约克的阿尔昆。"
+   },
+   "tr": {
+    "s": "Herkesi az kişi alan bir kayıkla karşıya geçir, yanlış ikiliyi bir kıyıda yalnız bırakmadan. Dört klasik: kurt, keçi ve lahana; keşişler ve cinler; ve saate karşı iki gece köprüsü bilmecesi.",
+    "h": "Nehirden geçiş bilmeceleri yazıya geçmiş en eski mantık bulmacalarındandır: kurt, keçi ve lahana ile kıskanç kocalar, 800 civarında York’lu Alcuin’e atfedilen Propositiones ad acuendos iuvenes derlemesinde geçer."
+   }
+  },
+  "binary": {
+   "names": {
+    "en": "Binary Puzzle (Takuzu)",
+    "zh": "二进制数独",
+    "tr": "İkili Bulmaca (Takuzu)",
+    "pinyin": "Èrjìnzhì shùdú",
+    "trad": "二進制數獨"
+   },
+   "en": {
+    "s": "Fill the grid with 0s and 1s: never three alike in a line, as many 0s as 1s in every row and column, and no two rows or columns the same.",
+    "h": "The puzzle was published as Tohu-Wa-Vohu in Italy and as Takuzu in France, and became popular in Dutch and Belgian newspapers as Binairo around 2009."
+   },
+   "zh": {
+    "s": "在方格中填入0和1：同一行（列）不能有三个相同的连在一起，每行每列0和1一样多，任意两行或两列不能完全相同。",
+    "h": "这种谜题在意大利以Tohu-Wa-Vohu之名出版，在法国叫Takuzu，2009年前后以Binairo之名在荷兰和比利时的报纸上流行开来。"
+   },
+   "tr": {
+    "s": "Izgarayı 0 ve 1’lerle doldur: bir hatta asla üç aynı yan yana gelmez, her satır ve sütunda 0 ile 1 sayısı eşittir, hiçbir iki satır ya da sütun aynı olamaz.",
+    "h": "Bulmaca İtalya’da Tohu-Wa-Vohu, Fransa’da Takuzu adıyla yayımlandı; 2009 civarında Binairo adıyla Hollanda ve Belçika gazetelerinde sevildi."
+   }
+  },
+  "kakuro": {
+   "names": {
+    "en": "Kakuro",
+    "zh": "数和",
+    "tr": "Kakuro",
+    "pinyin": "Shù hé",
+    "trad": "數和"
+   },
+   "en": {
+    "s": "A crossword made of numbers: fill the white squares with digits 1–9 so each run adds up to the clue beside it, with no digit repeated in a run.",
+    "h": "The puzzle was first printed in America in the 1950s as “Cross Sums” in Dell puzzle magazines."
+   },
+   "zh": {
+    "s": "数字版的填字游戏：在白格中填入1到9，使每一段的和等于旁边的提示，且同一段中数字不重复。",
+    "h": "这种谜题20世纪50年代最早在美国Dell谜题杂志上以“交叉和”（Cross Sums）的名字出现。"
+   },
+   "tr": {
+    "s": "Sayılardan yapılmış bir bulmaca: beyaz karelere 1–9 rakamlarını yaz; her dizi yanındaki ipucuna eşit toplansın ve bir dizide hiçbir rakam tekrar etmesin.",
+    "h": "Bulmaca ilk kez 1950’lerde Amerika’da Dell bulmaca dergilerinde “Cross Sums” adıyla basıldı. 1980’lerde Japon yayıncı Nikoli ona “toplama çaprazı” anlamına gelen kasan kurosu’dan Kakuro adını verdi; Japonya’nın Sudoku’dan sonra en sevilen kalem bulmacalarından biri oldu."
+   }
+  },
+  "slitherlink": {
+   "names": {
+    "en": "Slitherlink",
+    "zh": "数回",
+    "tr": "Slitherlink",
+    "pinyin": "Shù huí",
+    "trad": "數回"
+   },
+   "en": {
+    "s": "Join the dots into one closed loop. A number in a square says how many of its four sides the loop uses.",
+    "h": "Slitherlink was created by the Japanese puzzle publisher Nikoli and first printed in its magazine in 1989."
+   },
+   "zh": {
+    "s": "把点连成一条闭合回路。格子里的数字表示这一格的四条边中有几条在回路上。",
+    "h": "数回由日本谜题出版社Nikoli创作，1989年首次刊登在其杂志上。"
+   },
+   "tr": {
+    "s": "Noktaları tek bir kapalı döngüyle birleştir. Bir karedeki sayı, döngünün o karenin dört kenarından kaçını kullandığını söyler.",
+    "h": "Slitherlink’i Japon bulmaca yayıncısı Nikoli yarattı; ilk kez 1989’da dergisinde basıldı."
+   }
+  },
+  "nine-rings": {
+   "names": {
+    "en": "Nine Linked Rings",
+    "zh": "九连环",
+    "tr": "Dokuz Halka (九连环)",
+    "pinyin": "Jiǔ lián huán",
+    "trad": "九連環"
+   },
+   "en": {
+    "s": "Nine rings sit on a looped bar, each tied to its neighbour. Take them all off. Each ring can move only when the rings beside it are just right, so the solution is long but follows a beautiful pattern.",
+    "h": "The Nine Linked Rings is one of China’s oldest mechanical puzzles."
+   },
+   "zh": {
+    "s": "九个环套在一根环形剑上，彼此相连。把它们全部取下来。每个环只有在旁边的环处于恰当状态时才能动，所以解法很长，却遵循着美妙的规律。",
+    "h": "九连环是中国最古老的机械益智玩具之一。"
+   },
+   "tr": {
+    "s": "Dokuz halka, ilmekli bir çubuğa takılı ve her biri komşusuna bağlı. Hepsini çıkar. Her halka ancak yanındakiler tam uygun durumdayken oynar; bu yüzden çözüm uzundur ama çok güzel bir düzeni izler.",
+    "h": "Dokuz Halka Çin’in en eski mekanik bulmacalarından biridir."
+   }
+  },
+  "kenken": {
+   "names": {
+    "en": "KenKen",
+    "tr": "KenKen",
+    "zh": "聪明格"
+   },
+   "en": {
+    "s": "A Latin square with arithmetic: every row and column holds each number once, and each cage makes its target.",
+    "h": "Japanese maths teacher Tetsuya Miyamoto invented the puzzle in 2004 to help his students think, calling it “the art of teaching without teaching”."
+   },
+   "zh": {
+    "s": "带算术的拉丁方：每行每列数字各一次，每个笼子要算出目标数。",
+    "h": "日本数学老师宫本哲也在2004年发明了这种谜题，用来训练学生思考，称之为“不教而教的艺术”。"
+   },
+   "tr": {
+    "s": "Aritmetikli bir Latin karesi: her satır ve sütunda her sayı bir kez, her kafes de hedefini tutturur.",
+    "h": "Japon matematik öğretmeni Tetsuya Miyamoto bulmacayı 2004’te öğrencilerinin düşünmesine yardım etmek için icat etti ve “öğretmeden öğretme sanatı” dedi."
+   }
+  },
+  "hashi": {
+   "names": {
+    "en": "Hashi (Bridges)",
+    "tr": "Hashi (Köprüler)",
+    "zh": "数桥"
+   },
+   "en": {
+    "s": "Connect the islands with bridges so each has exactly as many as its number.",
+    "h": "Hashiwokakero, “build bridges”, was published by the Japanese puzzle company Nikoli in 1990, the same house that made Sudoku famous."
+   },
+   "zh": {
+    "s": "用桥把岛连起来，让每个岛的桥数正好等于它的数字。",
+    "h": "“架桥”（Hashiwokakero）由日本谜题公司Nikoli于1990年发表，正是让数独闻名的那家公司。"
+   },
+   "tr": {
+    "s": "Adaları köprülerle bağla; her adanın tam sayısı kadar köprüsü olsun.",
+    "h": "Hashiwokakero, yani “köprü kur”, 1990’da Sudoku’yu ünlü yapan Japon bulmaca şirketi Nikoli tarafından yayımlandı."
+   }
+  },
+  "sokoban": {
+   "names": {
+    "en": "Sokoban",
+    "tr": "Sokoban",
+    "zh": "推箱子"
+   },
+   "en": {
+    "s": "A warehouse keeper pushes boxes onto their places, one careful push at a time.",
+    "h": "Sokoban (“warehouse keeper” in Japanese) was created by Hiroyuki Imabayashi and published by Thinking Rabbit in 1982."
+   },
+   "zh": {
+    "s": "仓库管理员把箱子一个个推到指定位置，每一步都要小心。",
+    "h": "推箱子（日语“仓库番”）由今林宏行设计，1982年由Thinking Rabbit发行。"
+   },
+   "tr": {
+    "s": "Bir depo bekçisi kutuları tek tek, dikkatle iterek yerlerine yerleştirir.",
+    "h": "Sokoban (Japonca “depo bekçisi”) Hiroyuki Imabayashi tarafından tasarlandı ve 1982’de Thinking Rabbit tarafından yayımlandı."
+   }
+  },
+  "g2048": {
+   "names": {
+    "en": "2048",
+    "tr": "2048",
+    "zh": "2048"
+   },
+   "en": {
+    "s": "Slide numbered tiles on a 4×4 grid; equal tiles merge. Build a 2048 tile.",
+    "h": "Gabriele Cirulli, a 19-year-old Italian developer, wrote 2048 in a weekend in March 2014 as an experiment, building on the earlier games Threes! and 1024."
+   },
+   "zh": {
+    "s": "在4×4的格子里滑动数字方块，相同的会合并。拼出2048。",
+    "h": "2014年3月，19岁的意大利开发者加布里埃莱·奇鲁利用一个周末写出2048，灵感来自更早的Threes!和1024。"
+   },
+   "tr": {
+    "s": "4×4 ızgarada numaralı kareleri kaydır; eşit olanlar birleşir. 2048 karesini yap.",
+    "h": "19 yaşındaki İtalyan geliştirici Gabriele Cirulli, Mart 2014’te bir hafta sonunda, Threes! ve 1024 oyunlarından esinlenerek 2048’i yazdı."
+   }
+  },
+  "chess": {
+   "names": {
+    "en": "Chess",
+    "tr": "Satranç",
+    "zh": "国际象棋"
+   },
+   "en": {
+    "s": "The world’s game of war on 64 squares: checkmate the enemy king.",
+    "h": "Chess grew out of the Indian game chaturanga around the sixth century, passed through Persia as shatranj and reached Europe through the Islamic world."
+   },
+   "zh": {
+    "s": "64格上的世界性战棋：将死对方的王。",
+    "h": "国际象棋源自约六世纪印度的恰图兰卡，经波斯（称shatranj）传入伊斯兰世界，再传到欧洲。"
+   },
+   "tr": {
+    "s": "64 karede dünyanın savaş oyunu: rakip şahı mat et.",
+    "h": "Satranç, altıncı yüzyıl civarında Hindistan’daki çaturanga oyunundan doğdu, İran’da şatranç adıyla gelişti ve İslam dünyası üzerinden Avrupa’ya ulaştı."
+   }
+  },
+  "xiangqi": {
+   "names": {
+    "en": "Xiangqi",
+    "tr": "Xiangqi (Çin satrancı)",
+    "zh": "象棋",
+    "trad": "象棋",
+    "pinyin": "xiàngqí"
+   },
+   "en": {
+    "s": "Chinese chess: generals in palaces, a river across the board and cannons that jump to capture.",
+    "h": "Xiangqi took its modern form in the Song dynasty (960–1279), and is one of the most played board games in the world, seen on every street corner in China and Vietnam."
+   },
+   "zh": {
+    "s": "中国象棋：九宫中的将帅、横贯棋盘的河界、隔子吃子的炮。",
+    "h": "象棋在宋代（960–1279）定型，是世界上下得最多的棋类之一，中国和越南的街头巷尾随处可见。"
+   },
+   "tr": {
+    "s": "Çin satrancı: saraydaki generaller, tahtayı ikiye bölen nehir ve atlayarak alan toplar.",
+    "h": "Xiangqi bugünkü biçimini Song hanedanlığında (960–1279) aldı; dünyada en çok oynanan tahta oyunlarından biridir, Çin’de ve Vietnam’da her sokak köşesinde görülür."
+   }
+  },
+  "shogi": {
+   "names": {
+    "en": "Shogi",
+    "tr": "Shogi (Japon satrancı)",
+    "zh": "将棋"
+   },
+   "en": {
+    "s": "Japanese chess, where captured pieces change sides and come back into play.",
+    "h": "Shogi descends from the same Indian ancestor as chess and reached its modern form in Japan around the sixteenth century."
+   },
+   "zh": {
+    "s": "日本将棋：吃掉的棋子会变成自己的，再打入棋盘。",
+    "h": "将棋与国际象棋同源于印度，约十六世纪在日本定型。"
+   },
+   "tr": {
+    "s": "Japon satrancı: alınan taşlar taraf değiştirip oyuna geri döner.",
+    "h": "Shogi satrançla aynı Hint atasından gelir ve on altıncı yüzyıl civarında Japonya’da bugünkü biçimini aldı."
+   }
+  },
+  "weiqi": {
+   "names": {
+    "en": "Go (Weiqi)",
+    "tr": "Go (Weiqi)",
+    "zh": "围棋",
+    "trad": "圍棋",
+    "pinyin": "wéiqí"
+   },
+   "en": {
+    "s": "The ancient game of surrounding: black and white stones take turns to claim territory.",
+    "h": "Weiqi, “the surrounding game”, is over 2,500 years old and counted among the four arts of the Chinese scholar with music, calligraphy and painting."
+   },
+   "zh": {
+    "s": "古老的围地游戏：黑白双方轮流落子，争夺地盘。",
+    "h": "围棋已有两千五百多年历史，与琴、书、画并称文人四艺。"
+   },
+   "tr": {
+    "s": "Eski kuşatma oyunu: siyah ve beyaz taşlar sırayla toprak kapar.",
+    "h": "Weiqi, yani “kuşatma oyunu”, 2.500 yıldan eskidir ve müzik, hat ve resimle birlikte Çinli bilginin dört sanatından sayılır."
+   }
+  },
+  "pisti": {
+   "names": {
+    "en": "Pişti",
+    "tr": "Pişti",
+    "zh": "Pişti 抓牌"
+   },
+   "en": {
+    "s": "A quick Turkish fishing game for two: match the top card or play a jack to sweep the pile, and catch a lone card for a pişti.",
+    "h": "Pişti is one of the best-loved card games in Turkey, played in coffeehouses, on ferries and at family tables."
+   },
+   "zh": {
+    "s": "两人快速“钓鱼”类纸牌：出与顶牌同点的牌或J就能收走牌堆，桌上只剩一张时收走就是pişti。",
+    "h": "Pişti是土耳其最受欢迎的纸牌游戏之一，在咖啡馆、渡轮和家庭聚会上都能见到。"
+   },
+   "tr": {
+    "s": "İki kişilik hızlı bir Türk kart oyunu: üstteki kartla aynısını ya da vale atıp yerdekileri al, tek kartı aynısıyla yakalarsan pişti.",
+    "h": "Pişti Türkiye’nin en sevilen kart oyunlarından biridir; kahvehanelerde, vapurlarda, aile masalarında oynanır."
+   }
+  },
+  "batak": {
+   "names": {
+    "en": "Batak",
+    "tr": "Batak",
+    "zh": "巴塔克"
+   },
+   "en": {
+    "s": "The Turkish bidding trick game for four: bid how many tricks you will take, name trump, then make your bid.",
+    "h": "Batak is a Turkish relative of whist and spades, played everywhere from university canteens to coffeehouses."
+   },
+   "zh": {
+    "s": "土耳其四人叫牌吃墩游戏：叫出自己能吃几墩，指定将牌，然后完成叫牌。",
+    "h": "Batak是土耳其版本的惠斯特/黑桃类游戏，从大学食堂到咖啡馆都有人玩。"
+   },
+   "tr": {
+    "s": "Dört kişilik Türk ihale oyunu: kaç el alacağını söyle, kozu belirle, sonra sözünü tut.",
+    "h": "Batak, briç ve spades akrabası bir Türk oyunudur; üniversite kantinlerinden kahvehanelere her yerde oynanır."
+   }
+  },
+  "king": {
+   "names": {
+    "en": "King",
+    "tr": "King",
+    "zh": "King 国王"
+   },
+   "en": {
+    "s": "The long Turkish trick game for four: take turns choosing penalty hands to dodge and trump hands to win.",
+    "h": "King is the Turkish form of the old French game Barbu and Hungarian Kinggel: a \"compendium\" where each hand is a different small game."
+   },
+   "zh": {
+    "s": "土耳其四人长局吃墩游戏：轮流选择要躲避的罚分局和要赢墩的将牌局。",
+    "h": "King是法国Barbu、匈牙利Kinggel的土耳其版本：每一局都是一个不同的小游戏。"
+   },
+   "tr": {
+    "s": "Dört kişilik uzun Türk oyunu: sırayla kaçılacak cezaları ve kazanılacak kozları seçersiniz.",
+    "h": "King, eski Fransız Barbu ve Macar Kinggel oyununun Türk biçimidir: her el ayrı küçük bir oyundur."
+   }
+  },
+  "poker": {
+   "names": {
+    "en": "Texas Hold’em Poker",
+    "tr": "Poker (Texas Hold’em)",
+    "zh": "德州扑克"
+   },
+   "en": {
+    "s": "No-limit Texas Hold’em around a coffeehouse table: two cards of your own, five shared, and the courage to bet.",
+    "h": "Texas Hold’em began in Robstown, Texas, in the early 1900s and spread through Las Vegas card rooms in the 1960s."
+   },
+   "zh": {
+    "s": "茶馆桌上的无限注德州扑克：两张底牌、五张公共牌，再加上下注的勇气。",
+    "h": "德州扑克20世纪初起源于美国得州罗布斯敦，60年代在拉斯维加斯流行。"
+   },
+   "tr": {
+    "s": "Kahvehane masasında limitsiz Texas Hold’em: iki kart senin, beş kart ortak, gerisi cesaret.",
+    "h": "Texas Hold’em 1900’lerin başında Teksas’ın Robstown kasabasında doğdu, 1960’larda Las Vegas salonlarına yayıldı. 2000’lerde televizyon turnuvaları ve çevrimiçi oyunla dünyanın en bilinen poker türü oldu."
+   }
+  }
+ },
+ "tangram": {
+  "square": {
+   "en": "Square",
+   "zh": "正方形",
+   "tr": "Kare"
+  },
+  "triangle": {
+   "en": "Triangle",
+   "zh": "三角形",
+   "tr": "Üçgen"
+  },
+  "rectangle": {
+   "en": "Rectangle",
+   "zh": "长方形",
+   "tr": "Dikdörtgen"
+  },
+  "parallelogram": {
+   "en": "Parallelogram",
+   "zh": "平行四边形",
+   "tr": "Paralelkenar"
+  },
+  "trapezoid": {
+   "en": "Trapezoid",
+   "zh": "梯形",
+   "tr": "Yamuk"
+  },
+  "sailboats": {
+   "en": "Sailboats",
+   "zh": "帆船",
+   "tr": "Yelkenliler"
+  },
+  "cottage": {
+   "en": "Cottage",
+   "zh": "小屋",
+   "tr": "Kulübe"
+  },
+  "basket": {
+   "en": "Basket",
+   "zh": "篮子",
+   "tr": "Sepet"
+  },
+  "bowl": {
+   "en": "Bowl",
+   "zh": "碗",
+   "tr": "Kâse"
+  },
+  "arrow": {
+   "en": "Arrow",
+   "zh": "箭头",
+   "tr": "Ok"
+  },
+  "vase": {
+   "en": "Vase",
+   "zh": "花瓶",
+   "tr": "Vazo"
+  },
+  "pine-tree": {
+   "en": "Pine tree",
+   "zh": "松树",
+   "tr": "Çam ağacı"
+  },
+  "peaks": {
+   "en": "Peaks",
+   "zh": "山峰",
+   "tr": "Zirveler"
+  },
+  "swan": {
+   "en": "Swan",
+   "zh": "天鹅",
+   "tr": "Kuğu"
+  }
+ },
+ "huarong": {
+  "l12": {
+   "en": "First steps",
+   "zh": "初出茅庐",
+   "tr": "İlk adımlar"
+  },
+  "l15": {
+   "en": "Open road",
+   "zh": "一路通途",
+   "tr": "Açık yol"
+  },
+  "l30a": {
+   "en": "Side door",
+   "zh": "旁门左道",
+   "tr": "Yan kapı"
+  },
+  "l30b": {
+   "en": "Crossed paths",
+   "zh": "纵横交错",
+   "tr": "Kesişen yollar"
+  },
+  "l50a": {
+   "en": "Guarded pass",
+   "zh": "重兵把守",
+   "tr": "Korunan geçit"
+  },
+  "l50b": {
+   "en": "Scattered ranks",
+   "zh": "散兵游勇",
+   "tr": "Dağınık saflar"
+  },
+  "l75": {
+   "en": "Four pillars",
+   "zh": "四柱擎天",
+   "tr": "Dört sütun"
+  },
+  "classic": {
+   "en": "Sword drawn, horse reined (classic)",
+   "zh": "横刀立马（经典）",
+   "tr": "Kılıç çekili, at dizginli (klasik)"
+  },
+  "l109": {
+   "en": "Long march",
+   "zh": "长途跋涉",
+   "tr": "Uzun yürüyüş"
+  },
+  "l119": {
+   "en": "Walls within walls",
+   "zh": "层层设防",
+   "tr": "Sur içinde sur"
+  },
+  "l132": {
+   "en": "Deep encirclement",
+   "zh": "重重包围",
+   "tr": "Derin kuşatma"
+  }
+ }
+}

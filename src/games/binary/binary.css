@@ -1,0 +1,7 @@
+/* Binary puzzle: zeros as ink circles, ones as red discs. */
+.bn-grid { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 3px; width: min(100%, 460px); aspect-ratio: 1; padding: 4px; background: var(--line); border-radius: 6px; }
+.bn-cell { border: 0; border-radius: 4px; background: var(--surface); color: var(--ink); font: 700 clamp(.9rem, 4.6vw, 1.5rem)/1 var(--display); cursor: pointer; padding: 0; }
+.bn-cell.z { background: color-mix(in srgb, #2f5d8a 18%, var(--surface)); color: #2f5d8a; }
+.bn-cell.o { background: color-mix(in srgb, var(--red) 20%, var(--surface)); color: var(--red); }
+.bn-cell.given { box-shadow: inset 0 0 0 2px currentColor; cursor: default; }
+.bn-cell.bad { outline: 2px solid var(--bad); outline-offset: -2px; text-decoration: underline wavy var(--bad); }

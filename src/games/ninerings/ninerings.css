@@ -1,0 +1,17 @@
+/* The Nine Linked Rings: brass rings on a steel bar, each on a post from the base. */
+.nr-board { width: min(100%, 620px); height: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.nr-base { stroke: #6b4a2b; stroke-width: 10; stroke-linecap: round; }
+.nr-bar { fill: none; stroke: #8d969e; stroke-width: 5; }
+.nr-handle { fill: #7a2f22; stroke: #4a1c14; stroke-width: 2; }
+.nr-post { stroke: #a5a9ad; stroke-width: 2; }
+.nr-link { stroke: #a5a9ad; stroke-width: 1.4; stroke-dasharray: 3 3; }
+.nr-o { fill: none; stroke: #b8923a; stroke-width: 4.5; }
+.nr-ring { cursor: not-allowed; }
+.nr-ring.off .nr-o { opacity: .55; }
+.nr-ring.can { cursor: pointer; }
+.nr-ring.can .nr-o { stroke: #e2b33f; filter: drop-shadow(0 0 4px rgba(226, 179, 63, .7)); }
+.nr-ring.hint .nr-o { stroke: var(--red); filter: drop-shadow(0 0 6px var(--red)); }
+.nr-ring:focus-visible { outline: none; }
+.nr-ring:focus-visible .nr-o { stroke-width: 6.5; }
+.nr-num { font: 600 13px var(--body); fill: var(--muted); }
+.nr-hitbox { fill: transparent; }

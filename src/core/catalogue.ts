@@ -1,0 +1,93 @@
+import type { Category, GameMeta } from './game';
+import type { Lang } from './store';
+
+/** Games that are built and playable. Everything else in the catalogue is roadmap. */
+export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'mahjong', 'sifeng', 'kenken', 'hashi', 'sokoban', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'connect-four', 'tictactoe', 'hanoi', 'lights-out', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'rubik', 'reversi', 'nonogram', 'mastermind', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'battleship', 'qubic', 'football-70', 'minesweeper-3d']);
+
+type Row = [id: string, name: string, zh: string, cat: Category, minP: number, maxP: number,
+  minutes: number, depth: 1 | 2 | 3, trad: 0 | 1, dim: 2 | 3, phase: number, tr: string];
+
+const ROWS: Row[] = [
+  ['sudoku', 'Sudoku', '数独', 'logic', 1, 1, 15, 2, 0, 2, 2, 'Sudoku'],
+  ['minesweeper', 'Minesweeper', '扫雷', 'logic', 1, 1, 5, 1, 0, 2, 2, 'Mayın Tarlası'],
+  ['nonogram', 'Nonograms', '数织', 'logic', 1, 1, 15, 2, 0, 2, 2, 'Nonogram'],
+  ['kakuro', 'Kakuro', '数和', 'logic', 1, 1, 20, 2, 0, 2, 2, 'Kakuro'],
+  ['hanoi', 'Tower of Hanoi', '汉诺塔', 'logic', 1, 1, 5, 1, 1, 2, 2, 'Hanoi Kulesi'],
+  ['kenken', 'KenKen', '聪明格', 'logic', 1, 1, 15, 2, 0, 2, 2, 'KenKen'],
+  ['hashi', 'Hashi (Bridges)', '数桥', 'logic', 1, 1, 15, 2, 0, 2, 2, 'Hashi (Köprüler)'],
+  ['hidato', 'Hidato', 'Hidato', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Hidato'],
+  ['futoshiki', 'Futoshiki', '不等式数独', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Futoshiki'],
+  ['slitherlink', 'Slitherlink', '数回', 'logic', 1, 1, 20, 3, 0, 2, 2, 'Slitherlink'],
+  ['sokoban', 'Sokoban', '推箱子', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Sokoban'],
+  ['g2048', '2048', '2048', 'logic', 1, 1, 10, 1, 0, 2, 2, '2048'],
+  ['lights-out', 'Lights Out', '关灯游戏', 'logic', 1, 1, 5, 2, 0, 2, 2, 'Işıkları Söndür'],
+  ['binary', 'Binary Puzzle', '二进制数独', 'logic', 1, 1, 10, 1, 0, 2, 2, 'İkili Bulmaca'],
+  ['numberlink', 'Numberlink', '数字连线', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Sayı Bağla'],
+  ['n-queens', 'N-Queens', 'N皇后', 'logic', 1, 1, 10, 2, 1, 2, 2, 'N Vezir'],
+  ['mastermind', 'Mastermind', '珠玑妙算', 'logic', 1, 2, 10, 1, 0, 2, 2, 'Mastermind'],
+  ['bulls-cows', 'Bulls and Cows', '猜数字', 'logic', 1, 2, 5, 1, 1, 2, 2, 'Sayı Bulmaca'],
+  ['einstein', "Einstein's Riddle", '爱因斯坦谜题', 'logic', 1, 1, 20, 3, 0, 2, 2, 'Einstein Bilmecesi'],
+  ['river-crossing', 'River Crossing', '过河问题', 'logic', 1, 1, 5, 1, 1, 2, 2, 'Nehirden Geçiş'],
+  ['matchstick', 'Matchstick Puzzles', '火柴棍谜题', 'logic', 1, 1, 5, 1, 1, 2, 2, 'Kibrit Bulmacaları'],
+  ['minesweeper-3d', '3D Minesweeper', '3D扫雷', 'spatial', 1, 1, 10, 2, 0, 3, 3, '3B Mayın Tarlası'],
+  ['rubik', "Rubik's Cube", '魔方', 'spatial', 1, 1, 10, 3, 0, 3, 3, 'Rubik Küpü'],
+  ['soma', 'Soma Cube', '索玛立方体', 'spatial', 1, 1, 10, 2, 0, 3, 3, 'Soma Küpü'],
+  ['snake-cube', 'Snake Cube', '蛇形立方', 'spatial', 1, 1, 10, 2, 0, 3, 3, 'Yılan Küp'],
+  ['burr', 'Burr Puzzles', '插接谜题', 'spatial', 1, 1, 20, 3, 1, 3, 3, 'Geçme Bulmacalar'],
+  ['disentanglement', 'Disentanglement Puzzles', '解环谜题', 'spatial', 1, 1, 15, 3, 1, 3, 3, 'Halka Ayırma Bulmacaları'],
+  ['sliding-block', 'Sliding Block Puzzles', '滑块谜题', 'spatial', 1, 1, 10, 2, 1, 2, 3, 'Kaydırmalı Blok Bulmacaları'],
+  ['packing-3d', '3D Packing Puzzles', '3D装箱谜题', 'spatial', 1, 1, 15, 2, 0, 3, 3, '3B Yerleştirme Bulmacaları'],
+  ['pentomino', 'Pentomino & Polyominoes', '五连块', 'spatial', 1, 1, 15, 2, 0, 2, 3, 'Pentomino ve Poliominolar'],
+  ['t-puzzle', 'T-Puzzle', 'T字谜', 'spatial', 1, 1, 5, 1, 1, 2, 3, 'T Bulmacası'],
+  ['assembly-3d', '3D Assembly Puzzles', '3D拼装谜题', 'spatial', 1, 1, 20, 3, 0, 3, 3, '3B Montaj Bulmacaları'],
+  ['huarong', 'Huarong Dao', '华容道', 'chinese', 1, 1, 15, 3, 1, 2, 2, 'Huarong Dao'],
+  ['tangram', 'Tangram', '七巧板', 'chinese', 1, 1, 10, 1, 1, 2, 2, 'Tangram'],
+  ['luban', 'Lu Ban Lock', '鲁班锁', 'chinese', 1, 1, 15, 3, 1, 3, 3, 'Lu Ban Kilidi'],
+  ['nine-rings', 'Nine Linked Rings', '九连环', 'chinese', 1, 1, 20, 3, 1, 3, 3, 'Dokuz Halka'],
+  ['kongming', 'Kongming Lock', '孔明锁', 'chinese', 1, 1, 15, 3, 1, 3, 3, 'Kongming Kilidi'],
+  ['rope', 'Chinese Rope Puzzles', '绳结谜题', 'chinese', 1, 1, 15, 2, 1, 3, 3, 'Çin İp Bulmacaları'],
+  ['spatial-cn', 'Chinese Spatial Puzzles', '中国智力拼图', 'chinese', 1, 1, 15, 2, 1, 2, 3, 'Çin Uzamsal Bulmacaları'],
+  ['chess', 'Chess', '国际象棋', 'strategy', 1, 2, 30, 3, 1, 2, 4, 'Satranç'],
+  ['weiqi', 'Go (Weiqi)', '围棋', 'strategy', 1, 2, 45, 3, 1, 2, 4, 'Go (Weiqi)'],
+  ['xiangqi', 'Xiangqi', '象棋', 'strategy', 1, 2, 30, 3, 1, 2, 4, 'Xiangqi (Çin Satrancı)'],
+  ['gomoku', 'Gomoku', '五子棋', 'strategy', 1, 2, 10, 2, 1, 2, 4, 'Gomoku'],
+  ['checkers', 'International Draughts', '国际跳棋', 'strategy', 1, 2, 20, 2, 1, 2, 4, 'Uluslararası Dama'],
+  ['reversi', 'Reversi', '黑白棋', 'strategy', 1, 2, 15, 2, 1, 2, 4, 'Reversi'],
+  ['morris', "Nine Men's Morris", '九子棋', 'strategy', 1, 2, 15, 2, 1, 2, 4, 'Dokuz Taş'],
+  ['connect-four', 'Connect Four', '四子棋', 'strategy', 1, 2, 5, 1, 0, 2, 4, 'Dört Bağla'],
+  ['qubic', '3D Tic-Tac-Toe', '立体井字棋', 'strategy', 1, 2, 10, 2, 0, 3, 4, '3B XOX'],
+  ['mancala', 'Mancala', '播棋', 'strategy', 1, 2, 10, 2, 1, 2, 4, 'Mangala'],
+  ['shogi', 'Shogi', '将棋', 'strategy', 1, 2, 45, 3, 1, 2, 4, 'Shogi'],
+  ['chinese-checkers', 'Chinese Checkers', '跳棋', 'tabletop', 1, 6, 20, 1, 1, 2, 5, 'Çin Daması'],
+  ['okey', 'Okey', 'Okey', 'tabletop', 1, 4, 20, 2, 1, 2, 5, 'Okey'],
+  ['dama', 'Dama', '土耳其跳棋', 'tabletop', 1, 2, 20, 2, 1, 2, 5, 'Dama'],
+  ['okey-101', '101 Okey', '101 Okey', 'tabletop', 1, 4, 40, 3, 1, 2, 5, '101 Okey'],
+  ['tavla', 'Tavla', '双陆棋', 'tabletop', 1, 2, 15, 2, 1, 2, 5, 'Tavla'],
+  ['mahjong', 'Chinese Mahjong', '麻将', 'tabletop', 1, 4, 30, 3, 1, 2, 5, 'Mahjong'],
+  ['sifeng', 'Sì Fēng', '四风', 'tabletop', 1, 4, 20, 2, 0, 2, 5, 'Sì Fēng (四风)'],
+  ['pisti', 'Pişti', 'Pişti 抓牌', 'cards', 1, 2, 15, 1, 1, 2, 5, 'Pişti'],
+  ['batak', 'Batak', '巴塔克', 'cards', 1, 4, 30, 2, 1, 2, 5, 'Batak'],
+  ['king', 'King', 'King 国王', 'cards', 1, 4, 45, 3, 1, 2, 5, 'King'],
+  ['poker', 'Texas Hold’em Poker', '德州扑克', 'cards', 1, 6, 30, 2, 0, 2, 5, 'Poker'],
+  ['billiards', 'Billiards', '台球', 'classic', 1, 2, 10, 2, 1, 2, 8, 'Bilardo'],
+  ['air-hockey', 'Air Hockey', '桌上冰球', 'classic', 1, 2, 5, 1, 0, 2, 8, 'Hava Hokeyi'],
+  ['table-tennis', 'Table Tennis', '乒乓球', 'classic', 1, 2, 5, 1, 0, 2, 8, 'Masa Tenisi'],
+  ['dominoes', 'Dominoes', '多米诺骨牌', 'classic', 1, 4, 15, 1, 1, 2, 8, 'Domino'],
+  ['dots-boxes', 'Dots and Boxes', '点格棋', 'classic', 1, 2, 5, 1, 1, 2, 8, 'Noktalar ve Kutular'],
+  ['football-70', '7-0 Challenge', '7比0挑战', 'classic', 1, 4, 10, 1, 0, 2, 8, '7-0 Meydan Okuması'],
+  ['battleship', 'Battleship', '海战棋', 'classic', 1, 2, 10, 1, 0, 2, 8, 'Amiral Battı'],
+  ['tictactoe', 'Tic-Tac-Toe', '井字棋', 'classic', 1, 2, 2, 1, 1, 2, 8, 'XOX'],
+  ['ultimate-ttt', 'Ultimate Tic-Tac-Toe', '终极井字棋', 'classic', 1, 2, 10, 2, 0, 2, 8, 'Süper XOX'],
+  ['nim', 'Nim', '尼姆游戏', 'classic', 1, 2, 5, 1, 1, 2, 8, 'Nim'],
+  ['rps', 'Rock Paper Scissors', '石头剪刀布', 'classic', 1, 2, 2, 1, 1, 2, 8, 'Taş Kâğıt Makas'],
+];
+
+export const CATALOGUE: GameMeta[] = ROWS.map(r => ({
+  id: r[0], name: r[1], zh: r[2] || r[1], tr: r[11], category: r[3], players: [r[4], r[5]],
+  minutes: r[6], depth: r[7], tradition: r[8] ? 'traditional' : 'modern',
+  dim: r[9] === 3 ? '3D' : '2D', phase: r[10], status: PLAYABLE.has(r[0]) ? 'playable' : 'planned',
+}));
+
+export const metaOf = (id: string) => CATALOGUE.find(g => g.id === id);
+export const DEPTH_LABEL = [{ en: '', zh: '', tr: '' }, { en: 'Casual', zh: '轻松', tr: 'Hafif' }, { en: 'Moderate', zh: '适中', tr: 'Orta' }, { en: 'Deep', zh: '烧脑', tr: 'Derin' }];
+export const gameName = (g: GameMeta, lang: Lang) => (lang === 'zh' ? g.zh : lang === 'tr' ? g.tr ?? g.name : g.name);

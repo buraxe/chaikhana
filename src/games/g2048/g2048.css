@@ -1,0 +1,14 @@
+/* Styles that only games/g2048 uses; loaded with it. Split from styles.css. */
+.t48-c { display: grid; place-items: center; border-radius: 6px; background: rgba(255, 248, 230, .25); font: 800 clamp(1.2rem, 7vw, 2.2rem)/1 var(--display); color: #4a3a28; }
+.t48-c.v2 { background: #f3e7d3; }
+.t48-c.v4 { background: #efdcb9; }
+.t48-c.v8 { background: #f2b179; color: #fff; }
+.t48-c.v16 { background: #f59563; color: #fff; }
+.t48-c.v32 { background: #f67c5f; color: #fff; }
+.t48-c.v64 { background: #e85a3c; color: #fff; }
+.t48-c.v128 { background: #edcf72; color: #fff; font-size: clamp(1rem, 6vw, 1.9rem); }
+.t48-c.v256 { background: #edcc61; color: #fff; font-size: clamp(1rem, 6vw, 1.9rem); }
+.t48-c.v512 { background: #edc850; color: #fff; font-size: clamp(1rem, 6vw, 1.9rem); }
+.t48-c.v1024, .t48-c.v2048, .t48-c.v4096, .t48-c.big { background: #a3262a; color: #fff; font-size: clamp(.9rem, 5vw, 1.5rem); }
+.t48-c.v2048 { box-shadow: 0 0 18px var(--lamp-on); }
+.t48-c.pop { animation: t48pop .18s ease-out; }

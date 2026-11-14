@@ -1,0 +1,7 @@
+/* Queens: pastel regions (or a chequered board) and black queens. */
+.qn-grid { display: grid; grid-template-columns: repeat(var(--n), 1fr); width: min(100%, 460px); aspect-ratio: 1; border: 2.5px solid #2b2622; }
+.qn-cell { border: .5px solid rgba(43, 38, 34, .35); border-color: #2b2622; color: #1d1a17; font: 400 clamp(1.1rem, 6vw, 2rem)/1 var(--display); cursor: pointer; padding: 0; }
+.qn-grid.classic .qn-cell { background: #efe3c8; border: 0; }
+.qn-grid.classic .qn-cell.dark { background: #b58a5a; }
+.qn-grid.classic .qn-cell.hit { box-shadow: inset 0 0 0 999px rgba(179, 38, 30, .16); }
+.qn-cell.bad { color: #b3261e; box-shadow: inset 0 0 0 3px #b3261e; }

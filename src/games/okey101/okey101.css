@@ -1,0 +1,29 @@
+/* Styles that only games/okey101 uses; loaded with it. Split from styles.css. */
+.o1-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px; background: radial-gradient(circle at 30% 40%, #2f6a48, #1d4a32); border: 6px solid #4a2a12; border-radius: 6px; color: #f4efe2; }
+.o1-top .ok-centre { gap: 12px; flex-wrap: wrap; justify-content: flex-start; }
+.o1-label { font-size: .72rem; opacity: .8; }
+.o1-seats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.o1-seat { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: .78rem; text-align: center; padding: 6px; border-radius: 4px; background: rgba(0, 0, 0, .15); }
+.o1-seat span { opacity: .85; }
+.o1-seat.turn { outline: 2px solid #f2c14e; }
+.o1-table { display: flex; flex-direction: column; gap: 8px; padding: 10px; background: color-mix(in srgb, #1d4a32 12%, var(--surface)); border: 1px solid var(--line); border-radius: 4px; min-height: 64px; }
+.o1-owner { display: flex; gap: 10px; align-items: flex-start; }
+.o1-name { font-size: .78rem; color: var(--muted); min-width: 64px; padding-top: 8px; }
+.o1-melds { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.o1-meld { display: inline-flex; gap: 2px; padding: 3px; background: rgba(0, 0, 0, .06); border: 1px solid transparent; border-radius: 4px; }
+.o1-meld.can { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 18%, transparent); cursor: pointer; }
+button.o1-meld:disabled { cursor: default; color: inherit; }
+.o1-staged { display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 1px dashed var(--red); border-radius: 4px; }
+.o1-rack { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; background: linear-gradient(#8a5a2e, #5e3a1a); border-radius: 4px; }
+.o1-tile { padding: 0; background: none; border: 0; cursor: pointer; transition: transform .1s; }
+.o1-tile.sel { transform: translateY(-7px); }
+.o1-tile.sel .ok-tile { box-shadow: 0 0 0 2px var(--red), 0 6px 8px rgba(0, 0, 0, .35); }
+@media (max-width: 640px) {
+  .o1-top { grid-template-columns: 1fr; }
+}
+.o1-top .ok-centre { grid-column: auto; grid-row: auto; }
+@media (max-width: 560px) {
+  .o1-seats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .o1-seat { font-size: .7rem; padding: 4px; }
+  .o1-name { min-width: 46px; }
+}

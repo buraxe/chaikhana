@@ -1,0 +1,18 @@
+/* Styles that only games/mastermind uses; loaded with it. Split from styles.css. */
+.mm-board { display: flex; flex-direction: column; gap: 6px; padding: 12px; background: linear-gradient(#5e3a1a, #3e2610); border-radius: 6px; width: min(100%, 440px); }
+.mm-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 8px; background: rgba(0, 0, 0, .18); border-radius: 4px; }
+.mm-row.current { outline: 2px solid var(--gold); }
+.mm-row.secret { background: rgba(0, 0, 0, .35); }
+.mm-n { color: #e9dcc0; font-size: .8rem; text-align: center; }
+.mm-pegs { display: flex; gap: 8px; }
+.mm-peg { display: inline-block; width: 26px; height: 26px; border-radius: 50%; box-shadow: inset -3px -4px 6px rgba(0, 0, 0, .35), inset 2px 3px 4px rgba(255, 255, 255, .35); }
+.mm-slot { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: rgba(0, 0, 0, .35); padding: 0; border: 0; }
+.mm-slot.filled { background: none; cursor: pointer; }
+.mm-keys { display: grid; gap: 3px; }
+.mm-keys i { width: 10px; height: 10px; border-radius: 50%; background: rgba(0, 0, 0, .4); }
+.mm-keys i.b { background: #111; box-shadow: 0 0 0 1px #777; }
+.mm-keys i.w { background: #f4f1e8; }
+.mm-palette { display: flex; flex-wrap: wrap; gap: 8px; }
+.mm-pick { padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 50%; cursor: pointer; display: grid; }
+.mm-pick:disabled { opacity: .3; cursor: default; }
+.mm-pick .mm-peg { width: 30px; height: 30px; }

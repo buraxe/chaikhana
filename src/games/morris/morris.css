@@ -1,0 +1,17 @@
+/* Styles that only games/morris uses; loaded with it. Split from styles.css. */
+.nm-board { display: block; width: 100%; max-width: 520px; height: auto; margin-inline: auto; user-select: none; }
+.nm-wood { fill: var(--wood-1); stroke: var(--wood-line); stroke-width: .05; }
+.nm-line { stroke: var(--wood-line); stroke-width: .06; }
+.nm-dot { fill: var(--wood-line); }
+.nm-target { fill: var(--gold); opacity: .85; }
+.nm-stone { stroke-width: .04; }
+.nm-stone.p2 { fill: var(--stone-b); stroke: #000; }
+.nm-stone.sel { stroke: var(--red); stroke-width: .09; }
+.nm-stone.last { stroke: var(--gold); stroke-width: .07; }
+.nm-stone.mill { filter: drop-shadow(0 0 .08px var(--gold)); }
+.nm-stone.rm { stroke: var(--red); stroke-width: .1; stroke-dasharray: .12 .08; }
+.nm-board .pt { cursor: pointer; }
+.nm-hands { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; justify-content: center; font-size: .9rem; }
+.nm-hand { display: inline-flex; align-items: center; gap: 6px; }
+.nm-chip { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.nm-chip.p2 { background: var(--stone-b); }

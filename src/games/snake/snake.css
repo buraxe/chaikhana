@@ -1,0 +1,7 @@
+/* Snake cube: wooden cubes on a cord, pale joints. */
+.sn-stage { position: relative; width: 100%; aspect-ratio: 4 / 3; max-height: 500px; border-radius: 10px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #f3ead8, #d6c3a0); border: 1px solid var(--line); }
+.sn-canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.sn-note { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #5a4325; }
+.sn-joints { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.sn-joints .btn { min-width: 34px; }
+.sn-joints .btn.hint { box-shadow: 0 0 0 3px var(--red); }

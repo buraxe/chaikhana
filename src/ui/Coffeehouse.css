@@ -1,0 +1,28 @@
+/* Styles that only ui/Coffeehouse uses; loaded with it. Split from styles.css. */
+.tea-bank { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 14px 18px; margin-bottom: 18px; border-radius: 8px; background: linear-gradient(135deg, var(--wall-1), var(--wall-3)); color: var(--on-wall); }
+.tea-bank div { display: flex; flex-direction: column; }
+.tea-bank b { font: 800 2.2rem/1 var(--display); color: var(--lamp-on); }
+.tea-bank small { color: var(--on-wall-muted); margin-right: auto; }
+.tea-glass { font-size: 2.4rem; }
+.ladder th, .ladder td { text-align: center; }
+.ladder tbody th { text-align: left; white-space: nowrap; }
+.ladder thead .face { margin: 0 auto; }
+.ladder td.won { color: var(--gold); font-size: 1.1rem; }
+.ladder td.open { color: var(--muted); }
+.ladder td.shut { opacity: .5; font-size: .8rem; }
+.shop-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.shop-row h3 { font: 700 1rem/1.2 var(--display); }
+.ware { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; padding: 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-size: .88rem; }
+.ware.on { border-color: var(--red); box-shadow: inset 0 0 0 1px var(--red); }
+.ware-sw { display: flex; width: 100%; height: 34px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2); }
+.ware-sw i { flex: 1; }
+.clips { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; padding: 8px 4px; }
+.clip-date { font: 600 .68rem/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--paper-muted); border-bottom: 1px solid var(--paper-hair); padding-bottom: 5px; }
+.clip-head { font: 800 1.05rem/1.25 var(--display); }
+.clip.k-seven .clip-head, .clip.k-tour .clip-head { color: var(--paper-red); }
+.tea-bank .btn { color: var(--ink); }
+.ladder tbody th a { text-decoration: none; }
+.reg-tier { margin-bottom: 8px; }
+.reg-tier-h { font: 700 .8rem/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 10px 0 4px; }
+.ladder-faces { display: inline-flex; }
+.ladder-faces .face + .face { margin-left: -6px; }

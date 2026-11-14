@@ -1,0 +1,32 @@
+/* Styles that only ui/Tournament uses; loaded with it. Split from styles.css. */
+.tour-setup { display: flex; flex-direction: column; gap: 16px; max-width: 760px; }
+.tr-names { display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; }
+.tr-names li { display: flex; align-items: center; gap: 8px; }
+.tr-names .num { width: 20px; color: var(--muted); }
+.tr-names .input { flex: 1; min-width: 0; }
+.tr-games { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.tr-game { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 6px; border: 2px solid var(--line); border-radius: 6px; background: var(--surface); font-size: .8rem; font-weight: 600; cursor: pointer; text-align: center; }
+.tr-game svg { width: 44px; height: 44px; }
+.tr-game.on { border-color: var(--red); background: var(--red-soft); }
+.tr-next, .tr-champ { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; padding: 18px; margin-bottom: 18px; border-radius: 8px; background: var(--paper); color: var(--paper-ink); border-top: 4px solid var(--red); box-shadow: 0 10px 24px -16px rgba(0, 0, 0, .6); }
+.tr-vs { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px 16px; font: 800 1.5rem/1.2 var(--display); }
+.tr-vs span { font: 600 .9rem/1 var(--body); color: var(--paper-muted); }
+.tr-gamelink { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; padding: 8px 14px; border: 1px dashed var(--paper-hair); border-radius: 6px; }
+.tr-gamelink svg { width: 54px; height: 54px; }
+.tr-gamelink span { font: 700 1rem/1.2 var(--news); }
+.tr-gamelink small { color: var(--paper-entry); font-weight: 600; }
+.tr-res .btn { min-width: 110px; }
+.tr-champ h2 { font: 900 2.2rem/1.1 var(--display); color: var(--paper-red); }
+.tr-champ .tr-cup { font-size: 3.6rem; animation: cupUp .8s cubic-bezier(.2, 1.6, .4, 1); }
+.tr-rounds { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.tr-rounds.bracket { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(200px, 1fr); overflow-x: auto; padding-bottom: 6px; }
+.tr-round h3 { font: 700 .8rem/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.tr-round ol { display: flex; flex-direction: column; gap: 6px; }
+.tr-fx { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); font-size: .88rem; }
+.tr-fx > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tr-fx > span:last-child { text-align: right; }
+.tr-fx small { color: var(--muted); font-size: .72rem; text-align: center; }
+.tr-fx .w { font-weight: 800; color: var(--red); }
+.tr-fx.now { border-color: var(--red); box-shadow: inset 3px 0 0 var(--red); }
+.tr-fx.done { background: var(--sunk); }
+.tr-table tr.lead th { color: var(--red); }
