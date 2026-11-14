@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
 import { chooseInput, determinize } from './ai';
 import { apply, cardsOf, legal, newGame, validate, type GameDef, type GState } from './engine';
-import { COLOR_NUMBER, CONNECT4, EXAMPLES, PEG, SNAKES_LADDERS, TICTACTOE } from './examples';
+import { CARD_DUEL, COLOR_NUMBER, CONNECT4, EXAMPLES, HEX, PEG, REVERSI, SNAKES_LADDERS, TICTACTOE } from './examples';
 
 const play = (def: GameDef, st: GState, rng: () => number, cap = 500) => {
   for (let k = 0; k < cap && !st.over; k++) { const ms = legal(def, st); st = apply(def, st, ms[Math.floor(rng() * ms.length)]); }
@@ -91,5 +91,57 @@ describe('workshop engine', () => {
     const loop: GameDef = { ...TICTACTOE, rules: [{ on: 'click', do: [{ op: 'repeat', times: 1000, do: [{ op: 'repeat', times: 1000, do: [{ op: 'say', text: 'x' }] }] }] }] };
     const st = apply(loop, newGame(loop, 2, 1), { k: 'click', cell: 0 });
     expect(st.error).toMatch(/too many steps/);
+  });
+  it('reversi: four openings, flipping, and a count when the board fills', () => {
+    let st = newGame(REVERSI, 2, 1);
+    const opens = legal(REVERSI, st).map(m => (m.k === 'click' ? m.cell : -1)).sort((a, b) => a - b);
+    expect(opens).toEqual([19, 26, 37, 44]);
+    st = apply(REVERSI, st, { k: 'click', cell: 19 });
+    expect(st.board[27][0].o).toBe(0);
+    expect(st.board.flat().filter(p => p.o === 0)).toHaveLength(4);
+    const end = play(REVERSI, st, mulberry32(3));
+    expect(end.error).toBeNull();
+    const n0 = end.board.flat().filter(p => p.o === 0).length, n1 = end.board.flat().filter(p => p.o === 1).length;
+    expect(end.over!.winner).toBe(n0 > n1 ? 0 : n1 > n0 ? 1 : -1);
+  });
+  it('hex: connects across six neighbours, never a draw', () => {
+    let st = newGame(HEX, 2, 1);
+    // red climbs straight down column 3; blue wastes moves on the left edge
+    for (let r = 0; r < 7; r++) {
+      st = apply(HEX, st, { k: 'click', cell: r * 7 + 3 });
+      if (st.over) break;
+      st = apply(HEX, st, { k: 'click', cell: r * 7 });
+    }
+    expect(st.over).toEqual({ winner: 0 });
+    const rng = mulberry32(5);
+    for (let g = 0; g < 10; g++) expect(play(HEX, newGame(HEX, 2, g), rng).over!.winner).toBeGreaterThanOrEqual(0);
+  });
+  it('hex: a diagonal along the shared axis is connected', () => {
+    let st = newGame(HEX, 2, 1);
+    // cells (r, 6 - r) are neighbours in this layout (direction NE / SW)
+    for (let r = 0; r < 7; r++) { st = apply(HEX, st, { k: 'click', cell: r * 7 + (6 - r) }); if (st.over) break; st = apply(HEX, st, { k: 'click', cell: r * 7 }); }
+    expect(st.over?.winner).toBe(0);
+  });
+  it('card duel: a card goes onto a chosen cell and captures weaker neighbours', () => {
+    let st = newGame(CARD_DUEL, 2, 4);
+    const ms = legal(CARD_DUEL, st);
+    expect(ms.every(m => m.k === 'card' && m.cell !== undefined)).toBe(true);
+    expect(ms).toHaveLength(5 * 9);
+    const hand0 = st.zones['hand@0'], hand1 = st.zones['hand@1'], cards = cardsOf(CARD_DUEL);
+    const low = hand0.reduce((a, b) => (cards[a].n < cards[b].n ? a : b)), high = hand1.reduce((a, b) => (cards[a].n > cards[b].n ? a : b));
+    st = apply(CARD_DUEL, st, { k: 'card', card: low, zone: 'hand@0', cell: 4 });
+    expect(st.board[4][0]).toMatchObject({ o: 0, v: cards[low].n });
+    st = apply(CARD_DUEL, st, { k: 'card', card: high, zone: 'hand@1', cell: 1 });
+    if (cards[high].n > cards[low].n) expect(st.board[4][0].o).toBe(1);
+    const end = play(CARD_DUEL, st, mulberry32(9));
+    expect(end.over).not.toBeNull();
+    expect(end.zones.used).toHaveLength(9);
+  });
+  it('rounds count up and the move list respects reach', () => {
+    let st = newGame(TICTACTOE, 2, 1);
+    for (const c of [0, 1, 2]) st = apply(TICTACTOE, st, { k: 'click', cell: c });
+    expect(st.round).toBe(1);
+    const peg = newGame(PEG, 1, 1);
+    expect(legal(PEG, peg, true)).toHaveLength(1);
   });
 });

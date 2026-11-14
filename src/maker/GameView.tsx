@@ -10,11 +10,11 @@ export function playerName(def: GameDef, p: number, lang: 'en' | 'zh' | 'tr') {
 }
 
 /** One card face, coloured and labelled from its fields. */
-export function CardFace({ def, id, onClick, active, small }: { def: GameDef; id: number; onClick?: () => void; active?: boolean; small?: boolean }) {
+export function CardFace({ def, id, onClick, active, small, picked }: { def: GameDef; id: number; onClick?: () => void; active?: boolean; small?: boolean; picked?: boolean }) {
   const c = cardsOf(def)[id], cd = def.cards!;
   const bg = cd.color ? cd.color.map[String(c[cd.color.field])] ?? '#777' : '#f8f3e6';
   const label = cd.label.replace(/\{(\w+)\}/g, (_, f: string) => String(c[f] ?? ''));
-  const cls = 'wk-card' + (small ? ' sm' : '') + (active ? ' act' : '') + (cd.color ? ' tinted' : '');
+  const cls = 'wk-card' + (small ? ' sm' : '') + (active ? ' act' : '') + (picked ? ' picked' : '') + (cd.color ? ' tinted' : '');
   const title = Object.entries(c).map(([k, v]) => `${k}: ${v}`).join(', ');
   return onClick
     ? <button type="button" className={cls} style={{ background: bg }} onClick={onClick} disabled={!active} title={title} aria-label={title}><span>{label}</span></button>
@@ -39,13 +39,24 @@ function PieceShape({ p, x, y, r, color }: { p: PieceDef; x: number; y: number; 
 export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; st: GState; viewer: number | 'all'; canAct: boolean; onInput: (i: Input) => void }) {
   const lang = useLang(), t = useT();
   const [sel, setSel] = useState<number | null>(null);
+  /** A card waiting for its cell, in games where cards are played onto the board. */
+  const [selCard, setSelCard] = useState<number | null>(null);
   const moves = canAct ? legal(def, st) : [];
   const clicks = new Set(moves.flatMap(m => (m.k === 'click' ? [m.cell] : [])));
   const froms = new Set(moves.flatMap(m => (m.k === 'move' ? [m.from] : [])));
-  const targets = new Set(moves.flatMap(m => (m.k === 'move' && m.from === sel ? [m.to] : [])));
-  const send = (i: Input) => { setSel(null); onInput(i); };
+  const cardMoves = new Map(moves.flatMap(m => (m.k === 'card' && m.cell === undefined ? [[m.card, m] as const] : [])));
+  const aimed = new Map<number, Map<number, Input>>();
+  for (const m of moves) if (m.k === 'card' && m.cell !== undefined) { if (!aimed.has(m.card)) aimed.set(m.card, new Map()); aimed.get(m.card)!.set(m.cell, m); }
+  const targets = new Set(selCard !== null ? [...(aimed.get(selCard)?.keys() ?? [])] : moves.flatMap(m => (m.k === 'move' && m.from === sel ? [m.to] : [])));
+  const send = (i: Input) => { setSel(null); setSelCard(null); onInput(i); };
+  const tapCard = (id: number) => {
+    if (aimed.has(id)) { setSel(null); setSelCard(selCard === id ? null : id); return; }
+    const m = cardMoves.get(id);
+    if (m) send(m);
+  };
 
   const tapCell = (i: number) => {
+    if (selCard !== null) { const m = aimed.get(selCard)?.get(i); if (m) send(m); else setSelCard(null); return; }
     if (sel !== null && targets.has(i)) return send({ k: 'move', from: sel, to: i });
     if (clicks.has(i)) return send({ k: 'click', cell: i });
     if (froms.has(i)) return setSel(sel === i ? null : i);
@@ -55,37 +66,49 @@ export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; s
   let board: ReactNode = null;
   const b = def.board;
   if (b) {
-    const c = compile(def), last = new Set(st.last);
-    const cells: ReactNode[] = [], pieces: ReactNode[] = [], marks: ReactNode[] = [], links: ReactNode[] = [];
+    const c = compile(def), last = new Set(st.last), hex = b.grid === 'hex';
+    // Geometry: square cells are 1×1; hexagons are pointy-topped, each row shifted half a cell.
+    const HR = 1 / Math.sqrt(3), RowH = hex ? 0.866 : 1;
+    const cen = (i: number): [number, number] => {
+      const x = i % b.w, y = Math.floor(i / b.w);
+      return hex ? [x + y * 0.5 + 0.5, y * RowH + HR] : [x + 0.5, y + 0.5];
+    };
+    const hexPts = (cx: number, cy: number, r: number) => Array.from({ length: 6 }, (_, k) => { const a = (Math.PI / 3) * k - Math.PI / 2; return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`; }).join(' ');
+    const shape = (i: number, inset: number, props: Record<string, unknown>, key: string) => {
+      const [cx, cy] = cen(i);
+      return hex ? <polygon key={key} points={hexPts(cx, cy, HR - inset)} {...props} /> : <rect key={key} x={cx - 0.5 + inset} y={cy - 0.5 + inset} width={1 - 2 * inset} height={1 - 2 * inset} rx={0.06} {...props} />;
+    };
+    const W = hex ? b.w + (b.h - 1) * 0.5 : b.w, H = hex ? (b.h - 1) * RowH + 2 * HR : b.h;
+    const cells: ReactNode[] = [], pieces: ReactNode[] = [], marks: ReactNode[] = [], links: ReactNode[] = [], hits: ReactNode[] = [];
     for (let i = 0; i < c.cells; i++) {
       if (isHole(def, i)) continue;
-      const x = i % b.w, y = Math.floor(i / b.w), ty = cellTypeOf(def, i), tdef = ty ? b.types?.[ty] : undefined;
+      const [cx, cy] = cen(i), x = i % b.w, y = Math.floor(i / b.w), ty = cellTypeOf(def, i), tdef = ty ? b.types?.[ty] : undefined;
       const fill = tdef?.color ?? (b.checker && (x + y) % 2 ? 'var(--wk-dark)' : 'var(--wk-light)');
-      cells.push(<rect key={i} x={x + 0.02} y={y + 0.02} width={0.96} height={0.96} rx={0.06} fill={fill} className={'wk-cell' + (last.has(i) ? ' last' : '')} />);
-      if (tdef?.label) marks.push(<text key={'l' + i} x={x + 0.5} y={y + 0.62} className="wk-clabel" textAnchor="middle">{tdef.label}</text>);
-      if (b.showPath && c.pathPos[i] >= 0) marks.push(<text key={'n' + i} x={x + 0.08} y={y + 0.24} className="wk-num">{c.pathPos[i] + 1}</text>);
+      cells.push(shape(i, 0.02, { fill, className: 'wk-cell' + (last.has(i) ? ' last' : '') }, 'c' + i));
+      if (tdef?.label) marks.push(<text key={'l' + i} x={cx} y={cy + 0.12} className="wk-clabel" textAnchor="middle">{tdef.label}</text>);
+      if (b.showPath && c.pathPos[i] >= 0) marks.push(<text key={'n' + i} x={cx - 0.42} y={cy - 0.26} className="wk-num">{c.pathPos[i] + 1}</text>);
       const to = cellPropsOf(def, i).to;
       if (b.links && to !== undefined && to >= 0 && to < c.cells) {
-        const up = c.pathPos[to] > c.pathPos[i];
-        links.push(<line key={'k' + i} x1={x + 0.5} y1={y + 0.5} x2={(to % b.w) + 0.5} y2={Math.floor(to / b.w) + 0.5} className={'wk-link ' + (up ? 'up' : 'down')} markerEnd={`url(#wk-arrow-${up ? 'up' : 'down'})`} />);
+        const up = c.pathPos[to] > c.pathPos[i], [tx, tyy] = cen(to);
+        links.push(<line key={'k' + i} x1={cx} y1={cy} x2={tx} y2={tyy} className={'wk-link ' + (up ? 'up' : 'down')} markerEnd={`url(#wk-arrow-${up ? 'up' : 'down'})`} />);
       }
       const stack = st.board[i];
       stack.slice(-4).forEach((p, k, arr) => {
         const pd = def.pieces?.[p.t];
         if (!pd) return;
-        const n = arr.length, off = n === 1 ? [0, 0] : [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]][k];
-        pieces.push(<PieceShape key={`p${i}-${k}`} p={pd} x={x + 0.5 + off[0]} y={y + 0.5 + off[1]} r={n === 1 ? 0.36 : 0.2} color={playerColor(def, p.o)} />);
+        const n = arr.length, off = n === 1 ? [0, 0] : [[-0.2, -0.2], [0.2, -0.2], [-0.2, 0.2], [0.2, 0.2]][k], r = n === 1 ? (hex ? 0.36 : 0.38) : 0.2;
+        pieces.push(<PieceShape key={`p${i}-${k}`} p={pd} x={cx + off[0]} y={cy + off[1]} r={r} color={playerColor(def, p.o)} />);
+        if (p.v !== undefined) pieces.push(<text key={`v${i}-${k}`} x={cx + off[0]} y={cy + off[1] + r * 0.38} fontSize={r * 1.1} textAnchor="middle" className="wk-val">{p.v}</text>);
       });
-      if (stack.length > 4) marks.push(<text key={'h' + i} x={x + 0.92} y={y + 0.95} className="wk-num" textAnchor="end">{stack.length}</text>);
-      if (clicks.has(i) && !stack.length) marks.push(<circle key={'d' + i} cx={x + 0.5} cy={y + 0.5} r={0.1} className="wk-hint" />);
-      if (froms.has(i) && sel === null) marks.push(<rect key={'f' + i} x={x + 0.06} y={y + 0.06} width={0.88} height={0.88} rx={0.08} className="wk-from" />);
-      if (sel === i) marks.push(<rect key={'s' + i} x={x + 0.04} y={y + 0.04} width={0.92} height={0.92} rx={0.08} className="wk-sel" />);
-      if (targets.has(i)) marks.push(<circle key={'t' + i} cx={x + 0.5} cy={y + 0.5} r={0.18} className="wk-target" />);
+      if (stack.length > 4) marks.push(<text key={'h' + i} x={cx + 0.42} y={cy + 0.45} className="wk-num" textAnchor="end">{stack.length}</text>);
+      if (clicks.has(i) && !stack.length) marks.push(<circle key={'d' + i} cx={cx} cy={cy} r={0.1} className="wk-hint" />);
+      if (froms.has(i) && sel === null && selCard === null) marks.push(shape(i, 0.06, { className: 'wk-from' }, 'f' + i));
+      if (sel === i) marks.push(shape(i, 0.04, { className: 'wk-sel' }, 's' + i));
+      if (targets.has(i)) marks.push(<circle key={'t' + i} cx={cx} cy={cy} r={0.18} className="wk-target" />);
+      hits.push(shape(i, 0, { fill: 'transparent', className: clicks.has(i) || froms.has(i) || targets.has(i) ? 'pt wk-hit' : 'wk-hit', onClick: () => tapCell(i), 'data-cell': i }, 'hit' + i));
     }
-    const hits = Array.from({ length: c.cells }, (_, i) => isHole(def, i) ? null
-      : <rect key={'hit' + i} x={i % b.w} y={Math.floor(i / b.w)} width={1} height={1} fill="transparent" className={clicks.has(i) || froms.has(i) || targets.has(i) ? 'pt' : ''} onClick={() => tapCell(i)} />);
     board = (
-      <svg className="wk-board" viewBox={`-0.1 -0.1 ${b.w + 0.2} ${b.h + 0.2}`} style={{ maxWidth: Math.min(640, b.w * 72) }} role="application" aria-label={t('Game board', '棋盘', 'Oyun tahtası')}>
+      <svg className="wk-board" viewBox={`-0.1 -0.1 ${W + 0.2} ${H + 0.2}`} style={{ maxWidth: Math.min(640, W * 72) }} role="application" aria-label={t('Game board', '棋盘', 'Oyun tahtası')}>
         <defs>
           {['up', 'down'].map(k => <marker key={k} id={'wk-arrow-' + k} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" className={'wk-arrowhead ' + k} /></marker>)}
         </defs>
@@ -96,7 +119,7 @@ export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; s
 
   const zoneKeys = Object.keys(st.zones).sort((a, b2) => zoneOfKey(a)[1] - zoneOfKey(b2)[1]);
   const zoneButtons = new Set(moves.flatMap(m => (m.k === 'zone' ? [m.zone] : [])));
-  const cardMoves = new Map(moves.flatMap(m => (m.k === 'card' ? [[m.card, m] as const] : [])));
+  const playable = (id: number) => cardMoves.has(id) || aimed.has(id);
   const zones = zoneKeys.length > 0 && (
     <div className="wk-zones">
       {zoneKeys.map(key => {
@@ -109,8 +132,8 @@ export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; s
             <div className="wk-zhead"><b>{head}</b><span className="muted">{cards.length}</span>
               {clickable && <button type="button" className="btn sm primary" id={'wk-zone-' + z} onClick={() => send({ k: 'zone', zone: key })}>{txt(zd.name, lang)} ✋</button>}</div>
             <div className="wk-cards">
-              {vis === 'all' && cards.map(id => <CardFace key={id} def={def} id={id} active={cardMoves.has(id)} onClick={cardMoves.has(id) ? () => send(cardMoves.get(id)!) : undefined} />)}
-              {vis === 'top' && cards.length > 0 && <CardFace def={def} id={cards[cards.length - 1]} active={cardMoves.has(cards[cards.length - 1])} onClick={cardMoves.has(cards[cards.length - 1]) ? () => send(cardMoves.get(cards[cards.length - 1])!) : undefined} />}
+              {vis === 'all' && cards.map(id => <CardFace key={id} def={def} id={id} active={playable(id)} picked={selCard === id} onClick={playable(id) ? () => tapCard(id) : undefined} />)}
+              {vis === 'top' && cards.length > 0 && <CardFace def={def} id={cards[cards.length - 1]} active={playable(cards[cards.length - 1])} picked={selCard === cards[cards.length - 1]} onClick={playable(cards[cards.length - 1]) ? () => tapCard(cards[cards.length - 1]) : undefined} />}
               {vis === 'none' && cards.length > 0 && <span className="wk-card back" aria-label={`${cards.length}`}><span>×{cards.length}</span></span>}
               {!cards.length && <span className="muted small">{t('empty', '空', 'boş')}</span>}
             </div>
@@ -124,6 +147,7 @@ export function GameView({ def, st, viewer, canAct, onInput }: { def: GameDef; s
   const buttons = Object.entries(def.buttons ?? {}).filter(([id]) => moves.some(m => m.k === 'button' && m.id === id));
   return (
     <div className="wk-view">
+      {selCard !== null && <p className="wk-aim" role="status">{t('Now choose a cell for the card.', '现在为这张牌选一个格子。', 'Şimdi kart için bir kare seç.')}</p>}
       {board}
       {(def.dice || buttons.length > 0) && (
         <div className="tools wk-dice">

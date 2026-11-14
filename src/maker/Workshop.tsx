@@ -23,6 +23,7 @@ const EVENT_NAMES: Record<EventName, [string, string, string]> = {
   button: ['When a button is pressed', '按下按钮时', 'Bir düğmeye basılınca'],
   enter: ['When a piece lands on a cell', '棋子落到格子上时', 'Bir taş bir kareye girince'],
   after: ['After every action', '每次行动之后', 'Her hamleden sonra'],
+  blocked: ['When nobody can move', '无人可走时', 'Kimse oynayamayınca'],
 };
 
 const BLANK: GameDef = {
@@ -44,10 +45,12 @@ export function Workshop() {
   const [count, setCount] = useState(def.players.max);
   const [seats, setSeats] = useState<Seat[]>(['h', 2, 2, 2, 2, 2]);
   // The state is kept with the definition it belongs to, so a switch never pairs a board with the wrong game.
-  const [game, setGame] = useState<{ def: GameDef; st: GState } | null>(null);
+  // Earlier states are kept for undo.
+  const [game, setGame] = useState<{ def: GameDef; st: GState; hist: GState[] } | null>(null);
   const st = game && game.def === def ? game.st : null;
-  const setSt = (f: GState | ((s: GState | null) => GState | null)) =>
-    setGame(g => { const cur = g && g.def === def ? g.st : null, n = typeof f === 'function' ? f(cur) : f; return n ? { def, st: n } : null; });
+  const setSt = (n: GState) => setGame({ def, st: n, hist: [] });
+  /** The seat that last saw the hidden hands: a pass-the-device screen covers them in between. */
+  const [seenBy, setSeenBy] = useState<number | null>(null);
   const [src, setSrc] = useState('');
   const [errs, setErrs] = useState<string[]>([]);
   const [note, setNote] = useState('');
@@ -68,13 +71,26 @@ export function Workshop() {
   const aiTurn = !!st && !st.over && seatOf(st.turn) !== 'h';
   const viewer: number | 'all' = !st ? 'all' : seatOf(st.turn) === 'h' ? st.turn : humans.length ? humans[0] : 'all';
 
-  const play = (i: Input) => setSt(s => {
-    if (!s) return s;
-    const n = apply(def, s, i);
+  const play = (i: Input) => setGame(g => {
+    if (!g || g.def !== def) return g;
+    const s = g.st, n = apply(def, s, i);
     if (n.over && !s.over) sfx(n.over.winner >= 0 && seatOf(n.over.winner) === 'h' ? 'win' : n.over.winner < 0 ? 'draw' : 'lose');
     else sfx(i.k === 'roll' ? 'dice' : i.k === 'card' || i.k === 'zone' ? 'card' : 'stone', 0.6);
-    return n;
+    return { def, st: n, hist: [...g.hist.slice(-200), s] };
   });
+  /** Back to the last position where a person was to move. */
+  const undo = () => setGame(g => {
+    if (!g || !g.hist.length) return g;
+    const hist = g.hist.slice();
+    let back = hist.pop()!;
+    while (hist.length && seatOf(back.turn) !== 'h') back = hist.pop()!;
+    if (seatOf(back.turn) !== 'h') return g;
+    setSeenBy(back.turn);
+    return { def, st: back, hist };
+  });
+  const canUndo = !!game && game.def === def && game.hist.some(h => seatOf(h.turn) === 'h') && !aiTurn;
+  const secret = Object.values(def.zones ?? {}).some(z => z.show === 'owner') && humans.length > 1;
+  const passing = !!st && secret && !st.over && seatOf(st.turn) === 'h' && seenBy !== st.turn;
   useEffect(() => {
     if (!aiTurn || !st) return;
     const level = seatOf(st.turn) as number;
@@ -82,7 +98,7 @@ export function Workshop() {
     return () => clearTimeout(id);
   }, [st, aiTurn]); // eslint-disable-line
 
-  const restart = () => setSt(newGame(def, count));
+  const restart = () => { setSeenBy(null); setSt(newGame(def, count)); };
   const load = (save: boolean) => {
     let parsed: unknown;
     try { parsed = JSON.parse(src); } catch (e) { setErrs([t('This is not valid JSON: ', '这不是有效的JSON：', 'Bu geçerli bir JSON değil: ') + (e as Error).message]); return; }
@@ -143,7 +159,16 @@ export function Workshop() {
           <div className="play-main">
             <div className="statline"><span role="status" aria-live="polite">{st.players > 1 && !st.over && <i className="wk-dot" style={{ background: playerColor(def, st.turn) }} />}{status}</span>
               {st.msg && <span className="wk-msg">{txt(st.msg, lang)}</span>}</div>
-            <GameView def={def} st={st} viewer={viewer} canAct={!aiTurn} onInput={play} />
+            <GameView def={def} st={st} viewer={passing ? -1 : viewer} canAct={!aiTurn && !passing} onInput={play} />
+            {passing && (
+              <div className="wk-pass" role="dialog" aria-modal="true" aria-labelledby="wk-pass-h">
+                <div>
+                  <h2 id="wk-pass-h">{t(`Pass to ${playerName(def, st.turn, 'en')}`, `请交给${playerName(def, st.turn, 'zh')}`, `Cihazı ${playerName(def, st.turn, 'tr')} oyuncusuna ver`)}</h2>
+                  <p>{t('The other players should look away: your hand is about to be shown.', '其他玩家请回避：马上要显示你的手牌。', 'Diğer oyuncular baksın istemiyorsan başka yöne baksınlar: elin gösterilecek.')}</p>
+                  <button type="button" className="btn primary" id="wk-ready" onClick={() => setSeenBy(st.turn)}>{t('I’m ready', '我准备好了', 'Hazırım')}</button>
+                </div>
+              </div>
+            )}
           </div>
           <aside className="play-side">
             {def.about && <p className="muted small">{txt(def.about, lang)}</p>}
@@ -162,6 +187,7 @@ export function Workshop() {
                   onChange={v => setSeats(s => s.map((x, i) => (i === p ? (v === 'h' ? 'h' : Number(v)) : x)))}
                   options={[{ value: 'h', label: t('Person', '真人', 'Kişi') }, ...LEVELS.map((_, i) => ({ value: String(i), label: t('Computer', '电脑', 'Bilgisayar') + ' · ' + levelName(i) }))]} />
               ))}
+              <button type="button" className="btn" id="wk-undo" disabled={!canUndo} onClick={undo}>↶ {t('Undo', '悔棋', 'Geri al')}</button>
               <button type="button" className="btn primary" id="wk-restart" onClick={restart}>{st.over ? t('Play again', '再来一局', 'Tekrar oyna') : t('Restart', '重新开始', 'Yeniden başla')}</button>
             </div>
           </aside>

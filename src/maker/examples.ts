@@ -88,7 +88,7 @@ export const PEG: GameDef = {
   pieces: { peg: { name: { en: 'Peg', zh: '棋子', tr: 'Taş' }, shape: 'disc' } },
   rules: [
     { on: 'start', do: [o('forCells', { where: o('ne', { a: get('it'), b: 24 }), do: [o('place', { piece: 'peg', cell: get('it') })] })] },
-    { on: 'move', name: { en: 'Jump and take', zh: '跳吃', tr: 'Atla ve al' },
+    { on: 'move', reach: 2, name: { en: 'Jump and take', zh: '跳吃', tr: 'Atla ve al' },
       when: and(and(eq(o('owner', { cell: from }), o('me')), o('empty', { cell: to })),
         and(or(eq(o('dr', { a: from, b: to }), 0), eq(o('dc', { a: from, b: to }), 0)),
           and(o('ge', { a: o('between', { a: from, b: to }), b: 0 }), o('not', { a: o('empty', { cell: o('between', { a: from, b: to }) }) })))),
@@ -123,4 +123,72 @@ export const COLOR_NUMBER: GameDef = {
   ],
 };
 
-export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER];
+const dir = get('dir'), me = o('me');
+export const REVERSI: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-reversi', kind: 'game',
+  name: { en: 'Reversi', zh: '黑白棋', tr: 'Reversi' },
+  about: { en: 'Directions and loops: a stone must close a line of enemy stones in at least one of the eight directions, and every closed line flips. When nobody can move, the most stones wins.', zh: '方向与循环：落子必须在八个方向中至少一个方向夹住对方的棋子，被夹住的都翻过来。双方都无法落子时，棋子多者胜。', tr: 'Yönler ve döngüler: taş, sekiz yönden en az birinde rakip taşlardan bir sırayı kapatmalı; kapanan her sıra döner. Kimse oynayamayınca taşı çok olan kazanır.' },
+  players: { min: 2, max: 2, colors: ['#1d1a17', '#f4efe2'], names: [{ en: 'Black', zh: '黑方', tr: 'Siyah' }, { en: 'White', zh: '白方', tr: 'Beyaz' }] },
+  board: { w: 8, h: 8, types: {}, marks: [] },
+  pieces: { stone: { name: { en: 'Stone', zh: '棋子', tr: 'Taş' }, shape: 'disc' } },
+  rules: [
+    { on: 'start', do: [o('place', { piece: 'stone', cell: 27, owner: 1 }), o('place', { piece: 'stone', cell: 36, owner: 1 }), o('place', { piece: 'stone', cell: 28, owner: 0 }), o('place', { piece: 'stone', cell: 35, owner: 0 })] },
+    { on: 'click', name: { en: 'Place and flip', zh: '落子翻转', tr: 'Koy ve çevir' },
+      when: and(o('empty', { cell }), o('anyDir', { test: o('gt', { a: o('flank', { cell, dir }), b: 0 }) })),
+      do: [
+        o('forDirs', { do: [
+          o('let', { name: 'k', value: o('flank', { cell, dir }) }),
+          o('repeat', { times: get('k'), do: [o('setOwner', { cell: o('step', { cell, dir, n: get('i') }), owner: me })] }),
+        ] }),
+        o('place', { piece: 'stone', cell }),
+      ] },
+    { on: 'after', when: o('full'), do: [o('winBest', { score: o('count', { piece: 'stone', owner: get('p') }) })] },
+    { on: 'blocked', name: { en: 'Nobody can move: count the stones', zh: '无人可下：数子', tr: 'Kimse oynayamıyor: taşları say' }, do: [o('winBest', { score: o('count', { piece: 'stone', owner: get('p') }) })] },
+  ],
+};
+
+const hexEdges: Mark[] = [];
+for (let i = 0; i < 49; i++) { const r = Math.floor(i / 7), c = i % 7; if (r === 0 || r === 6) hexEdges.push({ cell: i, type: 'red' }); else if (c === 0 || c === 6) hexEdges.push({ cell: i, type: 'blue' }); }
+export const HEX: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-hex', kind: 'game',
+  name: { en: 'Hex', zh: '六贯棋', tr: 'Hex' },
+  about: { en: 'A hexagon board and a connection test: red joins the top and bottom edges, blue the left and right. There are no draws.', zh: '六边形棋盘和连通检查：红方连接上下两边，蓝方连接左右两边。不会有和棋。', tr: 'Altıgen tahta ve bağlantı kontrolü: kırmızı üst ve alt kenarı, mavi sol ve sağ kenarı birleştirir. Beraberlik olmaz.' },
+  players: { min: 2, max: 2, colors: ['#c0392b', '#1f4e9c'], names: [{ en: 'Red', zh: '红方', tr: 'Kırmızı' }, { en: 'Blue', zh: '蓝方', tr: 'Mavi' }] },
+  board: { w: 7, h: 7, grid: 'hex', types: { red: { name: { en: 'Red edge', zh: '红边', tr: 'Kırmızı kenar' }, color: '#eec3bb' }, blue: { name: { en: 'Blue edge', zh: '蓝边', tr: 'Mavi kenar' }, color: '#bfcdea' } }, marks: hexEdges },
+  pieces: { stone: { name: { en: 'Stone', zh: '棋子', tr: 'Taş' }, shape: 'disc' } },
+  rules: [
+    { on: 'click', name: { en: 'Place a stone', zh: '落子', tr: 'Taş koy' }, when: o('empty', { cell }), do: [
+      o('place', { piece: 'stone', cell }),
+      iff(eq(me, 0), [iff(o('connects', { owner: me, a: 'top', b: 'bottom' }), [o('win')])], [iff(o('connects', { owner: me, a: 'left', b: 'right' }), [o('win')])]),
+    ] },
+  ],
+};
+
+export const CARD_DUEL: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-duel', kind: 'game',
+  name: { en: 'Card duel', zh: '卡牌对决', tr: 'Kart Düellosu' },
+  about: { en: 'Cards played onto the board: pick a card from your hand, then an empty cell. It becomes a tile with the card’s number and captures each neighbouring enemy tile with a lower number. When the board is full, the most tiles wins.', zh: '把牌打到棋盘上：先选手里的一张牌，再选一个空格。它变成带有牌面数字的方块，并吃掉相邻的、数字更小的对方方块。棋盘填满时，方块多者胜。', tr: 'Tahtaya oynanan kartlar: elinden bir kart seç, sonra boş bir kare. Kart, üzerindeki sayıyla bir taşa dönüşür ve komşu rakip taşlardan sayısı küçük olanları ele geçirir. Tahta dolunca taşı çok olan kazanır.' },
+  players: PLAYERS2,
+  board: { w: 3, h: 3, checker: true },
+  pieces: { tile: { name: { en: 'Tile', zh: '方块', tr: 'Taş' }, shape: 'square' } },
+  cards: { fields: { n: [1, 2, 3, 4, 5, 6, 7, 8, 9] }, copies: 2, label: '{n}' },
+  zones: {
+    deck: { name: { en: 'Deck', zh: '牌堆', tr: 'Deste' }, owner: 'shared', show: 'count' },
+    hand: { name: { en: 'Hand', zh: '手牌', tr: 'El' }, owner: 'each', show: 'all' },
+    used: { name: { en: 'Played', zh: '已出', tr: 'Oynanan' }, owner: 'shared', show: 'count' },
+  },
+  rules: [
+    { on: 'start', do: [o('fill', { zone: 'deck' }), o('deal', { from: 'deck', to: 'hand', count: 5, each: true })] },
+    { on: 'card', zone: 'hand', target: 'cell', name: { en: 'Play a card onto a cell', zh: '把牌打到格子上', tr: 'Kartı kareye oyna' }, when: o('empty', { cell }), do: [
+      o('place', { piece: 'tile', cell, value: o('field', { card: get('card'), name: 'n' }) }),
+      o('moveCard', { card: get('card'), to: 'used' }),
+      o('forDirs', { orth: true, do: [
+        o('let', { name: 'nb', value: o('step', { cell, dir }) }),
+        iff(and(eq(o('owner', { cell: get('nb') }), o('next')), o('gt', { a: o('value', { cell }), b: o('value', { cell: get('nb') }) })), [o('setOwner', { cell: get('nb'), owner: me })]),
+      ] }),
+    ] },
+    { on: 'after', when: o('full'), do: [o('winBest', { score: o('count', { piece: 'tile', owner: get('p') }) })] },
+  ],
+};
+
+export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER, REVERSI, HEX, CARD_DUEL];
