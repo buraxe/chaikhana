@@ -96,7 +96,8 @@ export default function LockGame({ game, store, locks: ALL, mode, wood: WOOD = W
     });
   }, [g.pos, sel, hintMove, state3d]); // eslint-disable-line
   const hintOut = useRef(new Map<number, [number, number, number]>());
-  useEffect(() => { if (sel >= 0 && !g.pos[sel]) setSel(-1); }, [g.pos, sel]);
+  // Taking a lock apart, a piece that has left can no longer be picked; building one, pieces start outside.
+  useEffect(() => { if (mode === 'apart' && sel >= 0 && !g.pos[sel]) setSel(-1); }, [g.pos, sel]); // eslint-disable-line
 
   const doMove = (m: Move, hinted = false, to?: Pos) => {
     if (!g.moves) noteStarted(game);

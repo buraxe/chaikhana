@@ -77,11 +77,13 @@ export function createStage(THREE: Three, canvas: HTMLCanvasElement, opts: { rad
   };
   raf = requestAnimationFrame(loop);
   const raycaster = new THREE.Raycaster();
+  // Edge outlines are drawn as lines; they must never catch a tap meant for the solid behind them.
+  raycaster.params.Line = { threshold: 0.001 };
   const ndc = (x: number, y: number) => { const r = canvas.getBoundingClientRect(); return new THREE.Vector2(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1); };
   return {
     THREE, scene, camera, renderer, orbit,
     onFrame: fn => { frameFns.add(fn); return () => { frameFns.delete(fn); }; },
-    pick: (x, y, objects) => { raycaster.setFromCamera(ndc(x, y), camera); return raycaster.intersectObjects(objects, true)[0] ?? null; },
+    pick: (x, y, objects) => { raycaster.setFromCamera(ndc(x, y), camera); return raycaster.intersectObjects(objects, true).find(h => (h.object as THREE_NS.Mesh).isMesh) ?? null; },
     ray: (x, y) => { raycaster.setFromCamera(ndc(x, y), camera); return raycaster.ray.clone(); },
     orbitBy: (dx, dy) => { orbit.theta -= dx * 0.008; orbit.phi = Math.max(0.15, Math.min(Math.PI - 0.15, orbit.phi - dy * 0.008)); },
     zoomBy: f => { orbit.radius = Math.max(orbit.min, Math.min(orbit.max, orbit.radius * f)); },
