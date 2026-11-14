@@ -18,6 +18,7 @@ export const EVENT_TEXT: Record<EventName, T3> = {
   enter: ['When a piece lands on a cell', '棋子落到格子上时', 'Bir taş bir kareye girince'],
   after: ['After every action', '每次行动之后', 'Her hamleden sonra'],
   blocked: ['When nobody can move', '无人可走时', 'Kimse oynayamayınca'],
+  word: ['When a word is guessed', '猜词时', 'Bir kelime tahmin edilince'],
 };
 
 export const RULE_TEXT = {
@@ -97,6 +98,12 @@ export const EXPR_TEXT: Record<string, T3> = {
   field: ['%2 of card %1', '牌 %1 的 %2', '%1 kartının %2 alanı'],
   top: ['top card of %1 of %2', '%2 的 %1 顶牌', '%2 oyuncusunun %1 üstündeki kart'],
   size: ['cards in %1 of %2', '%2 的 %1 牌数', '%2 oyuncusunun %1 kart sayısı'],
+  len: ['letters in %1', '%1 的字母数', '%1 harf sayısı'],
+  secret: ['the secret word', '谜底单词', 'gizli kelime'],
+  inList: ['%1 is in the word list', '%1 在词表中', '%1 kelime listesinde var'],
+  guesses: ['guesses made', '已猜次数', 'yapılan tahmin'],
+  hits: ['letters of %1 in the right place', '%1 中位置正确的字母数', '%1 içinde yeri doğru harf sayısı'],
+  wordLen: ['letters per word', '单词长度', 'kelime uzunluğu'],
 };
 
 export const ACT_TEXT: Record<string, T3> = {
@@ -125,6 +132,8 @@ export const ACT_TEXT: Record<string, T3> = {
   deal: ['deal %3 from %1 of %4 to %2 of %5 (to everyone: %6)', '从 %4 的 %1 发 %3 张到 %5 的 %2（每人：%6）', '%4 oyuncusunun %1 alanından %5 oyuncusunun %2 alanına %3 kart dağıt (herkese: %6)'],
   moveCard: ['move card %1 to %2 of %3', '把牌 %1 放到 %3 的 %2', '%1 kartını %3 oyuncusunun %2 alanına taşı'],
   say: ['say %1', '显示 %1', 'göster: %1'],
+  pickWord: ['pick a secret word', '选一个谜底单词', 'gizli bir kelime seç'],
+  addGuess: ['mark the guess %1', '标出猜测 %1', '%1 tahminini işaretle'],
 };
 
 export const LIT_TEXT = {
@@ -148,6 +157,7 @@ export const CATEGORY_TEXT: Record<string, T3> = {
   flow: ['Do: control', '动作：流程', 'Yap: akış'],
   deal: ['Do: cards', '动作：纸牌', 'Yap: kartlar'],
   game: ['Do: game', '动作：游戏', 'Yap: oyun'],
+  words: ['Words', '单词', 'Kelimeler'],
 };
 
 export const tx = (t: T3, lang: 'en' | 'zh' | 'tr') => (lang === 'zh' ? t[1] : lang === 'tr' ? t[2] : t[0]);

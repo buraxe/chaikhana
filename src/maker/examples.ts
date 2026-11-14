@@ -191,4 +191,55 @@ export const CARD_DUEL: GameDef = {
   ],
 };
 
-export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER, REVERSI, HEX, CARD_DUEL];
+/** Lights out: every press flips a light and its four neighbours. Small enough for the solver to give hints. */
+export const LIGHTS: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-lights', kind: 'puzzle',
+  name: { en: 'Lights out', zh: '关灯', tr: 'Işıkları Söndür' },
+  about: { en: 'A puzzle for the solver: pressing a cell switches it and its four neighbours. Turn every light off. Ask for a hint, or check whether it can be solved.', zh: '适合求解器的谜题：按一个格子会切换它和上下左右四格。把所有灯关掉。可以要提示，或检查是否有解。', tr: 'Çözücüye uygun bir bulmaca: bir kareye basmak onu ve dört komşusunu değiştirir. Bütün ışıkları söndür. İpucu iste ya da çözülebilir mi diye kontrol et.' },
+  players: { min: 1, max: 1 },
+  board: { w: 3, h: 3 },
+  pieces: { light: { name: { en: 'Light', zh: '灯', tr: 'Işık' }, shape: 'disc', color: '#f2c14e' } },
+  rules: [
+    { on: 'start', do: [1, 3, 4, 5, 6].map(c => o('place', { piece: 'light', cell: c })) },
+    { on: 'click', name: { en: 'Flip it and its neighbours', zh: '切换它和邻格', tr: 'Kendisini ve komşularını çevir' }, do: [
+      iff(o('empty', { cell }), [o('place', { piece: 'light', cell })], [o('remove', { cell })]),
+      o('forDirs', { orth: true, do: [
+        o('let', { name: 'n', value: o('step', { cell, dir }) }),
+        iff(o('ge', { a: get('n'), b: 0 }), [iff(o('empty', { cell: get('n') }), [o('place', { piece: 'light', cell: get('n') })], [o('remove', { cell: get('n') })])]),
+      ] }),
+    ] },
+    { on: 'after', name: { en: 'All dark: solved', zh: '全灭：完成', tr: 'Hepsi söndü: çözüldü' }, when: eq(o('count', { piece: 'light' }), 0), do: [o('win')] },
+  ],
+};
+
+const guess = get('guess');
+const wordRules = (rows: number, mustBeWord: boolean) => [
+  { on: 'start' as const, do: [o('pickWord')] },
+  { on: 'word' as const, name: { en: 'Mark the guess', zh: '标出猜测', tr: 'Tahmini işaretle' },
+    when: mustBeWord ? and(eq(o('len', { text: guess }), o('wordLen')), o('inList', { text: guess })) : eq(o('len', { text: guess }), o('wordLen')),
+    do: [
+      o('addGuess', { text: guess }),
+      iff(eq(guess, o('secret')), [o('win')], [iff(o('ge', { a: o('guesses'), b: rows }), [o('lose')])]),
+    ] },
+];
+const TR_WORDS = 'kalem kitap araba deniz güneş bulut çiçek elmas kavun kiraz armut limon biber soğan masal şarkı orman nehir köpek tavuk horoz koyun aslan karga serçe balık yunus martı çorba pilav ekmek tatlı şeker bahar gülüş sevgi hayat dünya insan çocuk bebek sınıf kağıt silgi dolap kapak perde yatak saksı tabak kaşık çatal bıçak kahve şehir köprü sokak meyve sebze mısır havuç incir kayık vapur taksi düdük zurna davul gitar keman roman resim fırça tuval sahne zaman hafta aylık sabah öğlen akşam karlı sisli sıcak soğuk serin temiz kirli güzel büyük küçük geniş derin alçak hızlı yavaş mutlu üzgün sakin cesur yeşil beyaz siyah'.split(' ');
+const EN_WORDS = 'apple beach bread chair cloud dance dream earth field flame fruit ghost grape green heart horse house juice knife laugh lemon light magic money mouse music night ocean paint party peace piano plant queen quiet river robot salad sheep shirt smile snake sound space spoon sport stone storm sugar sweet table tiger toast train truth water whale world young zebra brave brick candy chess clock crown eagle flour glass honey lucky metal novel onion pearl pizza radio scarf shell skirt south north tooth tower uncle voice wheel woman youth bloom cabin coral frost globe jelly lunar maple olive pupil solar'.split(' ');
+
+export const WORD_TR: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-word-tr', kind: 'puzzle',
+  name: { en: 'Five letters (Turkish)', zh: '五个字母（土耳其语）', tr: 'Beş Harf' },
+  about: { en: 'A word puzzle in Turkish: guess the five-letter word in six tries. Green is the right letter in the right place, yellow is in the word but elsewhere, grey is not in it.', zh: '土耳其语猜词：六次之内猜出五个字母的单词。绿色表示字母和位置都对，黄色表示单词里有这个字母但位置不对，灰色表示没有。', tr: 'Altı tahminde beş harfli kelimeyi bul. Yeşil: harf doğru yerde. Sarı: harf kelimede var ama başka yerde. Gri: harf kelimede yok.' },
+  players: { min: 1, max: 1 },
+  words: { list: TR_WORDS, length: 5, rows: 6, locale: 'tr', alphabet: 'ERTYUIOPĞÜ ASDFGHJKLŞİ ZCVBNMÖÇ' },
+  rules: wordRules(6, false),
+};
+export const WORD_EN: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-word-en', kind: 'puzzle',
+  name: { en: 'Five letters', zh: '五个字母（英语）', tr: 'Five Letters (İngilizce)' },
+  about: { en: 'Guess the five-letter English word in six tries; every guess must be in the word list. Green: right place. Yellow: elsewhere in the word. Grey: not in it.', zh: '六次之内猜出五个字母的英语单词，每次猜测都必须在词表里。绿色：位置正确。黄色：在单词里但位置不对。灰色：没有。', tr: 'Beş harfli İngilizce kelimeyi altı tahminde bul; her tahmin listede olmalı. Yeşil: doğru yer. Sarı: kelimede başka yerde. Gri: yok.' },
+  players: { min: 1, max: 1 },
+  words: { list: EN_WORDS, length: 5, rows: 6, locale: 'en', alphabet: 'QWERTYUIOP ASDFGHJKL ZXCVBNM' },
+  rules: wordRules(6, true),
+};
+
+export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER, REVERSI, HEX, CARD_DUEL, LIGHTS, WORD_TR, WORD_EN];

@@ -1,22 +1,18 @@
 import './workshop.css';
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
-import { useLang, useT } from '../core/i18n';
-import { sfx } from '../core/sound';
+import { pname, useLang, useT } from '../core/i18n';
 import { loadJSON, saveJSON } from '../core/storage';
-import { Pick, Seg } from '../ui/bits';
-import { chooseInput, LEVELS } from './ai';
-import { applyTraced, canon, explainInput, newGame, txt, validate, type GameDef, type GState, type Input } from './engine';
+import { activeOf, useData } from '../core/store';
+import { community } from './community';
+import { canon, txt, validate, type GameDef } from './engine';
 import { EXAMPLES } from './examples';
-import { GameView, playerColor, playerName } from './GameView';
 import { MaterialsEditor } from './MaterialsEditor';
+import { Player } from './Player';
 import { decodeGame, encodeGame, shareLink } from './share';
-import { WatchLog, WhyPanel, type LogEntry, type Why } from './Watch';
 
-type Seat = 'h' | number;
 // Blockly is large, so the block editor loads only when its tab is opened.
 const BlockEditor = lazy(() => import('./BlockEditor'));
-const MINE = 'gp.workshop.mine';
-const LEVEL_NAMES: Record<string, [string, string]> = { Beginner: ['新手', 'Acemi'], Easy: ['简单', 'Kolay'], Intermediate: ['中等', 'Orta'], Advanced: ['高级', 'İleri'], Expert: ['专家', 'Uzman'] };
+export const MINE = 'gp.workshop.mine';
 
 const BLANK: GameDef = {
   format: 'chaikhana-game', version: 1, id: 'my-game', kind: 'game', name: 'My game',
@@ -25,51 +21,42 @@ const BLANK: GameDef = {
   pieces: { stone: { name: { en: 'Stone', zh: '棋子', tr: 'Taş' }, shape: 'disc' } },
   rules: [{ on: 'click', when: { op: 'empty', cell: { op: 'get', name: 'cell' } }, do: [{ op: 'place', piece: 'stone', cell: { op: 'get', name: 'cell' } }, { op: 'if', test: { op: 'line', cell: { op: 'get', name: 'cell' }, n: 4 }, then: [{ op: 'win' }] }] }],
 };
+const BLANK_WORDS: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'my-words', kind: 'puzzle', name: 'My word puzzle',
+  players: { min: 1, max: 1 },
+  words: { list: ['kalem', 'kitap', 'araba', 'deniz', 'güneş'], length: 5, rows: 6, locale: 'tr' },
+  rules: [
+    { on: 'start', do: [{ op: 'pickWord' }] },
+    { on: 'word', when: { op: 'eq', a: { op: 'len', text: { op: 'get', name: 'guess' } }, b: { op: 'wordLen' } }, do: [
+      { op: 'addGuess', text: { op: 'get', name: 'guess' } },
+      { op: 'if', test: { op: 'eq', a: { op: 'get', name: 'guess' }, b: { op: 'secret' } }, then: [{ op: 'win' }], else: [{ op: 'if', test: { op: 'ge', a: { op: 'guesses' }, b: 6 }, then: [{ op: 'lose' }] }] },
+    ] },
+  ],
+};
 
 export function Workshop({ incoming }: { incoming?: string }) {
-  const t = useT(), lang = useLang();
+  const t = useT(), lang = useLang(), me = activeOf(useData());
   const [mine, setMine] = useState<GameDef[]>(() => loadJSON<GameDef[]>(MINE, []));
   const all = useMemo(() => [...EXAMPLES, ...mine], [mine]);
   const [defId, setDefId] = useState(() => loadJSON<string>('gp.workshop.pick', EXAMPLES[0].id));
   const def = all.find(d => d.id === defId) ?? EXAMPLES[0];
   const isMine = mine.some(d => d.id === def.id);
   const [tab, setTab] = useState<'play' | 'blocks' | 'rules' | 'json'>('play');
-  const [count, setCount] = useState(def.players.max);
-  const [seats, setSeats] = useState<Seat[]>(['h', 2, 2, 2, 2, 2]);
-  // The state is kept with the definition it belongs to, so a switch never pairs a board with the wrong game.
-  // Earlier states are kept for undo.
-  const [game, setGame] = useState<{ def: GameDef; st: GState; hist: GState[] } | null>(null);
-  const st = game && game.def === def ? game.st : null;
-  const setSt = (n: GState) => setGame({ def, st: n, hist: [] });
-  /** The seat that last saw the hidden hands: a pass-the-device screen covers them in between. */
-  const [seenBy, setSeenBy] = useState<number | null>(null);
   const [src, setSrc] = useState('');
   const [errs, setErrs] = useState<string[]>([]);
   const [note, setNote] = useState('');
-  // Watching rules: a log of what each move triggered, and why a tap did nothing.
-  const [watch, setWatch] = useState(() => loadJSON<boolean>('gp.workshop.watch', false));
-  const [hold, setHold] = useState(false);
-  const [log, setLog] = useState<LogEntry[]>([]);
-  const [why, setWhy] = useState<Why | null>(null);
   const [focus, setFocus] = useState<{ rule: number; paths: string[] } | null>(null);
-  const logId = useRef(0);
-  // Sharing.
   const [link, setLink] = useState('');
   const [paste, setPaste] = useState('');
   const [shareNote, setShareNote] = useState('');
-  useEffect(() => { saveJSON('gp.workshop.watch', watch); }, [watch]);
+  const [author, setAuthor] = useState(() => loadJSON<string>('gp.workshop.author', '') || pname(me, lang));
+  const [blurb, setBlurb] = useState('');
+  const [pubNote, setPubNote] = useState<{ text: string; id?: string } | null>(null);
 
   useEffect(() => { saveJSON(MINE, mine); }, [mine]);
   useEffect(() => { saveJSON('gp.workshop.pick', def.id); }, [def.id]);
-  // A new game whenever the definition changes.
-  useEffect(() => {
-    const n = Math.max(def.players.min, Math.min(def.players.max, def.players.max));
-    setCount(n);
-    setSrc(JSON.stringify(def, null, 2));
-    setErrs([]); setNote('');
-    setSt(newGame(def, n));
-    setLog([]); setWhy(null); setLink('');
-  }, [def]);
+  useEffect(() => { saveJSON('gp.workshop.author', author); }, [author]);
+  useEffect(() => { setSrc(JSON.stringify(def, null, 2)); setErrs([]); setNote(''); setLink(''); setPubNote(null); }, [def]);
 
   /** A shared game: add it to the player's games and open it. */
   const adopt = (d: GameDef) => {
@@ -89,54 +76,10 @@ export function Workshop({ incoming }: { incoming?: string }) {
     try { history.replaceState(null, '', '#workshop'); } catch { /* the address stays as it was */ }
   }, [incoming]); // eslint-disable-line
 
-  const seatOf = (p: number): Seat => (def.players.max === 1 ? 'h' : seats[p]);
-  const humans = st ? Array.from({ length: st.players }, (_, p) => p).filter(p => seatOf(p) === 'h') : [];
-  const aiTurn = !!st && !st.over && seatOf(st.turn) !== 'h';
-  const viewer: number | 'all' = !st ? 'all' : seatOf(st.turn) === 'h' ? st.turn : humans.length ? humans[0] : 'all';
-
-  const play = (i: Input) => {
-    if (!game || game.def !== def) return;
-    const s = game.st, { state: n, trace } = applyTraced(def, s, i);
-    if (n.over && !s.over) sfx(n.over.winner >= 0 && seatOf(n.over.winner) === 'h' ? 'win' : n.over.winner < 0 ? 'draw' : 'lose');
-    else sfx(i.k === 'roll' ? 'dice' : i.k === 'card' || i.k === 'zone' ? 'card' : 'stone', 0.6);
-    setGame({ def, st: n, hist: [...game.hist.slice(-200), s] });
-    setWhy(null);
-    if (watch) setLog(l => [...l.slice(-29), { id: ++logId.current, who: s.turn, input: i, trace }]);
-  };
-  /** A tap that did nothing: while watching, say which rules were asked and why none applied. */
-  const explain = (i: Input) => { if (watch && st) setWhy({ input: i, items: explainInput(def, st, i) }); };
-  const openRule = (rule: number, paths: string[] = []) => { setFocus({ rule, paths: ['r' + rule, ...paths.map(p => `r${rule}.${p}`)] }); setTab('blocks'); };
-  const share = async () => {
-    try { const code = await encodeGame(def); setLink(shareLink(code)); setShareNote(''); }
-    catch { setShareNote(t('This browser cannot make share codes.', '此浏览器无法生成分享码。', 'Bu tarayıcı paylaşım kodu oluşturamıyor.')); }
-  };
-  const copyLink = () => { navigator.clipboard?.writeText(link).then(() => setShareNote(t('Link copied.', '链接已复制。', 'Link kopyalandı.')), () => setShareNote(t('Select the link and copy it by hand.', '请手动选择并复制链接。', 'Linki seçip elle kopyala.'))); };
-  const importCode = () => { decodeGame(paste).then(d => { setPaste(''); adopt(d); }, e => setShareNote(t('Not a game code: ', '不是游戏码：', 'Oyun kodu değil: ') + (e as Error).message)); };
-  /** Back to the last position where a person was to move. */
-  const undo = () => setGame(g => {
-    if (!g || !g.hist.length) return g;
-    const hist = g.hist.slice();
-    let back = hist.pop()!;
-    while (hist.length && seatOf(back.turn) !== 'h') back = hist.pop()!;
-    if (seatOf(back.turn) !== 'h') return g;
-    setSeenBy(back.turn);
-    return { def, st: back, hist };
-  });
-  const canUndo = !!game && game.def === def && game.hist.some(h => seatOf(h.turn) === 'h') && !aiTurn;
-  const secret = Object.values(def.zones ?? {}).some(z => z.show === 'owner') && humans.length > 1;
-  const passing = !!st && secret && !st.over && seatOf(st.turn) === 'h' && seenBy !== st.turn;
-  useEffect(() => {
-    if (!aiTurn || !st || hold) return;
-    const level = seatOf(st.turn) as number;
-    const id = setTimeout(() => { const m = chooseInput(def, st, level, { ms: 1200 }); if (m) play(m); }, 450);
-    return () => clearTimeout(id);
-  }, [st, aiTurn, hold]); // eslint-disable-line
-
-  const restart = () => { setSeenBy(null); setSt(newGame(def, count)); };
   const load = (save: boolean) => {
     let parsed: unknown;
     try { parsed = JSON.parse(src); } catch (e) { setErrs([t('This is not valid JSON: ', '这不是有效的JSON：', 'Bu geçerli bir JSON değil: ') + (e as Error).message]); return; }
-    const problems = validate(parsed);
+    const problems = validate(parsed, lang);
     setErrs(problems);
     if (problems.length) return;
     let d = parsed as GameDef;
@@ -149,8 +92,6 @@ export function Workshop({ incoming }: { incoming?: string }) {
     setDefId(d.id);
     setTab('play');
   };
-  /** Rules from the block editor: an example is saved as the player's own copy. */
-  const applyRules = (rules: GameDef['rules']) => saveDef({ ...def, rules });
   /** Saves an edited game; an example is saved as the player's own copy. */
   const saveDef = (edited: GameDef) => {
     let d: GameDef = edited;
@@ -159,25 +100,59 @@ export function Workshop({ incoming }: { incoming?: string }) {
     setDefId(d.id);
     setTab('play');
   };
+  const newFrom = (tpl: GameDef, name: string) => { const d: GameDef = { ...structuredClone(tpl), id: 'my-' + Date.now().toString(36), name }; setMine(m => [...m, d]); setDefId(d.id); setTab('rules'); };
   const remove = () => { setMine(m => m.filter(x => x.id !== def.id)); setDefId(EXAMPLES[0].id); };
   const copy = () => { navigator.clipboard?.writeText(src).then(() => setNote(t('Copied.', '已复制。', 'Kopyalandı.')), () => setNote(t('Select the text and copy it by hand.', '请手动选择并复制。', 'Metni seçip elle kopyala.'))); };
+  const openRule = (rule: number, paths: string[] = []) => { setFocus({ rule, paths: ['r' + rule, ...paths.map(p => `r${rule}.${p}`)] }); setTab('blocks'); };
+  const share = async () => {
+    try { setLink(shareLink(await encodeGame(def))); setShareNote(''); }
+    catch { setShareNote(t('This browser cannot make share codes.', '此浏览器无法生成分享码。', 'Bu tarayıcı paylaşım kodu oluşturamıyor.')); }
+  };
+  const copyLink = () => { navigator.clipboard?.writeText(link).then(() => setShareNote(t('Link copied.', '链接已复制。', 'Link kopyalandı.')), () => setShareNote(t('Select the link and copy it by hand.', '请手动选择并复制链接。', 'Linki seçip elle kopyala.'))); };
+  const importCode = () => { decodeGame(paste).then(d => { setPaste(''); adopt(d); }, e => setShareNote(t('Not a game code: ', '不是游戏码：', 'Oyun kodu değil: ') + (e as Error).message)); };
+  const publish = async () => {
+    try {
+      const e = await community().publish(def, { author, note: blurb });
+      setPubNote({ id: e.id, text: community().shared
+        ? t('Published: everyone can find it under “From you”.', '已发布：大家都能在“你们的作品”中找到它。', 'Yayınlandı: herkes “Sizden gelenler”de bulabilir.')
+        : t('Published on this device. Once the site has its server, published games reach everyone.', '已在本设备上发布。网站接入服务器后，发布的游戏会对所有人可见。', 'Bu cihazda yayınlandı. Site sunucusuna kavuşunca yayınlanan oyunlar herkese ulaşacak.') });
+    } catch (e) { setPubNote({ text: t('Could not publish: ', '无法发布：', 'Yayınlanamadı: ') + (e as Error).message }); }
+  };
 
-  const status = !st ? '' : st.error ? t('The game stopped: ', '游戏中止：', 'Oyun durdu: ') + st.error
-    : st.over ? (def.kind === 'puzzle' || st.players === 1
-      ? (st.over.winner === 0 ? t('Solved!', '完成！', 'Çözüldü!') : st.over.stuck ? t('No moves left.', '无路可走了。', 'Hamle kalmadı.') : t('Not solved.', '未完成。', 'Çözülemedi.'))
-      : st.over.winner >= 0 ? t(`${playerName(def, st.over.winner, 'en')} wins!`, `${playerName(def, st.over.winner, 'zh')}获胜！`, `${playerName(def, st.over.winner, 'tr')} kazandı!`) : t('Draw.', '和棋。', 'Berabere.'))
-    : st.players === 1 ? t('Your move.', '请走。', 'Sıra sende.')
-    : aiTurn ? t(`${playerName(def, st.turn, 'en')} (computer) is thinking…`, `${playerName(def, st.turn, 'zh')}（电脑）思考中…`, `${playerName(def, st.turn, 'tr')} (bilgisayar) düşünüyor…`)
-    : t(`${playerName(def, st.turn, 'en')} to move`, `轮到${playerName(def, st.turn, 'zh')}`, `Sıra: ${playerName(def, st.turn, 'tr')}`);
-  const levelName = (i: number) => { const n = LEVELS[i].name; return lang === 'zh' ? LEVEL_NAMES[n][0] : lang === 'tr' ? LEVEL_NAMES[n][1] : n; };
+  const side = (
+    <>
+      <div className="setup">
+        <h3>{t('Share', '分享', 'Paylaş')}</h3>
+        <button type="button" className="btn" id="wk-share" onClick={share}>{t('Make a share link', '生成分享链接', 'Paylaşım linki oluştur')}</button>
+        {link && <>
+          <input className="wk-linkbox" id="wk-link" readOnly value={link} onFocus={e => e.target.select()} aria-label={t('Share link', '分享链接', 'Paylaşım linki')} />
+          <button type="button" className="btn sm" id="wk-copylink" onClick={copyLink}>{t('Copy', '复制', 'Kopyala')}</button>
+          <p className="muted small">{t('Anyone who opens the link gets this game in their Workshop. The link opens the public site.', '打开链接的人会在自己的工坊里得到这个游戏。链接指向公开网站。', 'Linki açan herkes bu oyunu kendi Atölyesine alır. Link herkese açık siteyi açar.')}</p>
+        </>}
+        <label className="wk-f"><span>{t('Got a code or link? Paste it here', '有分享码或链接？粘贴到这里', 'Kod ya da link mi geldi? Buraya yapıştır')}</span>
+          <input id="wk-paste" value={paste} onChange={e => setPaste(e.target.value)} placeholder="workshop-g-…" /></label>
+        <button type="button" className="btn sm" id="wk-import" disabled={paste.trim().length < 8} onClick={importCode}>{t('Add the game', '添加游戏', 'Oyunu ekle')}</button>
+        {shareNote && <p className="muted small" role="status">{shareNote}</p>}
+      </div>
+      <div className="setup">
+        <h3>{t('Publish', '发布', 'Yayınla')}</h3>
+        {isMine ? <>
+          <label className="wk-f"><span>{t('Made by', '作者', 'Yapan')}</span><input id="wk-author" value={author} maxLength={40} onChange={e => setAuthor(e.target.value)} /></label>
+          <label className="wk-f"><span>{t('A line for players (optional)', '给玩家的一句话（可选）', 'Oyunculara bir cümle (isteğe bağlı)')}</span><input id="wk-blurb" value={blurb} maxLength={140} onChange={e => setBlurb(e.target.value)} /></label>
+          <button type="button" className="btn primary" id="wk-publish" disabled={!def.rules.length || !author.trim()} onClick={publish}>{t('Publish to “From you”', '发布到“你们的作品”', '“Sizden gelenler”e gönder')}</button>
+          {pubNote && <p className="muted small" role="status">{pubNote.text} {pubNote.id && <a href={'#community-' + pubNote.id}>{t('Open', '打开', 'Aç')}</a>}</p>}
+        </> : <p className="muted small">{t('Examples cannot be published. Change something and save it, and the copy becomes yours.', '示例不能发布。修改并保存后，副本就归你了。', 'Örnekler yayınlanamaz. Bir şeyi değiştirip kaydedince kopya senin olur.')}</p>}
+      </div>
+    </>
+  );
 
   return (
     <>
       <header className="page-head">
         <h1>{t('Workshop', '工坊', 'Atölye')}</h1>
-        <p className="lede">{t('Make your own games and puzzles. Set out the materials (a board you paint, pieces, cards, dice, counters), then build the rules from blocks: “when this happens, if that holds, do these”. Try it at once against the computer or a friend.',
-          '制作你自己的游戏和谜题。先准备材料（可以绘制的棋盘、棋子、纸牌、骰子、计数器），再用积木搭建规则：“当……发生时，如果……，就做……”。马上就能和电脑或朋友试玩。',
-          'Kendi oyunlarını ve bulmacalarını yap. Önce malzemeleri hazırla (boyayarak tasarladığın tahta, taşlar, kartlar, zar, sayaçlar), sonra kuralları bloklarla kur: “şu olunca, şu doğruysa, şunları yap”. Hemen bilgisayara ya da bir arkadaşına karşı dene.')}</p>
+        <p className="lede">{t('Make your own games and puzzles. Set out the materials (a board you paint, pieces, cards, dice, counters, a word list), then build the rules from blocks: “when this happens, if that holds, do these”. Try it at once against the computer or a friend, then share or publish it.',
+          '制作你自己的游戏和谜题。先准备材料（可以绘制的棋盘、棋子、纸牌、骰子、计数器、词表），再用积木搭建规则：“当……发生时，如果……，就做……”。马上和电脑或朋友试玩，然后分享或发布。',
+          'Kendi oyunlarını ve bulmacalarını yap. Önce malzemeleri hazırla (boyayarak tasarladığın tahta, taşlar, kartlar, zar, sayaçlar, kelime listesi), sonra kuralları bloklarla kur: “şu olunca, şu doğruysa, şunları yap”. Hemen bilgisayara ya da bir arkadaşına karşı dene, sonra paylaş ya da yayınla.')}</p>
       </header>
 
       {shareNote && tab !== 'play' && <p className="wk-msg" role="status">{shareNote}</p>}
@@ -185,11 +160,14 @@ export function Workshop({ incoming }: { incoming?: string }) {
         {all.map(d => (
           <button key={d.id} type="button" role="listitem" id={'wk-pick-' + d.id} className={'wk-pick' + (d.id === def.id ? ' on' : '')} onClick={() => setDefId(d.id)}>
             <b>{txt(d.name, lang)}</b>
-            <span>{mine.includes(d) ? t('Your game', '我的游戏', 'Senin oyunun') : t('Example', '示例', 'Örnek')} · {d.kind === 'puzzle' ? t('puzzle', '谜题', 'bulmaca') : `${d.players.min}–${d.players.max} ${t('players', '人', 'oyuncu')}`}</span>
+            <span>{mine.includes(d) ? t('Your game', '我的游戏', 'Senin oyunun') : t('Example', '示例', 'Örnek')} · {d.words ? t('words', '单词', 'kelime') : d.kind === 'puzzle' ? t('puzzle', '谜题', 'bulmaca') : `${d.players.min}–${d.players.max} ${t('players', '人', 'oyuncu')}`}</span>
           </button>
         ))}
-        <button type="button" className="wk-pick new" id="wk-new" onClick={() => { const d: GameDef = { ...structuredClone(BLANK), id: 'my-' + Date.now().toString(36), name: t('My game', '我的游戏', 'Oyunum') }; setMine(m => [...m, d]); setDefId(d.id); setTab('rules'); }}>
-          <b>+ {t('New game', '新游戏', 'Yeni oyun')}</b><span>{t('Start from a blank template', '从空白模板开始', 'Boş şablondan başla')}</span>
+        <button type="button" className="wk-pick new" id="wk-new" onClick={() => newFrom(BLANK, t('My game', '我的游戏', 'Oyunum'))}>
+          <b>+ {t('New game', '新游戏', 'Yeni oyun')}</b><span>{t('A board and pieces to start from', '从棋盘和棋子开始', 'Tahta ve taşlarla başla')}</span>
+        </button>
+        <button type="button" className="wk-pick new" id="wk-new-words" onClick={() => newFrom(BLANK_WORDS, t('My word puzzle', '我的猜词游戏', 'Kelime bulmacam'))}>
+          <b>+ {t('New word puzzle', '新猜词游戏', 'Yeni kelime bulmacası')}</b><span>{t('Your own list, Wordle style', '用你自己的词表，Wordle 玩法', 'Kendi listen, Wordle usulü')}</span>
         </button>
       </div>
 
@@ -199,72 +177,11 @@ export function Workshop({ incoming }: { incoming?: string }) {
         ))}
       </div>
 
-      {tab === 'play' && st && (
-        <div className="play">
-          <div className="play-main">
-            <div className="statline"><span role="status" aria-live="polite">{st.players > 1 && !st.over && <i className="wk-dot" style={{ background: playerColor(def, st.turn) }} />}{status}</span>
-              {st.msg && <span className="wk-msg">{txt(st.msg, lang)}</span>}</div>
-            <GameView def={def} st={st} viewer={passing ? -1 : viewer} canAct={!aiTurn && !passing} onInput={play} onExplain={watch ? explain : undefined} />
-            {why && <WhyPanel def={def} why={why} onClose={() => setWhy(null)} onOpen={r => openRule(r)} />}
-            {passing && (
-              <div className="wk-pass" role="dialog" aria-modal="true" aria-labelledby="wk-pass-h">
-                <div>
-                  <h2 id="wk-pass-h">{t(`Pass to ${playerName(def, st.turn, 'en')}`, `请交给${playerName(def, st.turn, 'zh')}`, `Cihazı ${playerName(def, st.turn, 'tr')} oyuncusuna ver`)}</h2>
-                  <p>{t('The other players should look away: your hand is about to be shown.', '其他玩家请回避：马上要显示你的手牌。', 'Diğer oyuncular baksın istemiyorsan başka yöne baksınlar: elin gösterilecek.')}</p>
-                  <button type="button" className="btn primary" id="wk-ready" onClick={() => setSeenBy(st.turn)}>{t('I’m ready', '我准备好了', 'Hazırım')}</button>
-                </div>
-              </div>
-            )}
-          </div>
-          <aside className="play-side">
-            {def.about && <p className="muted small">{txt(def.about, lang)}</p>}
-            {Object.entries(def.vars ?? {}).some(([, v]) => v.show) && (
-              <dl className="facts">{Object.entries(def.vars ?? {}).filter(([, v]) => v.show).flatMap(([k, v]) => (st.vars[k].length === 1
-                ? [<div key={k}><dt>{txt(v.name, lang)}</dt><dd className="num">{st.vars[k][0]}</dd></div>]
-                : st.vars[k].map((x, p) => <div key={k + p}><dt>{txt(v.name, lang)} · {playerName(def, p, lang)}</dt><dd className="num">{x}</dd></div>)))}</dl>
-            )}
-            <div className="setup">
-              {def.players.max > 1 && def.players.min !== def.players.max && (
-                <Seg id="wk-count" label={t('Players', '人数', 'Oyuncu sayısı')} value={count} onChange={setCount}
-                  options={Array.from({ length: def.players.max - def.players.min + 1 }, (_, i) => ({ value: def.players.min + i, label: String(def.players.min + i) }))} />
-              )}
-              {def.players.max > 1 && Array.from({ length: count }, (_, p) => (
-                <Pick key={p} id={'wk-seat-' + p} label={playerName(def, p, lang)} value={String(seats[p])}
-                  onChange={v => setSeats(s => s.map((x, i) => (i === p ? (v === 'h' ? 'h' : Number(v)) : x)))}
-                  options={[{ value: 'h', label: t('Person', '真人', 'Kişi') }, ...LEVELS.map((_, i) => ({ value: String(i), label: t('Computer', '电脑', 'Bilgisayar') + ' · ' + levelName(i) }))]} />
-              ))}
-              <button type="button" className="btn" id="wk-undo" disabled={!canUndo} onClick={undo}>↶ {t('Undo', '悔棋', 'Geri al')}</button>
-              <button type="button" className="btn primary" id="wk-restart" onClick={restart}>{st.over ? t('Play again', '再来一局', 'Tekrar oyna') : t('Restart', '重新开始', 'Yeniden başla')}</button>
-            </div>
-            <div className="setup">
-              <h3>{t('Test', '测试', 'Test')}</h3>
-              <label className="check"><input type="checkbox" id="wk-watch" checked={watch} onChange={e => { setWatch(e.target.checked); setWhy(null); }} /> {t('Watch the rules', '观察规则', 'Kuralları izle')}</label>
-              {seats.slice(0, count).some(x => x !== 'h') && def.players.max > 1 && <>
-                <label className="check"><input type="checkbox" id="wk-hold" checked={hold} onChange={e => setHold(e.target.checked)} /> {t('Computer waits for me', '电脑等我', 'Bilgisayar beklesin')}</label>
-                {hold && aiTurn && <button type="button" className="btn" id="wk-step" onClick={() => { const m = chooseInput(def, st, seatOf(st.turn) as number, { ms: 1200 }); if (m) play(m); }}>▶ {t('Computer’s move', '电脑走一步', 'Bilgisayar oynasın')}</button>}
-              </>}
-              {watch && <WatchLog def={def} log={log} onOpen={openRule} onClear={() => setLog([])} />}
-            </div>
-            <div className="setup">
-              <h3>{t('Share', '分享', 'Paylaş')}</h3>
-              <button type="button" className="btn" id="wk-share" onClick={share}>{t('Make a share link', '生成分享链接', 'Paylaşım linki oluştur')}</button>
-              {link && <>
-                <input className="wk-linkbox" id="wk-link" readOnly value={link} onFocus={e => e.target.select()} aria-label={t('Share link', '分享链接', 'Paylaşım linki')} />
-                <button type="button" className="btn sm" id="wk-copylink" onClick={copyLink}>{t('Copy', '复制', 'Kopyala')}</button>
-                <p className="muted small">{t('Anyone who opens the link gets this game in their Workshop. The link opens the public site.', '打开链接的人会在自己的工坊里得到这个游戏。链接指向公开网站。', 'Linki açan herkes bu oyunu kendi Atölyesine alır. Link herkese açık siteyi açar.')}</p>
-              </>}
-              <label className="wk-f"><span>{t('Got a code or link? Paste it here', '有分享码或链接？粘贴到这里', 'Kod ya da link mi geldi? Buraya yapıştır')}</span>
-                <input id="wk-paste" value={paste} onChange={e => setPaste(e.target.value)} placeholder="workshop-g-…" /></label>
-              <button type="button" className="btn sm" id="wk-import" disabled={paste.trim().length < 8} onClick={importCode}>{t('Add the game', '添加游戏', 'Oyunu ekle')}</button>
-              {shareNote && <p className="muted small" role="status">{shareNote}</p>}
-            </div>
-          </aside>
-        </div>
-      )}
+      {tab === 'play' && <Player def={def} testing onOpenRule={openRule} side={side} />}
 
       {tab === 'blocks' && (
         <Suspense fallback={<p className="muted">{t('Loading the block editor…', '正在加载积木编辑器…', 'Blok düzenleyici yükleniyor…')}</p>}>
-          <BlockEditor def={def} onApply={applyRules} focus={focus} />
+          <BlockEditor def={def} onApply={rules => saveDef({ ...def, rules })} focus={focus} />
         </Suspense>
       )}
 

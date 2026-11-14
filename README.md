@@ -40,3 +40,7 @@ Every push to `main` builds the site and publishes it to GitHub Pages
 (`.github/workflows/pages.yml`). In the repository settings, Pages → Build and deployment →
 Source must be set to **GitHub Actions**; serving the branch directly shows a blank page,
 because the source `index.html` needs the build step.
+
+## Workshop
+
+Players can build their own games and puzzles (board, card, logic and word puzzles) with blocks, and publish them to “From you”. The format, the files and the server interface are described in [docs/workshop.md](docs/workshop.md).

@@ -15,6 +15,7 @@ const LocalPlay = lazy(() => import('./ui/Pages').then(m => ({ default: m.LocalP
 const Rankings = lazy(() => import('./ui/Pages').then(m => ({ default: m.Rankings })));
 const ProfilePage = lazy(() => import('./ui/Profile').then(m => ({ default: m.ProfilePage })));
 const Coffeehouse = lazy(() => import('./ui/Coffeehouse').then(m => ({ default: m.Coffeehouse })));
+const Community = lazy(() => import('./maker/Community').then(m => ({ default: m.Community })));
 const Workshop = lazy(() => import('./maker/Workshop').then(m => ({ default: m.Workshop })));
 const Tournament = lazy(() => import('./ui/Tournament').then(m => ({ default: m.Tournament })));
 
@@ -22,7 +23,7 @@ const Tournament = lazy(() => import('./ui/Tournament').then(m => ({ default: m.
 const NAV: [route: string, en: string, zh: string, tr: string][] = [
   ['home', 'Home', '首页', 'Ana sayfa'], ['puzzles', 'Puzzles', '谜题', 'Bulmacalar'], ['board-games', 'Board Games', '棋牌', 'Masa Oyunları'],
   ['local-play', 'Multiplayer', '对战', 'Çok oyunculu'], ['daily', 'Daily', '每日挑战', 'Günlük'], ['rankings', 'Rankings', '排行', 'Sıralama'],
-  ['coffeehouse', 'Coffeehouse', '茶馆', 'Kahvehane'], ['workshop', 'Workshop', '工坊', 'Atölye'], ['learn', 'Learn', '学习', 'Öğren'], ['profile', 'Profile', '我的', 'Profil'],
+  ['coffeehouse', 'Coffeehouse', '茶馆', 'Kahvehane'], ['workshop', 'Workshop', '工坊', 'Atölye'], ['community', 'From you', '你们的作品', 'Sizden gelenler'], ['learn', 'Learn', '学习', 'Öğren'], ['profile', 'Profile', '我的', 'Profil'],
 ];
 const LANGS: [Lang, string, string, string][] = [['en', 'EN', 'English', 'en'], ['tr', 'TR', 'Türkçe', 'tr'], ['zh', '中', '中文', 'zh-Hans']];
 const read = () => location.hash.replace(/^#/, '') || 'home';
@@ -41,7 +42,8 @@ export default function App() {
   const gameId = route.replace(/-daily$/, '');
   const lesson = route.startsWith('learn-') ? route.slice(6) : '';
   const shared = route.startsWith('workshop-g-') ? route : '';
-  const section = PLAYABLE.has(gameId) ? '' : lesson ? 'learn' : route === 'tournament' ? 'local-play' : shared ? 'workshop' : route;
+  const communityId = route.startsWith('community-') ? route.slice(10) : '';
+  const section = PLAYABLE.has(gameId) ? '' : lesson ? 'learn' : route === 'tournament' ? 'local-play' : shared ? 'workshop' : communityId ? 'community' : route;
   let page;
   if (PLAYABLE.has(gameId)) page = <GamePage key={route} id={gameId} daily={route.endsWith('-daily')} />;
   else if (route === 'puzzles') page = <Library key="p" title={t('Puzzles', '谜题', 'Bulmacalar')} categories={['logic', 'spatial', 'chinese']} />;
@@ -54,6 +56,7 @@ export default function App() {
   else if (route === 'coffeehouse') page = <Coffeehouse />;
   else if (route === 'tournament') page = <Tournament />;
   else if (route === 'workshop' || shared) page = <Workshop incoming={shared || undefined} />;
+  else if (route === 'community' || communityId) page = <Community key={communityId} id={communityId || undefined} />;
   else page = <Home />;
 
   return (

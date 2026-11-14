@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useLang, useT } from '../core/i18n';
+import { WordBoard } from './WordBoard';
 import { canSee, cardsOf, cellPropsOf, cellTypeOf, compile, isHole, legal, txt, zoneOfKey, type GameDef, type GState, type Input, type PieceDef } from './engine';
 
 const DEFAULT_COLORS = ['#c0392b', '#1f4e9c', '#1e7a4a', '#e0a020', '#7b3fa0', '#1a8a8a'];
@@ -36,7 +37,7 @@ function PieceShape({ p, x, y, r, color }: { p: PieceDef; x: number; y: number; 
   }
 }
 
-export function GameView({ def, st, viewer, canAct, onInput, onExplain }: { def: GameDef; st: GState; viewer: number | 'all'; canAct: boolean; onInput: (i: Input) => void; onExplain?: (i: Input) => void }) {
+export function GameView({ def, st, viewer, canAct, onInput, onExplain, hint }: { def: GameDef; st: GState; viewer: number | 'all'; canAct: boolean; onInput: (i: Input) => void; onExplain?: (i: Input) => void; hint?: Input | null }) {
   const lang = useLang(), t = useT();
   const [sel, setSel] = useState<number | null>(null);
   /** A card waiting for its cell, in games where cards are played onto the board. */
@@ -106,6 +107,7 @@ export function GameView({ def, st, viewer, canAct, onInput, onExplain }: { def:
       if (froms.has(i) && sel === null && selCard === null) marks.push(shape(i, 0.06, { className: 'wk-from' }, 'f' + i));
       if (sel === i) marks.push(shape(i, 0.04, { className: 'wk-sel' }, 's' + i));
       if (targets.has(i)) marks.push(<circle key={'t' + i} cx={cx} cy={cy} r={0.18} className="wk-target" />);
+      if (hint && ((hint.k === 'click' && hint.cell === i) || (hint.k === 'move' && (hint.from === i || hint.to === i)) || (hint.k === 'card' && hint.cell === i))) marks.push(<circle key={'hint' + i} cx={cx} cy={cy} r={0.42} className="wk-hintring" />);
       hits.push(shape(i, 0, { fill: 'transparent', className: clicks.has(i) || froms.has(i) || targets.has(i) ? 'pt wk-hit' : 'wk-hit', onClick: () => tapCell(i), 'data-cell': i }, 'hit' + i));
     }
     board = (
@@ -148,6 +150,7 @@ export function GameView({ def, st, viewer, canAct, onInput, onExplain }: { def:
   const buttons = Object.entries(def.buttons ?? {}).filter(([id]) => moves.some(m => m.k === 'button' && m.id === id));
   return (
     <div className="wk-view">
+      {def.words && <WordBoard def={def} st={st} canAct={canAct} onInput={onInput} onExplain={onExplain} />}
       {selCard !== null && <p className="wk-aim" role="status">{t('Now choose a cell for the card.', '现在为这张牌选一个格子。', 'Şimdi kart için bir kare seç.')}</p>}
       {board}
       {(def.dice || buttons.length > 0) && (

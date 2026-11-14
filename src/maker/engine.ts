@@ -14,7 +14,7 @@ export type Val = number | string | boolean;
 export type Expr = Val | { op: string; [k: string]: unknown };
 export interface Act { op: string; [k: string]: unknown }
 
-export type EventName = 'start' | 'turn' | 'click' | 'move' | 'roll' | 'card' | 'zone' | 'button' | 'enter' | 'after' | 'blocked';
+export type EventName = 'start' | 'turn' | 'click' | 'move' | 'roll' | 'card' | 'zone' | 'button' | 'enter' | 'after' | 'blocked' | 'word';
 export interface Rule {
   on: EventName;
   name?: Text;
@@ -62,6 +62,18 @@ export interface CardsDef {
   label: string;
 }
 export interface ZoneDef { name: Text; owner: 'each' | 'shared'; show: 'all' | 'owner' | 'count' | 'top' }
+export interface WordsDef {
+  /** The words the secret is drawn from (and, if a rule asks, the guesses must be among). */
+  list: string[];
+  /** Letters per word. */
+  length: number;
+  /** How many guess rows to show. */
+  rows?: number;
+  /** The keyboard's letters, in order; spaces start a new keyboard row. */
+  alphabet?: string;
+  /** For upper case: "tr" knows that i becomes İ. */
+  locale?: string;
+}
 export interface VarDef { name: Text; per: 'player' | 'game'; init: number; show?: boolean }
 
 export interface GameDef {
@@ -81,6 +93,8 @@ export interface GameDef {
   dice?: { count: number; faces: number };
   vars?: Record<string, VarDef>;
   buttons?: Record<string, { name: Text }>;
+  /** Word puzzles: guesses are typed on a keyboard, and the game keeps a secret word and the marked guesses. */
+  words?: WordsDef;
   rules: Rule[];
 }
 
@@ -124,6 +138,8 @@ export const EXPRS: Record<string, Spec> = {
   field: { args: { card: 'e', name: 'name' } },
   top: { args: { zone: 'zone', player: 'e' }, opt: ['player'], out: 'n' },
   size: { args: { zone: 'zone', player: 'e' }, opt: ['player'], out: 'n' },
+  len: { args: { text: 'e' }, out: 'n' }, secret: { args: {}, out: 's' }, inList: { args: { text: 'e' }, out: 'b' },
+  guesses: { args: {}, out: 'n' }, hits: { args: { text: 'e' }, out: 'n' }, wordLen: { args: {}, out: 'n' },
 };
 export const ACTS: Record<string, Spec> = {
   place: { args: { piece: 'piece', cell: 'e', owner: 'e', value: 'e' }, opt: ['owner', 'value'] },
@@ -148,11 +164,13 @@ export const ACTS: Record<string, Spec> = {
   deal: { args: { from: 'zone', to: 'zone', count: 'e', fromPlayer: 'e', toPlayer: 'e', each: 'e' }, opt: ['count', 'fromPlayer', 'toPlayer', 'each'] },
   moveCard: { args: { card: 'e', to: 'zone', player: 'e' }, opt: ['player'] },
   say: { args: { text: 'text' } },
+  pickWord: { args: {} },
+  addGuess: { args: { text: 'e' } },
 };
-const EVENTS: EventName[] = ['start', 'turn', 'click', 'move', 'roll', 'card', 'zone', 'button', 'enter', 'after', 'blocked'];
+const EVENTS: EventName[] = ['start', 'turn', 'click', 'move', 'roll', 'card', 'zone', 'button', 'enter', 'after', 'blocked', 'word'];
 /** What each event makes available to its rule through "get". */
 export const BINDINGS: Record<EventName, string[]> = {
-  start: [], turn: [], click: ['cell'], move: ['from', 'to'], roll: [], card: ['card', 'zone', 'cell'], zone: ['zone'], button: ['button'], enter: ['cell', 'from', 'who'], after: [], blocked: [],
+  start: [], turn: [], click: ['cell'], move: ['from', 'to'], roll: [], card: ['card', 'zone', 'cell'], zone: ['zone'], button: ['button'], enter: ['cell', 'from', 'who'], after: [], blocked: [], word: ['guess'],
 };
 
 // ───────────────────────────── State ─────────────────────────────
@@ -175,6 +193,8 @@ export interface GState {
   msg: Text | null;
   error: string | null;
   plies: number;
+  /** Word puzzles: the secret and every guess with its marks (g right place, y elsewhere in the word, . not in it). */
+  words?: { secret: string; guesses: { text: string; marks: string }[] };
   /** Completed rounds: goes up each time play comes back to the first player. */
   round: number;
   last: number[];
@@ -185,15 +205,16 @@ export type Input =
   | { k: 'roll' }
   | { k: 'card'; card: number; zone: string; cell?: number }
   | { k: 'zone'; zone: string }
-  | { k: 'button'; id: string };
+  | { k: 'button'; id: string }
+  | { k: 'word'; text: string };
 
 export const inputKey = (i: Input): string =>
-  i.k === 'click' ? 'c' + i.cell : i.k === 'move' ? `m${i.from}-${i.to}` : i.k === 'roll' ? 'r' : i.k === 'card' ? `k${i.card}` + (i.cell === undefined ? '' : '@' + i.cell) : i.k === 'zone' ? 'z' + i.zone : 'b' + i.id;
+  i.k === 'click' ? 'c' + i.cell : i.k === 'move' ? `m${i.from}-${i.to}` : i.k === 'roll' ? 'r' : i.k === 'card' ? `k${i.card}` + (i.cell === undefined ? '' : '@' + i.cell) : i.k === 'zone' ? 'z' + i.zone : i.k === 'word' ? 'w' + i.text : 'b' + i.id;
 
 // ───────────────────────────── Compiled definition ─────────────────────────────
 
 interface Compiled {
-  cells: number; w: number; h: number; hex: boolean;
+  cells: number; w: number; h: number; hex: boolean; words: string[]; wordSet: Set<string>;
   type: string[]; props: Record<string, number>[]; hole: boolean[];
   path: number[]; pathPos: Int32Array;
   cards: Record<string, string | number>[];
@@ -225,11 +246,21 @@ export function compile(def: GameDef): Compiled {
     for (let k = 0; k < (def.cards.copies ?? 1); k++) cards.push(...combos.map(c => ({ ...c })));
   }
   const byEvent = Object.fromEntries(EVENTS.map(e => [e, def.rules.filter(r => r.on === e)])) as Record<EventName, Rule[]>;
-  const out = { cells, w, h, hex: def.board?.grid === 'hex', type, props, hole, path, pathPos, cards, byEvent };
+  const words = (def.words?.list ?? []).map(wd => upper(def, wd.trim())).filter(Boolean);
+  const out = { words, wordSet: new Set(words), cells, w, h, hex: def.board?.grid === 'hex', type, props, hole, path, pathPos, cards, byEvent };
   CACHE.set(def, out);
   return out;
 }
 export const cardsOf = (def: GameDef) => compile(def).cards;
+/** Upper case in the game's own language (Turkish i → İ, ı → I). */
+export const upper = (def: GameDef, s: string) => s.toLocaleUpperCase(def.words?.locale || 'en');
+/** Wordle marks for a guess: g right letter in the right place, y in the word elsewhere, . not in it (repeats counted). */
+export function markGuess(guess: string, secret: string): string {
+  const g = [...guess], s = [...secret], out = g.map(() => '.'), left: Record<string, number> = {};
+  g.forEach((ch, i) => { if (s[i] === ch) out[i] = 'g'; else left[s[i]] = (left[s[i]] ?? 0) + 1; });
+  g.forEach((ch, i) => { if (out[i] !== 'g' && left[ch] > 0) { out[i] = 'y'; left[ch]--; } });
+  return out.join('');
+}
 export const pathOf = (def: GameDef) => compile(def).path;
 export const cellTypeOf = (def: GameDef, i: number) => compile(def).type[i];
 export const cellPropsOf = (def: GameDef, i: number) => compile(def).props[i];
@@ -447,6 +478,12 @@ export function ev(x: Ctx, e: Expr): Val {
     case 'field': { const k = gn('card'); return x.c.cards[k]?.[String(n.name)] ?? ''; }
     case 'top': { const z = st.zones[zoneKey(x.def, String(n.zone), playerArg(x, n))] ?? []; return z.length ? z[z.length - 1] : -1; }
     case 'size': return (st.zones[zoneKey(x.def, String(n.zone), playerArg(x, n))] ?? []).length;
+    case 'len': return [...String(g('text'))].length;
+    case 'secret': return st.words?.secret ?? '';
+    case 'inList': return x.c.wordSet.has(upper(x.def, String(g('text'))));
+    case 'guesses': return st.words?.guesses.length ?? 0;
+    case 'hits': { const t = upper(x.def, String(g('text'))); return [...markGuess(t, st.words?.secret ?? '')].filter(m => m === 'g').length; }
+    case 'wordLen': return x.def.words?.length ?? 0;
     default: throw new GameError(`unknown block "${String(n.op)}"`);
   }
 }
@@ -572,6 +609,17 @@ function run(x: Ctx, acts: unknown, path = 'do'): void {
         break;
       }
       case 'say': st.msg = n.text as Text; break;
+      case 'pickWord': {
+        const list = x.c.words;
+        st.words = { secret: list.length ? list[Math.floor(rand(st) * list.length)] : '', guesses: [] };
+        break;
+      }
+      case 'addGuess': {
+        const t = upper(x.def, String(g('text')));
+        st.words ??= { secret: '', guesses: [] };
+        st.words.guesses.push({ text: t, marks: markGuess(t, st.words.secret) });
+        break;
+      }
       default: throw new GameError(`unknown block "${a.op}"`);
     }
   }
@@ -609,7 +657,7 @@ export function clone(st: GState): GState {
   const zones: Record<string, number[]> = {}, vars: Record<string, number[]> = {};
   for (const k in st.zones) zones[k] = st.zones[k].slice();
   for (const k in st.vars) vars[k] = st.vars[k].slice();
-  return { ...st, board: st.board.map(s => s.map(p => ({ ...p }))), zones, vars, dice: st.dice.slice(), last: st.last.slice(), over: st.over && { ...st.over } };
+  return { ...st, board: st.board.map(s => s.map(p => ({ ...p }))), zones, vars, dice: st.dice.slice(), last: st.last.slice(), over: st.over && { ...st.over }, ...(st.words ? { words: { secret: st.words.secret, guesses: st.words.guesses.slice() } } : {}) };
 }
 
 function guard(st: GState, f: () => void) {
@@ -664,6 +712,7 @@ function triggered(def: GameDef, st: GState, inp: Input): number {
     }
     case 'zone': x.b = { zone: zoneOfKey(inp.zone)[0] }; return c.byEvent.zone.filter(r => matches(x, r, -1, zoneOfKey(inp.zone)[0], '')).length;
     case 'button': x.b = { button: inp.id }; return c.byEvent.button.filter(r => matches(x, r, -1, '', inp.id)).length;
+    case 'word': x.b = { guess: upper(def, inp.text) }; return c.byEvent.word.filter(r => matches(x, r, -1, '', '')).length;
   }
 }
 
@@ -712,7 +761,8 @@ export function legal(def: GameDef, st: GState, first = false): Input[] {
  */
 function settle(def: GameDef, st: GState) {
   for (let skipped = 0; !st.over && skipped <= st.players; skipped++) {
-    if (legal(def, st, true).length) return;
+    // Typed words cannot be listed in advance, so a game with word rules is never stuck.
+    if (compile(def).byEvent.word.length || legal(def, st, true).length) return;
     if (st.players === 1 || skipped === st.players) {
       fire(ctx(def, st), compile(def).byEvent.blocked);
       if (!st.over) st.over = { winner: -1, stuck: true };
@@ -744,6 +794,7 @@ export function apply(def: GameDef, st0: GState, inp: Input): GState {
       }
       case 'zone': { const z = zoneOfKey(inp.zone)[0]; x.b = { zone: z }; ran = fire(x, c.byEvent.zone, -1, z); break; }
       case 'button': x.b = { button: inp.id }; ran = fire(x, c.byEvent.button, -1, '', inp.id); break;
+      case 'word': x.b = { guess: upper(def, inp.text) }; ran = fire(x, c.byEvent.word); break;
     }
     if (!ran) return;
     st.plies++;
@@ -752,6 +803,12 @@ export function apply(def: GameDef, st0: GState, inp: Input): GState {
     settle(def, st);
   });
   return st;
+}
+
+/** Whether an input would do anything right now (typed words included, which legal() cannot list). */
+export function accepts(def: GameDef, st: GState, inp: Input): boolean {
+  if (st.over) return false;
+  try { return triggered(def, st, inp) > 0; } catch { return false; }
 }
 
 /** Plays one input and also reports which rules were looked at and which actions ran. */
@@ -788,6 +845,7 @@ export function explainInput(def: GameDef, st: GState, inp: Input): Explained[] 
     case 'card': ev2 = 'card'; zone = zoneOfKey(inp.zone)[0]; cell = inp.cell ?? -1; tgt = inp.cell !== undefined; x.b = { card: inp.card, zone, cell }; break;
     case 'zone': ev2 = 'zone'; zone = zoneOfKey(inp.zone)[0]; x.b = { zone }; break;
     case 'button': ev2 = 'button'; button = inp.id; x.b = { button }; break;
+    case 'word': ev2 = 'word'; x.b = { guess: upper(def, inp.text) }; break;
   }
   return c.byEvent[ev2].map(r => {
     let why: Explained['why'];
@@ -809,43 +867,52 @@ export function canSee(def: GameDef, key: string, viewer: number | 'all'): 'all'
 // ───────────────────────────── Validation ─────────────────────────────
 
 /** Problems in a definition, in words a person can fix. Empty when the game can be played. */
-export function validate(raw: unknown): string[] {
+export function validate(raw: unknown, lang: 'en' | 'zh' | 'tr' = 'en'): string[] {
+  const L = (en: string, zh: string, tr: string) => (lang === 'zh' ? zh : lang === 'tr' ? tr : en);
   const out: string[] = [];
-  if (!raw || typeof raw !== 'object') return ['The game must be a JSON object.'];
+  if (!raw || typeof raw !== 'object') return [L('The game must be a JSON object.', '游戏必须是一个JSON对象。', 'Oyun bir JSON nesnesi olmalı.')];
   const def = raw as GameDef;
-  if (def.format !== 'chaikhana-game') out.push('"format" must be "chaikhana-game".');
-  if (!def.name) out.push('The game needs a "name".');
-  if (def.board?.grid !== undefined && !['square', 'hex'].includes(def.board.grid)) out.push('"grid" must be "square" or "hex".');
-  if (!def.players || !(def.players.min >= 1) || !(def.players.max >= def.players.min) || def.players.max > 6) out.push('"players" needs min and max between 1 and 6.');
-  if (def.board && (!(def.board.w >= 1 && def.board.w <= 20) || !(def.board.h >= 1 && def.board.h <= 20))) out.push('The board can be 1 to 20 cells wide and high.');
-  if (!Array.isArray(def.rules)) { out.push('"rules" must be a list.'); return out; }
+  if (def.format !== 'chaikhana-game') out.push(L('"format" must be "chaikhana-game".', '“format”必须是“chaikhana-game”。', '“format” değeri “chaikhana-game” olmalı.'));
+  if (!def.name) out.push(L('The game needs a name.', '游戏需要一个名称。', 'Oyunun bir adı olmalı.'));
+  if (def.board?.grid !== undefined && !['square', 'hex'].includes(def.board.grid)) out.push(L('"grid" must be "square" or "hex".', '“grid”必须是“square”或“hex”。', '“grid” değeri “square” ya da “hex” olmalı.'));
+  if (def.words) {
+    const wd = def.words;
+    if (!(wd.length >= 2 && wd.length <= 12)) out.push(L('Words must have 2 to 12 letters.', '单词必须有2到12个字母。', 'Kelimeler 2 ile 12 harf arasında olmalı.'));
+    else if (!Array.isArray(wd.list) || !wd.list.length) out.push(L('The word list is empty.', '词表是空的。', 'Kelime listesi boş.'));
+    else { const bad = wd.list.filter(x => [...x.trim()].length !== wd.length); if (bad.length) { const ws = bad.slice(0, 5).join(', ') + (bad.length > 5 ? '…' : ''); out.push(L(`These words do not have ${wd.length} letters: ${ws}`, `这些单词不是${wd.length}个字母：${ws}`, `Bu kelimeler ${wd.length} harfli değil: ${ws}`)); } }
+  }
+  if (!def.players || !(def.players.min >= 1) || !(def.players.max >= def.players.min) || def.players.max > 6) out.push(L('Players: the smallest and largest number must be between 1 and 6.', '玩家人数：最少和最多都必须在1到6之间。', 'Oyuncu sayısı: en az ve en çok 1 ile 6 arasında olmalı.'));
+  if (def.board && (!(def.board.w >= 1 && def.board.w <= 20) || !(def.board.h >= 1 && def.board.h <= 20))) out.push(L('The board can be 1 to 20 cells wide and high.', '棋盘的宽和高可以是1到20格。', 'Tahta 1 ile 20 kare arasında geniş ve yüksek olabilir.'));
+  if (!Array.isArray(def.rules)) { out.push(L('"rules" must be a list.', '“rules”必须是列表。', '“rules” bir liste olmalı.')); return out; }
   const has = (kind: Arg, name: unknown) =>
     kind === 'piece' ? !!def.pieces?.[String(name)] : kind === 'zone' ? !!def.zones?.[String(name)] : kind === 'var' ? !!def.vars?.[String(name)] : true;
   const what: Record<string, string> = { piece: 'piece', zone: 'zone', var: 'variable' };
+  const whatZh: Record<string, string> = { piece: '棋子', zone: '区域', var: '计数器' }, whatTr: Record<string, string> = { piece: 'taş', zone: 'alan', var: 'sayaç' };
   const walk = (node: unknown, table: Record<string, Spec>, where: string) => {
     if (table === EXPRS && (typeof node !== 'object' || node === null)) return;
     const n = node as Record<string, unknown>;
-    if (!n || typeof n.op !== 'string' || !table[n.op]) { out.push(`${where}: unknown block ${JSON.stringify(n?.op ?? n)}.`); return; }
+    if (!n || typeof n.op !== 'string' || !table[n.op]) { out.push(`${where}: ` + L(`unknown block ${JSON.stringify(n?.op ?? n)}.`, `未知积木 ${JSON.stringify(n?.op ?? n)}。`, `bilinmeyen blok ${JSON.stringify(n?.op ?? n)}.`)); return; }
     const spec = table[n.op];
     for (const [k, kind] of Object.entries(spec.args)) {
-      if (n[k] === undefined) { if (!spec.opt?.includes(k)) out.push(`${where}: "${n.op}" needs "${k}".`); continue; }
+      if (n[k] === undefined) { if (!spec.opt?.includes(k)) out.push(`${where}: ` + L(`"${n.op}" needs "${k}".`, `“${n.op}”缺少“${k}”。`, `“${n.op}” bloğunda “${k}” boş.`)); continue; }
       if (kind === 'e') walk(n[k], EXPRS, `${where} › ${n.op}.${k}`);
       else if (kind === 'a') walkList(n[k], `${where} › ${n.op}.${k}`);
-      else if (!has(kind, n[k])) out.push(`${where}: there is no ${what[kind]} called "${String(n[k])}".`);
+      else if (!has(kind, n[k])) out.push(`${where}: ` + L(`there is no ${what[kind]} called "${String(n[k])}".`, `没有名为“${String(n[k])}”的${whatZh[kind]}。`, `“${String(n[k])}” adında ${whatTr[kind]} yok.`));
     }
   };
   const walkList = (list: unknown, where: string) => {
-    if (!Array.isArray(list)) { out.push(`${where}: expected a list of actions.`); return; }
+    if (!Array.isArray(list)) { out.push(`${where}: ` + L('expected a list of actions.', '应为一组动作。', 'bir eylem listesi bekleniyordu.')); return; }
     list.forEach((a, i) => walk(a, ACTS, `${where}[${i + 1}]`));
   };
   def.rules.forEach((r, i) => {
-    const where = `Rule ${i + 1}`;
-    if (!EVENTS.includes(r?.on)) { out.push(`${where}: "on" must be one of ${EVENTS.join(', ')}.`); return; }
-    if (r.zone !== undefined && !def.zones?.[r.zone]) out.push(`${where}: there is no zone called "${r.zone}".`);
-    if (r.button !== undefined && !def.buttons?.[r.button]) out.push(`${where}: there is no button called "${r.button}".`);
-    if (r.cellType !== undefined && !def.board?.types?.[r.cellType]) out.push(`${where}: there is no cell type called "${r.cellType}".`);
-    if (r.target !== undefined && (r.on !== 'card' || r.target !== 'cell')) out.push(`${where}: only card rules can have target "cell".`);
-    if (r.target === 'cell' && !def.board) out.push(`${where}: a card played onto a cell needs a board.`);
+    const where = L(`Rule ${i + 1}`, `规则 ${i + 1}`, `Kural ${i + 1}`);
+    if (!EVENTS.includes(r?.on)) { out.push(`${where}: ` + L(`"on" must be one of ${EVENTS.join(', ')}.`, `“on”必须是以下之一：${EVENTS.join(', ')}。`, `“on” şunlardan biri olmalı: ${EVENTS.join(', ')}.`)); return; }
+    if (r.zone !== undefined && !def.zones?.[r.zone]) out.push(`${where}: ` + L(`there is no zone called "${r.zone}".`, `没有名为“${r.zone}”的区域。`, `“${r.zone}” adında alan yok.`));
+    if (r.button !== undefined && !def.buttons?.[r.button]) out.push(`${where}: ` + L(`there is no button called "${r.button}".`, `没有名为“${r.button}”的按钮。`, `“${r.button}” adında düğme yok.`));
+    if (r.cellType !== undefined && !def.board?.types?.[r.cellType]) out.push(`${where}: ` + L(`there is no cell type called "${r.cellType}".`, `没有名为“${r.cellType}”的格子类型。`, `“${r.cellType}” adında kare türü yok.`));
+    if (r.target !== undefined && (r.on !== 'card' || r.target !== 'cell')) out.push(`${where}: ` + L('only card rules can be played onto a cell.', '只有出牌规则可以打到格子上。', 'yalnızca kart kuralları bir kareye oynanabilir.'));
+    if (r.target === 'cell' && !def.board) out.push(`${where}: ` + L('a card played onto a cell needs a board.', '把牌打到格子上需要棋盘。', 'kareye oynanan kart için tahta gerekir.'));
+    if (r.on === 'word' && !def.words) out.push(`${where}: ` + L('typed words need a word list (Materials › Words).', '输入单词需要词表（材料 › 单词）。', 'yazılan kelimeler için kelime listesi gerekir (Malzemeler › Kelimeler).'));
     if (r.when !== undefined) walk(r.when, EXPRS, `${where} › when`);
     walkList(r.do, where);
   });

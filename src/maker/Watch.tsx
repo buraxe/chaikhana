@@ -15,6 +15,7 @@ export function inputLabel(def: GameDef, i: Input, lang: Lang): string {
     case 'roll': return T('rolled the dice', '掷了骰子', 'zar attı');
     case 'card': return i.cell === undefined ? T('played a card', '出了一张牌', 'kart oynadı') : T(`played a card on ${i.cell}`, `把牌打到 ${i.cell}`, `${i.cell}. kareye kart oynadı`);
     case 'zone': return T(`clicked ${txt(def.zones?.[i.zone.split('@')[0]]?.name, lang)}`, `点击了${txt(def.zones?.[i.zone.split('@')[0]]?.name, lang)}`, `${txt(def.zones?.[i.zone.split('@')[0]]?.name, lang)} alanına tıkladı`);
+    case 'word': return T(`guessed ${i.text}`, `猜了 ${i.text}`, `${i.text} tahmin etti`);
     case 'button': return T(`pressed ${txt(def.buttons?.[i.id]?.name, lang)}`, `按下了${txt(def.buttons?.[i.id]?.name, lang)}`, `${txt(def.buttons?.[i.id]?.name, lang)} düğmesine bastı`);
   }
 }

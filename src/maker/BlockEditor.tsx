@@ -65,7 +65,7 @@ export default function BlockEditor({ def, onApply, focus }: { def: GameDef; onA
     const read = () => {
       const state = Blockly.serialization.workspaces.save(w) as WorkspaceState;
       const out = workspaceToRules(state, lang);
-      setRules(out.rules); setLoose(out.loose); setErrs(validate({ ...def, rules: out.rules }));
+      setRules(out.rules); setLoose(out.loose); setErrs(validate({ ...def, rules: out.rules }, lang));
       // Moving blocks around is not a change; only a different set of rules is.
       setDirty(canon(out.rules) !== canon(def.rules));
     };

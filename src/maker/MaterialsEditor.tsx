@@ -40,7 +40,7 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
   const t = useT(), lang = useLang();
   const [d, setD] = useState<GameDef>(() => structuredClone(def));
   const up = (f: (x: GameDef) => void) => setD(prev => { const n = structuredClone(prev); f(n); return n; });
-  const errs = useMemo(() => validate(d), [d]);
+  const errs = useMemo(() => validate(d, lang), [d, lang]);
   const dirty = canon(d) !== canon(def);
   const tt = (x: Text | undefined) => txt(x, lang);
 
@@ -230,6 +230,29 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
             </div>
           )}
         </> : <p className="muted small">{t('Without a board the game is played with cards, dice and counters only.', '没有棋盘时，游戏只用纸牌、骰子和计数器进行。', 'Tahtasız oyun yalnızca kart, zar ve sayaçlarla oynanır.')}</p>}
+      </Sec>
+
+      <Sec title={t('Words', '单词', 'Kelimeler')} aside={
+        <label className="check"><input type="checkbox" id="wk-m-words" checked={!!d.words} onChange={e => up(x => { if (e.target.checked) x.words = { list: [], length: 5, rows: 6, locale: lang === 'tr' ? 'tr' : 'en' }; else delete x.words; })} /> {t('Word puzzle', '猜词', 'Kelime bulmacası')}</label>}>
+        {d.words ? <>
+          <div className="wk-row">
+            <F label={t('Letters per word', '单词长度', 'Harf sayısı')}><input id="wk-m-wlen" type="number" min={2} max={12} value={d.words.length} onChange={e => up(x => { x.words!.length = Math.max(2, Math.min(12, +e.target.value || 5)); })} /></F>
+            <F label={t('Guess rows', '猜测行数', 'Tahmin satırı')}><input type="number" min={1} max={12} value={d.words.rows ?? 6} onChange={e => up(x => { x.words!.rows = Math.max(1, Math.min(12, +e.target.value || 6)); })} /></F>
+            <F label={t('Language of the words', '单词语言', 'Kelimelerin dili')}>
+              <select value={d.words.locale ?? 'en'} onChange={e => up(x => { x.words!.locale = e.target.value; })}>
+                <option value="tr">Türkçe (i → İ)</option><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option>
+              </select>
+            </F>
+          </div>
+          <F label={t('Keyboard letters (a space starts a new row; empty: the letters the words use)', '键盘字母（空格换行；留空则使用单词中出现的字母）', 'Klavye harfleri (boşluk yeni satır açar; boşsa kelimelerdeki harfler)')} wide>
+            <input id="wk-m-alpha" value={d.words.alphabet ?? ''} placeholder={d.words.locale === 'tr' ? 'ERTYUIOPĞÜ ASDFGHJKLŞİ ZCVBNMÖÇ' : 'QWERTYUIOP ASDFGHJKL ZXCVBNM'} onChange={e => up(x => { const v = e.target.value.toLocaleUpperCase(x.words!.locale || 'en'); if (v.trim()) x.words!.alphabet = v; else delete x.words!.alphabet; })} />
+          </F>
+          <F label={t(`Word list: ${d.words.list.length} words`, `词表：${d.words.list.length} 个`, `Kelime listesi: ${d.words.list.length} kelime`)} wide>
+            <textarea id="wk-m-list" rows={5} defaultValue={d.words.list.join(' ')} key={d.words.list.join(' ')} placeholder={t('Words separated by spaces, commas or new lines', '用空格、逗号或换行分隔', 'Boşluk, virgül ya da satırla ayrılmış kelimeler')}
+              onBlur={e => up(x => { x.words!.list = [...new Set(e.target.value.split(/[\s,;]+/).map(w => w.trim().toLocaleLowerCase(x.words!.locale || 'en')).filter(Boolean))]; })} />
+          </F>
+          <p className="muted small">{t('A secret is drawn from the list with “pick a secret word”; guesses are typed on the keyboard and marked green, yellow or grey with “mark the guess”. Rules can also require that a guess be in the list.', '用“选一个谜底单词”从词表中抽出谜底；猜测用键盘输入，用“标出猜测”标成绿、黄或灰。规则还可以要求猜测必须在词表中。', '“Gizli bir kelime seç” bloğu listeden bir kelime çeker; tahminler klavyeyle yazılır ve “tahmini işaretle” ile yeşil, sarı ya da gri işaretlenir. Kurallar tahminin listede olmasını da şart koşabilir.')}</p>
+        </> : <p className="muted small">{t('Turn this on for Wordle-style puzzles: a word list, a keyboard and coloured guesses.', '开启后可做 Wordle 式谜题：词表、键盘和带颜色的猜测。', 'Wordle tarzı bulmacalar için aç: kelime listesi, klavye ve renkli tahminler.')}</p>}
       </Sec>
 
       <Sec title={t('Pieces', '棋子', 'Taşlar')}>

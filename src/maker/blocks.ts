@@ -17,7 +17,7 @@ const ANY = '*';
 
 export const COLOURS: Record<string, string> = {
   rules: '#c27c1e', values: '#7a6a58', logic: '#4f78a8', math: '#4c9a52', board: '#2e8a84', dirs: '#2b7499',
-  cards: '#8657b3', players: '#a0663f', pieces: '#b8433a', flow: '#b58a12', deal: '#7a49a8', game: '#c4512b',
+  cards: '#8657b3', players: '#a0663f', words: '#3f7f5f', pieces: '#b8433a', flow: '#b58a12', deal: '#7a49a8', game: '#c4512b',
 };
 const EXPR_CAT: Record<string, string> = {};
 const ACT_CAT: Record<string, string> = {};
@@ -29,6 +29,8 @@ put(EXPR_CAT, 'board', 'empty piece owner height value type prop row col cellAt 
 put(EXPR_CAT, 'dirs', 'step dirs adjacent flank run around anyDir sumDirs');
 put(EXPR_CAT, 'cards', 'die sum rolled field top size');
 put(EXPR_CAT, 'players', 'me next players var');
+put(EXPR_CAT, 'words', 'len secret inList guesses hits wordLen');
+put(ACT_CAT, 'words', 'pickWord addGuess');
 put(ACT_CAT, 'pieces', 'place remove move setOwner');
 put(ACT_CAT, 'flow', 'if repeat while forCells forDirs forPlayers let');
 put(ACT_CAT, 'deal', 'fill shuffle deal moveCard roll');
@@ -105,8 +107,8 @@ export function toolbox(def: GameDef, lang: Lang) {
   const blk = (type: string, fields?: Record<string, unknown>) => ({ kind: 'block', type, ...(fields ? { fields } : {}) });
   const cat = (key: string, contents: unknown[]) => ({ kind: 'category', name: tx(CATEGORY_TEXT[key], lang), colour: COLOURS[key], contents });
   const of = (m: Record<string, string>, c: string, prefix: string) => Object.keys(m).filter(o => m[o] === c).map(o => blk(prefix + o));
-  const binds = ['cell', 'from', 'to', 'card', 'who', 'it', 'p', 'dir', 'i'];
-  const want = (ev: EventName) => ev !== 'card' || !!def.cards || !!def.zones;
+  const binds = ['cell', 'from', 'to', 'card', 'who', 'it', 'p', 'dir', 'i', ...(def.words ? ['guess'] : [])];
+  const want = (ev: EventName) => (ev !== 'card' || !!def.cards || !!def.zones) && (ev !== 'word' || !!def.words);
   return {
     kind: 'categoryToolbox',
     contents: [
@@ -121,6 +123,7 @@ export function toolbox(def: GameDef, lang: Lang) {
       cat('flow', of(ACT_CAT, 'flow', 'a_')),
       cat('deal', of(ACT_CAT, 'deal', 'a_')),
       cat('game', of(ACT_CAT, 'game', 'a_')),
+      ...(def.words ? [cat('words', [...of(EXPR_CAT, 'words', 'e_'), ...of(ACT_CAT, 'words', 'a_')])] : []),
     ],
   };
 }
