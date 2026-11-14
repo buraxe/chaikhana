@@ -33,3 +33,10 @@ Some content is generated offline and checked in as JSON:
 - packing boxes and assembly figures: `GEN=1 npx vitest run src/games/soma/sets.gen.test.ts`
 
 three.js is loaded from a CDN the first time a 3D game opens.
+
+## Publishing
+
+Every push to `main` builds the site and publishes it to GitHub Pages
+(`.github/workflows/pages.yml`). In the repository settings, Pages → Build and deployment →
+Source must be set to **GitHub Actions**; serving the branch directly shows a blank page,
+because the source `index.html` needs the build step.
