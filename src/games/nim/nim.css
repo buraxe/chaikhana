@@ -1,0 +1,12 @@
+/* Nim: matches on a green baize. */
+.ni-table { display: block; width: min(100%, 460px); height: auto; border-radius: 10px; background: radial-gradient(circle at 50% 40%, #2f6b4f, #1d4733); }
+.ni-stick { fill: #e8d3a3; }
+.ni-head { fill: #b3261e; }
+.ni-match.gone { opacity: .1; }
+.ni-match.just { opacity: .35; }
+.ni-match.hot .ni-stick { fill: #fff3c4; }
+.ni-match.hot .ni-head { fill: #f2c14e; }
+.ni-table .pt { cursor: pointer; }
+.ni-bin { width: auto; margin-top: 8px; font-family: var(--mono, monospace); }
+.ni-bin th, .ni-bin td { padding: 2px 10px; text-align: center; }
+.ni-bin tr.sum { border-top: 2px solid var(--ink); font-weight: 700; }

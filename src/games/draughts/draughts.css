@@ -1,0 +1,18 @@
+/* International draughts: a 10×10 board of maple and walnut squares. */
+.xd-board { display: block; width: min(100%, 580px); height: auto; aspect-ratio: 1; touch-action: manipulation; border: 3px solid #4a2a12; }
+.xd-sq.lt { fill: #ead7b3; }
+.xd-sq.dk { fill: #8a5a33; }
+.xd-sq.last { fill: #a77a45; }
+.xd-sq.sel { fill: #a4372c; }
+.xd-sq.target { fill: #b8932f; }
+.xd-ghost { fill: rgba(164, 55, 44, .55); }
+.xd-piece circle { stroke-width: .03; }
+.xd-piece.w circle { fill: #f6f1e4; stroke: #8a7d5e; }
+.xd-piece.b circle { fill: #1d1d22; stroke: #000; }
+.xd-piece .xd-shadow { fill: rgba(0, 0, 0, .35) !important; stroke: none !important; }
+.xd-piece .xd-inner { fill: none !important; stroke-width: .02; }
+.xd-piece.w .xd-inner { stroke: #b8a882 !important; }
+.xd-piece.b .xd-inner { stroke: #44444c !important; }
+.xd-crown { fill: #d6a842; }
+.xd-piece.movable circle:not(.xd-shadow):not(.xd-inner) { stroke: #e2b33f; stroke-width: .06; }
+.xd-board .pt { cursor: pointer; }

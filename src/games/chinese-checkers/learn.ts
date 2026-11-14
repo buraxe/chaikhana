@@ -1,0 +1,60 @@
+import type { Lesson } from '../../core/learn';
+export const lesson: Lesson = {
+  names: { en: 'Chinese Checkers', zh: '跳棋', tr: 'Çin Daması', pinyin: 'Tiàoqí', trad: '跳棋' },
+  en: {
+    summary: 'Race your ten marbles across a six-pointed star into the opposite corner, hopping over any marble in the way.',
+    history: 'Despite the name, the game is German: it was published in 1892 as Stern-Halma, a star-shaped version of the English game Halma. American sellers renamed it Chinese Checkers in the late 1920s to make it sound exotic. The name then travelled back to Asia, and in China, Japan and Taiwan the game, called 跳棋 "jumping chess", became one of the most common family board games of the twentieth century.',
+    culture: 'In China almost every household of the 1970s–90s had a tin or plastic 跳棋 board with glass marbles, and it was the first strategy game many children learned, long before chess. Its simple idea of "build a ladder and climb it" is still a classroom favourite.',
+    rules: [
+      'The board is a six-pointed star of 121 holes. Here two players face each other: red starts in the bottom point, green in the top point, ten marbles each.',
+      'On your turn move one marble, either one step to an adjacent empty hole, or by hopping.',
+      'A hop jumps over one adjacent marble of either colour into the empty hole directly beyond it. Hopped marbles are not captured.',
+      'You may chain any number of hops in one move, changing direction as you like, but you cannot mix a step with hops.',
+      'The first player to fill the opposite point with their marbles wins. An opponent marble left sitting in your target point counts as filled, so blocking cannot stop you forever.',
+      'Here, a game that reaches 400 moves without a winner is a draw.',
+    ],
+    basics: [
+      'Long hop chains are what wins: set up "ladders" of marbles spaced one hole apart.',
+      'Do not leave stragglers behind; the last marble home often decides the race.',
+      'Move up the middle of the board, where there are the most hops.',
+    ],
+    advanced: [
+      'Use the opponent’s marbles as stepping stones as much as your own.',
+      'Before a long hop, check that it does not leave a ladder for your opponent.',
+      'Fill the far corner from the tip outwards so that late marbles can still hop in.',
+    ],
+    mistakes: ['Moving only the front marbles and leaving the back row for last.', 'Making single steps when a hop of the same marble was available.', 'Clogging your own target point with marbles placed in the wrong order.'],
+  },
+  zh: {
+    summary: '让你的十颗弹珠穿过六角星，跳到对面的角里，路上可以跳过任何弹珠。',
+    history: '虽然叫“中国跳棋”，这个游戏其实来自德国：它在1892年以“星形哈尔马”（Stern-Halma）的名字出版，是英国游戏哈尔马的星形版本。二十世纪二十年代末，美国商人把它改名为Chinese Checkers，让它听起来更有异国情调。这个名字又传回亚洲，在中国、日本和台湾，它被称为“跳棋”，成为二十世纪最常见的家庭棋类游戏之一。',
+    culture: '在上世纪七十到九十年代，中国几乎家家都有一副铁皮或塑料的跳棋盘和玻璃弹珠，许多孩子在学象棋之前，最先学会的策略游戏就是跳棋。“搭梯子再爬上去”这个简单的思路，至今仍是课堂上的热门游戏。',
+    rules: [
+      '棋盘是有121个孔的六角星。这里两人对弈：红方从下面的角出发，绿方从上面的角出发，各十颗弹珠。',
+      '每回合移动一颗弹珠：要么走一步到相邻的空孔，要么跳。',
+      '跳是越过一颗相邻的弹珠（任何颜色），落在它正后方的空孔。被跳过的弹珠不会被吃掉。',
+      '一步之内可以连续跳任意次，方向随意，但不能把走一步和跳混在一起。',
+      '先用自己的弹珠填满对面角的一方获胜。如果对方的弹珠留在你的目标角里，那个孔也算已填满，所以堵角不能永远拦住你。',
+      '本桌规定：走满400步仍无人获胜则判和。',
+    ],
+    basics: ['长距离连跳才是取胜关键：把弹珠隔一个孔排开，搭成“梯子”。', '不要把弹珠落在后面，最后一颗回家的弹珠常常决定胜负。', '从棋盘中间推进，那里能跳的机会最多。'],
+    advanced: ['对方的弹珠和自己的一样可以当跳板。', '长跳之前，先看看会不会给对方留下梯子。', '从角尖开始往外填目标角，让后面的弹珠还能跳进来。'],
+    mistakes: ['只动前面的弹珠，把最后一排留到最后。', '同一颗弹珠可以跳却只走一步。', '目标角填的顺序不对，把自己堵住。'],
+  },
+  tr: {
+    summary: 'On bilyeni altı köşeli yıldızın karşı ucuna taşı; yolundaki her bilyenin üstünden atlayabilirsin.',
+    history: 'Adına rağmen oyun Alman’dır: 1892’de, İngiliz oyunu Halma’nın yıldız biçimli bir hâli olarak Stern-Halma adıyla yayımlandı. Amerikalı satıcılar 1920’lerin sonunda kulağa egzotik gelsin diye adını Chinese Checkers yaptı. Bu ad sonra Asya’ya geri döndü; Çin, Japonya ve Tayvan’da “atlama satrancı” anlamına gelen 跳棋 adıyla 20. yüzyılın en yaygın aile oyunlarından biri oldu.',
+    culture: 'Çin’de 1970’lerden 90’lara neredeyse her evde cam bilyeli, tenekeden ya da plastikten bir 跳棋 tahtası vardı; pek çok çocuğun satrançtan çok önce öğrendiği ilk strateji oyunuydu. “Bir merdiven kur ve tırman” fikri bugün de sınıfların gözde oyunu.',
+    rules: [
+      'Tahta 121 delikli altı köşeli bir yıldızdır. Burada iki oyuncu karşılıklı oynar: kırmızı alt uçtan, yeşil üst uçtan, onar bilyeyle başlar.',
+      'Sırası gelen bir bilyeyi oynatır: ya komşu boş deliğe bir adım, ya da atlayarak.',
+      'Atlama, komşu bir bilyenin (renk fark etmez) üstünden hemen arkasındaki boş deliğe geçmektir. Üstünden atlanan bilye alınmaz.',
+      'Bir hamlede istediğin kadar atlamayı zincirleyebilir, yön değiştirebilirsin; ama adımla atlamayı karıştıramazsın.',
+      'Karşı ucu kendi bilyeleriyle ilk dolduran kazanır. Hedef ucunda kalan rakip bilye de dolu sayılır; yani uç tıkanarak sonsuza dek engellenemezsin.',
+      'Burada 400 hamlede kazanan çıkmazsa oyun berabere biter.',
+    ],
+    basics: ['Kazandıran uzun atlama zincirleridir: bilyeleri birer delik arayla dizerek “merdiven” kur.', 'Geride bilye bırakma; eve son giren bilye çoğu zaman yarışı belirler.', 'Tahtanın ortasından ilerle; en çok atlama orada.'],
+    advanced: ['Rakibin bilyelerini de kendininkiler kadar basamak olarak kullan.', 'Uzun bir atlamadan önce rakibe merdiven bırakıp bırakmadığına bak.', 'Hedef ucunu sivri uçtan dışa doğru doldur ki geç kalan bilyeler hâlâ atlayıp girebilsin.'],
+    mistakes: ['Yalnızca öndeki bilyeleri oynatıp arka sırayı sona bırakmak.', 'Aynı bilyeyle atlamak mümkünken tek adım atmak.', 'Hedef ucunu yanlış sırayla doldurup kendi yolunu tıkamak.'],
+  },
+};

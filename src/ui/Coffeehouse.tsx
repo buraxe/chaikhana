@@ -11,7 +11,7 @@ import { clipHeadline } from './Frame';
 import { Section } from './bits';
 
 /** Games played against the regulars. */
-const TABLES = ['chess', 'weiqi', 'xiangqi', 'shogi', 'tavla', 'mahjong', 'okey', 'okey-101', 'pisti', 'batak', 'king', 'dama', 'mancala', 'morris', 'billiards', 'battleship', 'gomoku', 'reversi', 'connect-four', 'qubic', 'dots-boxes', 'tictactoe'];
+const TABLES = ['chess', 'weiqi', 'xiangqi', 'shogi', 'tavla', 'mahjong', 'okey', 'okey-101', 'pisti', 'batak', 'king', 'dama', 'checkers', 'chinese-checkers', 'dominoes', 'mancala', 'morris', 'billiards', 'battleship', 'gomoku', 'reversi', 'connect-four', 'qubic', 'dots-boxes', 'ultimate-ttt', 'tictactoe', 'nim'];
 const SLOTS: [Slot, [string, string, string]][] = [['wall', ['Walls', '墙面', 'Duvarlar']], ['tavla', ['Tavla board', '双陆棋盘', 'Tavla tahtası']], ['tiles', ['Okey tiles', 'Okey 牌', 'Okey taşları']], ['felt', ['Billiard cloth', '台呢', 'Bilardo çuhası']]];
 
 export function Coffeehouse() {

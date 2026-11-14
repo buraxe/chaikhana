@@ -1,0 +1,63 @@
+import type { Lesson } from '../../core/learn';
+export const lesson: Lesson = {
+  names: { en: 'International Draughts', zh: '国际跳棋', tr: 'Uluslararası Dama', pinyin: 'Guójì tiàoqí', trad: '國際跳棋' },
+  en: {
+    summary: 'Draughts on a 10×10 board with twenty men a side, backward captures and flying kings. The game of the world championships.',
+    history: 'The 10×10 game was first played in Amsterdam and Paris around the 1720s, when players moved the old 8×8 draughts onto a larger board and let men capture backwards and kings fly along the diagonals. It became the national game of the Netherlands and spread through French-speaking Africa, where Senegal, Cameroon and Mali still produce great players. World championships have been held since 1894, and today the game is governed by the FMJD.',
+    rules: [
+      'The board has 10×10 squares and play is on the dark squares only. Each side starts with 20 men on the four rows nearest to it. White moves first.',
+      'A man moves one square diagonally forward onto an empty square.',
+      'A man captures by jumping over an adjacent enemy piece to the empty square just beyond it, forwards or backwards. It may keep jumping in the same move.',
+      'Capturing is compulsory, and you must take the sequence that captures the most pieces. Among equal sequences you may choose freely.',
+      'Captured pieces are removed only after the whole move is complete, and no piece may be jumped twice.',
+      'A man that ends its move on the far row becomes a king. A man that only passes through the far row during a capture stays a man.',
+      'A king flies any distance along a diagonal, and captures from a distance: it can jump a lone enemy piece anywhere on its line and land on any empty square beyond.',
+      'You lose when you have no pieces or no legal move. Here the game is a draw after 50 moves without a capture or a man moving, or when only one king is left on each side.',
+    ],
+    basics: [
+      'Keep your men together in columns and triangles: a lone man is easy to capture.',
+      'Control the centre squares; men on the edges have half the moves.',
+      'Do not hurry to empty your back row; it stops the opponent from crowning.',
+    ],
+    advanced: [
+      'Use the majority rule as a weapon: give one man to force the opponent into a capture that opens a longer one for you (a "shot").',
+      'Count tempi in the endgame: with blocked positions, the side that runs out of safe moves first loses.',
+      'A king is worth about three men; trade down when you have one and the opponent does not.',
+    ],
+    mistakes: ['Forgetting that men capture backwards.', 'Missing that the opponent must take the longest capture and walking into a forced combination.', 'Leaving the long diagonal open to an enemy king.'],
+  },
+  zh: {
+    summary: '在10×10棋盘上进行的跳棋，每方二十子，兵可以向后吃子，王可以长距离飞行。这是世界锦标赛所用的规则。',
+    history: '10×10跳棋最早在十八世纪二十年代前后出现在阿姆斯特丹和巴黎，人们把旧的8×8跳棋搬到更大的棋盘上，并允许兵向后吃子、王沿斜线飞行。它成为荷兰的国民游戏，又传遍了法语非洲，塞内加尔、喀麦隆和马里至今仍出强手。世界锦标赛自1894年起举办，现由世界跳棋联合会（FMJD）管理。',
+    rules: [
+      '棋盘10×10，只在深色格上行棋。双方各有20个兵，摆在靠近自己的四行。白方先走。',
+      '兵沿斜线向前走一格，落到空格上。',
+      '兵吃子时跳过斜向相邻的敌子，落到紧挨着的空格上，向前向后都可以，并可以连续跳吃。',
+      '有吃必吃，而且必须选择吃子最多的路线；吃子数相同时可以任选。',
+      '被吃的棋子在整步走完后才拿掉，同一个子不能被跳过两次。',
+      '兵在走完一步时停在对方底线上就升为王。吃子途中经过底线又离开的，仍然是兵。',
+      '王可以沿斜线走任意格，也可以远距离吃子：跳过斜线上一个孤立的敌子，落在其后的任意空格。',
+      '没有棋子或无棋可走的一方输。本桌规定：连续50步无吃子且无兵移动，或双方只剩一个王时，判和。',
+    ],
+    basics: ['让兵保持成列或三角形，孤兵容易被吃。', '控制中央格子；边上的兵只有一半走法。', '不要急着清空底线，它能阻止对方升王。'],
+    advanced: ['把“吃最多”规则当作武器：弃一子，逼对方吃，为自己打开更长的连吃。', '残局中要数步数：局面封闭时，先没有安全步的一方输。', '一个王约值三个兵；你有王而对方没有时，应该兑子。'],
+    mistakes: ['忘了兵可以向后吃。', '没注意对方必须吃最多，结果走进强制组合。', '让敌王占据长斜线。'],
+  },
+  tr: {
+    summary: '10×10 tahtada, taraf başına yirmi taşla, geriye alma ve uçan damalarla oynanan dama. Dünya şampiyonalarının oyunu.',
+    history: '10×10 oyun ilk kez 1720’ler civarında Amsterdam ve Paris’te oynandı: oyuncular eski 8×8 damayı daha büyük bir tahtaya taşıdı, taşların geriye almasına ve damaların çaprazlarda uçmasına izin verdi. Hollanda’nın millî oyunu oldu ve Fransızca konuşulan Afrika’ya yayıldı; Senegal, Kamerun ve Mali hâlâ büyük oyuncular çıkarıyor. Dünya şampiyonaları 1894’ten beri yapılıyor; oyunu bugün FMJD yönetiyor.',
+    rules: [
+      'Tahta 10×10’dur ve yalnızca koyu karelerde oynanır. Her taraf kendine yakın dört sırada 20 taşla başlar. İlk hamleyi beyaz yapar.',
+      'Taş çapraz olarak bir kare ileri, boş bir kareye gider.',
+      'Taş, çaprazdaki bir rakip taşın üstünden hemen arkasındaki boş kareye atlayarak alır; ileri de geri de olur. Aynı hamlede atlamaya devam edebilir.',
+      'Almak zorunludur ve en çok taş alan yol seçilmelidir. Eşit yollar arasında serbestçe seçilir.',
+      'Alınan taşlar hamle bitince kaldırılır; bir taşın üstünden iki kez atlanamaz.',
+      'Hamlesini karşı son sırada bitiren taş dama olur. Alış sırasında son sıradan geçip çıkan taş, taş olarak kalır.',
+      'Dama çapraz boyunca istediği kadar gider ve uzaktan alır: çizgisindeki yalnız bir rakip taşın üstünden atlayıp arkasındaki herhangi bir boş kareye konar.',
+      'Taşı ya da yasal hamlesi kalmayan kaybeder. Burada alış ve taş hareketi olmadan 50 hamle geçerse ya da iki tarafta birer dama kalırsa oyun berabere biter.',
+    ],
+    basics: ['Taşlarını sütun ve üçgen hâlinde bir arada tut; yalnız taş kolay alınır.', 'Merkez kareleri tut; kenardaki taşın hamlesi yarıya iner.', 'Arka sırayı boşaltmakta acele etme; rakibin dama çıkarmasını engeller.'],
+    advanced: ['En çok alma kuralını silah olarak kullan: bir taş verip rakibi, sana daha uzun bir alış açacak bir alışa zorla.', 'Oyun sonunda tempo say: kilitli konumlarda güvenli hamlesi önce biten kaybeder.', 'Bir dama aşağı yukarı üç taş eder; senin daman varsa ve rakibin yoksa değiş tokuş yap.'],
+    mistakes: ['Taşların geriye de aldığını unutmak.', 'Rakibin en uzun alışı yapmak zorunda olduğunu görmeyip zorunlu bir kombinasyona girmek.', 'Uzun çaprazı rakip damaya açık bırakmak.'],
+  },
+};

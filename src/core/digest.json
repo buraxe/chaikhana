@@ -562,6 +562,69 @@
     "h": "Mahjong bugünkü biçimini 19. yüzyılın ikinci yarısında Yangtze deltasında aldı; para ve dizi takımlarıyla oynanan daha eski kâğıt oyunlarından doğdu. 1920’lerde Şanghay ve Ningbo’dan bütün Çin’e yayıldı, bir ara Amerika ve İngiltere’de de çılgınlık hâline geldi."
    }
   },
+  "checkers": {
+   "names": {
+    "en": "International Draughts",
+    "zh": "国际跳棋",
+    "tr": "Uluslararası Dama",
+    "pinyin": "Guójì tiàoqí",
+    "trad": "國際跳棋"
+   },
+   "en": {
+    "s": "Draughts on a 10×10 board with twenty men a side, backward captures and flying kings. The game of the world championships.",
+    "h": "The 10×10 game was first played in Amsterdam and Paris around the 1720s, when players moved the old 8×8 draughts onto a larger board and let men capture backwards and kings fly along the diagonals."
+   },
+   "zh": {
+    "s": "在10×10棋盘上进行的跳棋，每方二十子，兵可以向后吃子，王可以长距离飞行。这是世界锦标赛所用的规则。",
+    "h": "10×10跳棋最早在十八世纪二十年代前后出现在阿姆斯特丹和巴黎，人们把旧的8×8跳棋搬到更大的棋盘上，并允许兵向后吃子、王沿斜线飞行。"
+   },
+   "tr": {
+    "s": "10×10 tahtada, taraf başına yirmi taşla, geriye alma ve uçan damalarla oynanan dama. Dünya şampiyonalarının oyunu.",
+    "h": "10×10 oyun ilk kez 1720’ler civarında Amsterdam ve Paris’te oynandı: oyuncular eski 8×8 damayı daha büyük bir tahtaya taşıdı, taşların geriye almasına ve damaların çaprazlarda uçmasına izin verdi."
+   }
+  },
+  "dominoes": {
+   "names": {
+    "en": "Dominoes",
+    "zh": "多米诺骨牌",
+    "tr": "Domino",
+    "pinyin": "Duōmǐnuò gǔpái",
+    "trad": "多米諾骨牌"
+   },
+   "en": {
+    "s": "Match tiles end to end, draw when you cannot, and empty your hand first. The classic draw game, played to 100.",
+    "h": "Dominoes began in China, where tiles with the pips of two dice are recorded from the Song dynasty and Chinese sets of 32 tiles are still used for games such as Tien Gow."
+   },
+   "zh": {
+    "s": "把骨牌首尾相接，接不上就摸牌，谁先出完手牌谁赢一局。经典的摸牌玩法，先得100分者胜。",
+    "h": "骨牌起源于中国，宋代就有记载刻有两枚骰子点数的牌，32张的中国骨牌至今仍用于牌九等游戏。"
+   },
+   "tr": {
+    "s": "Taşları uç uca ekle, ekleyemezsen çek, elini ilk bitiren ol. 100’e kadar oynanan klasik çekmeli domino.",
+    "h": "Domino Çin’de doğdu: iki zarın noktalarını taşıyan taşlar Song hanedanından beri kayıtlarda geçer ve 32 taşlık Çin takımları Tien Gow gibi oyunlarda hâlâ kullanılır. 28 taşlık Avrupa düşeşi takımı 18. yüzyılın başında İtalya’da ortaya çıktı ve Fransa’ya yayıldı; adı belki de “domino” denen siyah beyaz kapüşonlu pelerinden gelir."
+   }
+  },
+  "nim": {
+   "names": {
+    "en": "Nim",
+    "zh": "尼姆游戏",
+    "tr": "Nim",
+    "pinyin": "Nímǔ yóuxì",
+    "trad": "尼姆遊戲"
+   },
+   "en": {
+    "s": "Four rows of matches. Take as many as you like from one row; whoever takes the last match wins.",
+    "h": "Games of taking objects from piles are very old, and a Chinese version, 捡石子 \"picking stones\", is often linked to Nim."
+   },
+   "zh": {
+    "s": "四行火柴。每次从一行里拿任意根，谁拿走最后一根火柴谁赢。",
+    "h": "从几堆东西里轮流拿取的游戏由来已久，中国的“捡石子”常被认为与尼姆游戏有关。"
+   },
+   "tr": {
+    "s": "Dört sıra kibrit. Tek bir sıradan istediğin kadar al; son kibriti alan kazanır.",
+    "h": "Yığınlardan nesne alma oyunları çok eskidir; Çin’deki 捡石子 “taş toplama” oyunu sık sık Nim’le ilişkilendirilir."
+   }
+  },
   "futoshiki": {
    "names": {
     "en": "Futoshiki",

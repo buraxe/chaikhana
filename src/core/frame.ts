@@ -19,6 +19,8 @@ export const FRAME: Record<string, FrameMap> = {
   'bulls-cows': { again: '#bc-again, #bd-again', fresh: '#bc-new, #bd-new' },
   'minesweeper-3d': { again: '#cm-again', fresh: '#cm-new' },
   'connect-four': match('c4'), dama: match('dm'), 'dots-boxes': match('db'), mancala: match('mg'), morris: match('nm'),
+  checkers: match('xd'), 'chinese-checkers': match('cc'), 'ultimate-ttt': match('ut'), nim: match('ni'),
+  dominoes: { again: '#do-again', fresh: '#do-new' },
   qubic: match('qb'), reversi: match('rv'), tictactoe: match('ttt'),
   gomoku: { undo: '#gmk-undo', again: '#gmk-again', fresh: '#gmk-new', confirm: '#gmk-discard' },
   tavla: { undo: '#tv-undo', again: '#tv-again', fresh: '#tv-new', confirm: '#tv-discard' },

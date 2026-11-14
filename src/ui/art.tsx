@@ -455,6 +455,48 @@ const ART: Record<string, JSX.Element> = {
       <text className="t b r-t" x="20" y="38" textAnchor="middle">7</text><text className="t b" x="27" y="38">-0</text>
     </>
   ),
+  checkers: (
+    <>
+      <rect className="k w2" x="7" y="7" width="50" height="50" />
+      {range(5).map(r => range(5).map(c => (r + c) % 2 ? null : <rect key={r * 5 + c} className="sh" x={7 + c * 10} y={7 + r * 10} width="10" height="10" />))}
+      {[[12, 12], [32, 12], [52, 12], [22, 22]].map(([x, y]) => <circle key={x + '-' + y} className="f" cx={x} cy={y} r="3.8" />)}
+      {[[12, 52], [32, 52], [42, 42]].map(([x, y]) => <circle key={x + '-' + y} className="k p" cx={x} cy={y} r="3.8" />)}
+      <circle className="k p" cx="52" cy="32" r="3.8" /><circle className="r" cx="52" cy="32" r="1.8" />
+      <path className="r-s w15" d="M42 42L22 22" strokeDasharray="2 2" />
+    </>
+  ),
+  'chinese-checkers': (
+    <>
+      <path className="k w15" d="M32 5L44 26H56L44 47L32 59L20 47L8 26H20Z" />
+      <path className="k w05" d="M32 5L56 47H8Z M8 26H56L32 59Z" />
+      {[[32, 12], [29, 17], [35, 17]].map(([x, y], i) => <circle key={i} className="f" cx={x} cy={y} r="2.6" />)}
+      {[[32, 52], [29, 47], [35, 47]].map(([x, y], i) => <circle key={i} className="r" cx={x} cy={y} r="2.6" />)}
+      {[[26, 32], [32, 32], [38, 32], [29, 27]].map(([x, y], i) => <circle key={i} className="k p" cx={x} cy={y} r="2" />)}
+    </>
+  ),
+  dominoes: (
+    <>
+      <rect className="k p w15" x="8" y="20" width="26" height="14" rx="2" transform="rotate(-12 21 27)" />
+      <path className="k w05" d="M21 20v14" transform="rotate(-12 21 27)" />
+      <rect className="k p w15" x="30" y="30" width="26" height="14" rx="2" transform="rotate(8 43 37)" />
+      <path className="k w05" d="M43 30v14" transform="rotate(8 43 37)" />
+      {[[13, 27], [16, 25], [26, 25], [29, 27]].map(([x, y], i) => <circle key={i} className="f" cx={x} cy={y} r="1.5" />)}
+      {[[35, 34], [38, 37], [35, 40], [48, 36], [51, 38]].map(([x, y], i) => <circle key={i} className={i > 2 ? 'r' : 'f'} cx={x} cy={y} r="1.5" />)}
+    </>
+  ),
+  'ultimate-ttt': (
+    <>
+      <path className="k w2" d="M25 6v52M39 6v52M6 25h52M6 39h52" />
+      <path className="k w05" d="M11 9v12M16 9v12M8 13h12M8 17h12M47 43v12M52 43v12M44 47h12M44 51h12" />
+      <path className="r-s w15" d="M27 27l10 10M37 27l-10 10" />
+      <circle className="k w15" cx="50" cy="15" r="6" /><circle className="k w15" cx="14" cy="49" r="6" />
+    </>
+  ),
+  nim: (
+    <>
+      {[1, 3, 5, 7].map((n, r) => range(n).map(i => <g key={r + '-' + i}><path className={'k w2' + (r === 3 && i > 4 ? ' sh' : '')} d={`M${32 - (n - 1) * 3.5 + i * 7} ${12 + r * 12}v9`} /><circle className="r" cx={32 - (n - 1) * 3.5 + i * 7} cy={11 + r * 12} r="1.6" /></g>))}
+    </>
+  ),
   'minesweeper-3d': (
     <>
       <path className="k w15" d="M32 8L54 20.5V45.5L32 58L10 45.5V20.5Z" /><path className="k w15" d="M10 20.5L32 33L54 20.5M32 33V58" />

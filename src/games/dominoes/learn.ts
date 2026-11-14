@@ -1,0 +1,60 @@
+import type { Lesson } from '../../core/learn';
+export const lesson: Lesson = {
+  names: { en: 'Dominoes', zh: '多米诺骨牌', tr: 'Domino', pinyin: 'Duōmǐnuò gǔpái', trad: '多米諾骨牌' },
+  en: {
+    summary: 'Match tiles end to end, draw when you cannot, and empty your hand first. The classic draw game, played to 100.',
+    history: 'Dominoes began in China, where tiles with the pips of two dice are recorded from the Song dynasty and Chinese sets of 32 tiles are still used for games such as Tien Gow. The European double-six set of 28 tiles appeared in Italy in the early eighteenth century and spread through France, perhaps named after the black-and-white hooded cloak called a domino. From there it went to Latin America, the Caribbean and the Turkish coffeehouse, where the slam of the last tile on the table is part of the game.',
+    rules: [
+      'A double-six set has 28 tiles, each showing two ends from 0 to 6 pips. Each player draws 7 tiles; the remaining 14 face down are the boneyard.',
+      'In the first round the player holding the highest double sets it down first. In later rounds the winner of the last round leads with any tile.',
+      'Players take turns adding one tile to either open end of the line. The touching ends must show the same number.',
+      'If you cannot play, draw one tile from the boneyard; it is then the other player’s turn. When the boneyard is empty and you still cannot play, pass.',
+      'The round ends when a player plays their last tile. That player scores the pips left in the opponent’s hand.',
+      'If both players pass in a row the game is blocked; the player with fewer pips in hand wins the round and scores the opponent’s pips. Equal hands score nothing.',
+      'The first player to reach 100 points wins the match.',
+    ],
+    basics: [
+      'Play heavy tiles early: if the round is lost or blocked, they count against you.',
+      'Keep a variety of numbers in your hand so that you can follow either end.',
+      'Get rid of doubles when you can; each double only fits one number.',
+    ],
+    advanced: [
+      'Remember which numbers your opponent drew on: they do not have them, so leave those numbers at the ends.',
+      'Count the tiles of each number that are out: once six of the seven are visible, the last one is either yours or a sure block.',
+      'When you hold most of one number, make both ends that number and lock the opponent out.',
+    ],
+    mistakes: ['Playing the tile that leaves only one number you can follow.', 'Holding a double-six to the end and being caught with 12 pips.', 'Ignoring what the opponent drew for.'],
+  },
+  zh: {
+    summary: '把骨牌首尾相接，接不上就摸牌，谁先出完手牌谁赢一局。经典的摸牌玩法，先得100分者胜。',
+    history: '骨牌起源于中国，宋代就有记载刻有两枚骰子点数的牌，32张的中国骨牌至今仍用于牌九等游戏。欧洲28张的双六骨牌在十八世纪初出现在意大利，随后传入法国，名字可能来自一种黑白两色、带兜帽的斗篷“domino”。之后它传到拉丁美洲、加勒比地区和土耳其咖啡馆，在那里把最后一张牌“啪”地拍在桌上也是游戏的一部分。',
+    rules: [
+      '双六骨牌共28张，每张两端各有0到6点。每人摸7张，剩下的14张背面朝上作为牌堆。',
+      '第一局由持有最大对子牌的一方先出这张牌。之后各局由上一局赢家任意出牌开局。',
+      '双方轮流在牌龙任意一端接一张牌，相接的两端点数必须相同。',
+      '接不上就从牌堆摸一张，然后轮到对方。牌堆摸完仍接不上，就过。',
+      '有人出完最后一张牌时本局结束，他得到对方手里剩余的点数。',
+      '如果双方连续都过，牌局堵死；手里点数少的一方赢下本局，得对方的点数。点数相同不计分。',
+      '先得到100分的一方赢得比赛。',
+    ],
+    basics: ['早点出点数大的牌：一旦输掉或堵死，它们都会算在你头上。', '手里保留不同的点数，这样两端都能接。', '有机会就出对子牌，每张对子只能接一种点数。'],
+    advanced: ['记住对方在哪个点数上摸过牌：他没有那个点数，就把它留在两端。', '数一数每种点数已经出现了多少张：七张里出现六张后，最后一张不是在你手里，就是一定能堵死。', '某个点数你握有大半时，让两端都是这个点数，把对方锁死。'],
+    mistakes: ['出了一张牌后，手里只剩一种能接的点数。', '把双六留到最后，被罚12点。', '不注意对方是因为缺什么而摸牌。'],
+  },
+  tr: {
+    summary: 'Taşları uç uca ekle, ekleyemezsen çek, elini ilk bitiren ol. 100’e kadar oynanan klasik çekmeli domino.',
+    history: 'Domino Çin’de doğdu: iki zarın noktalarını taşıyan taşlar Song hanedanından beri kayıtlarda geçer ve 32 taşlık Çin takımları Tien Gow gibi oyunlarda hâlâ kullanılır. 28 taşlık Avrupa düşeşi takımı 18. yüzyılın başında İtalya’da ortaya çıktı ve Fransa’ya yayıldı; adı belki de “domino” denen siyah beyaz kapüşonlu pelerinden gelir. Oradan Latin Amerika’ya, Karayipler’e ve Türk kahvehanesine geçti; son taşı masaya şaklatmak da oyunun parçasıdır.',
+    rules: [
+      'Düşeşe kadar olan takımda 28 taş vardır; her taşın iki ucunda 0 ile 6 arasında nokta bulunur. Her oyuncu 7 taş çeker, kalan 14 taş kapalı yığındır.',
+      'İlk elde en büyük çifti elinde tutan onu ilk olarak koyar. Sonraki ellerde bir önceki eli kazanan istediği taşla açar.',
+      'Oyuncular sırayla hattın açık uçlarından birine bir taş ekler. Birbirine değen uçların sayısı aynı olmalıdır.',
+      'Oynayamazsan yığından bir taş çekersin; sonra sıra rakibe geçer. Yığın bitmişse ve hâlâ oynayamıyorsan pas geçersin.',
+      'Bir oyuncu son taşını oynayınca el biter; o oyuncu rakibinin elinde kalan noktaları kazanır.',
+      'İki oyuncu üst üste pas geçerse oyun kilitlenir; elinde daha az nokta olan eli kazanır ve rakibin noktalarını alır. Eşit ellerde puan yazılmaz.',
+      '100 puana ilk ulaşan maçı kazanır.',
+    ],
+    basics: ['Ağır taşları erken oyna: el kaybedilir ya da kilitlenirse onlar aleyhine sayılır.', 'Elinde farklı sayılar tut ki iki uca da uyabilesin.', 'Fırsat buldukça çiftlerden kurtul; her çift tek bir sayıya uyar.'],
+    advanced: ['Rakibin hangi sayıda çektiğini hatırla: o sayı onda yok, uçlarda o sayıyı bırak.', 'Her sayıdan kaç taş çıktığını say: yedi taştan altısı görünüyorsa sonuncusu ya sendedir ya da kesin bir kilittir.', 'Bir sayının çoğu sendeyse iki ucu da o sayı yap ve rakibi kilitle.'],
+    mistakes: ['Oynadıktan sonra elinde uyabileceğin tek sayı bırakan taşı oynamak.', 'Düşeşi sona saklayıp 12 noktayla yakalanmak.', 'Rakibin neyi olmadığı için çektiğini görmezden gelmek.'],
+  },
+};

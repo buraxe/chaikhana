@@ -2,7 +2,7 @@ import type { Category, GameMeta } from './game';
 import type { Lang } from './store';
 
 /** Games that are built and playable. Everything else in the catalogue is roadmap. */
-export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'mahjong', 'sifeng', 'kenken', 'hashi', 'sokoban', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'connect-four', 'tictactoe', 'hanoi', 'lights-out', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'rubik', 'reversi', 'nonogram', 'mastermind', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'battleship', 'qubic', 'football-70', 'minesweeper-3d']);
+export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'mahjong', 'sifeng', 'kenken', 'hashi', 'sokoban', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'connect-four', 'tictactoe', 'hanoi', 'lights-out', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'rubik', 'reversi', 'nonogram', 'mastermind', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'battleship', 'qubic', 'football-70', 'minesweeper-3d', 'checkers', 'chinese-checkers', 'dominoes', 'ultimate-ttt', 'nim']);
 
 type Row = [id: string, name: string, zh: string, cat: Category, minP: number, maxP: number,
   minutes: number, depth: 1 | 2 | 3, trad: 0 | 1, dim: 2 | 3, phase: number, tr: string];
