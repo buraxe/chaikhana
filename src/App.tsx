@@ -15,13 +15,14 @@ const LocalPlay = lazy(() => import('./ui/Pages').then(m => ({ default: m.LocalP
 const Rankings = lazy(() => import('./ui/Pages').then(m => ({ default: m.Rankings })));
 const ProfilePage = lazy(() => import('./ui/Profile').then(m => ({ default: m.ProfilePage })));
 const Coffeehouse = lazy(() => import('./ui/Coffeehouse').then(m => ({ default: m.Coffeehouse })));
+const Workshop = lazy(() => import('./maker/Workshop').then(m => ({ default: m.Workshop })));
 const Tournament = lazy(() => import('./ui/Tournament').then(m => ({ default: m.Tournament })));
 
 // Routes are plain #names so a link to any page can be shared or bookmarked.
 const NAV: [route: string, en: string, zh: string, tr: string][] = [
   ['home', 'Home', '首页', 'Ana sayfa'], ['puzzles', 'Puzzles', '谜题', 'Bulmacalar'], ['board-games', 'Board Games', '棋牌', 'Masa Oyunları'],
   ['local-play', 'Multiplayer', '对战', 'Çok oyunculu'], ['daily', 'Daily', '每日挑战', 'Günlük'], ['rankings', 'Rankings', '排行', 'Sıralama'],
-  ['coffeehouse', 'Coffeehouse', '茶馆', 'Kahvehane'], ['learn', 'Learn', '学习', 'Öğren'], ['profile', 'Profile', '我的', 'Profil'],
+  ['coffeehouse', 'Coffeehouse', '茶馆', 'Kahvehane'], ['workshop', 'Workshop', '工坊', 'Atölye'], ['learn', 'Learn', '学习', 'Öğren'], ['profile', 'Profile', '我的', 'Profil'],
 ];
 const LANGS: [Lang, string, string, string][] = [['en', 'EN', 'English', 'en'], ['tr', 'TR', 'Türkçe', 'tr'], ['zh', '中', '中文', 'zh-Hans']];
 const read = () => location.hash.replace(/^#/, '') || 'home';
@@ -51,6 +52,7 @@ export default function App() {
   else if (route === 'profile') page = <ProfilePage />;
   else if (route === 'coffeehouse') page = <Coffeehouse />;
   else if (route === 'tournament') page = <Tournament />;
+  else if (route === 'workshop') page = <Workshop />;
   else page = <Home />;
 
   return (
