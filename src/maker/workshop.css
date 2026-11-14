@@ -59,3 +59,11 @@ button.wk-card.picked { outline-color: var(--red); transform: translateY(-8px); 
 .wk-pass { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-left, 0px)); background: rgba(20, 14, 9, .92); }
 .wk-pass > div { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; max-width: 360px; color: #f4efe2; }
 .wk-pass h2 { margin: 0; color: #f4efe2; }
+.wk-blocks { display: flex; flex-direction: column; gap: 10px; }
+.wk-blocks > p { margin: 0; max-width: 72ch; }
+.wk-blockly { width: 100%; height: min(640px, 72vh); min-height: 380px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; touch-action: none; }
+.wk-blockly .blocklyToolboxDiv { font-family: inherit; }
+.wk-blockly .blocklyTreeLabel { font-size: .86rem; }
+.wk-blockly-wrap { position: relative; }
+.wk-zoom { position: absolute; right: 18px; bottom: 22px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
+.wk-zoom button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 1.1rem; cursor: pointer; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }

@@ -1,5 +1,5 @@
 import './workshop.css';
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useLang, useT } from '../core/i18n';
 import { sfx } from '../core/sound';
 import { loadJSON, saveJSON } from '../core/storage';
@@ -10,6 +10,8 @@ import { EXAMPLES } from './examples';
 import { GameView, playerColor, playerName } from './GameView';
 
 type Seat = 'h' | number;
+// Blockly is large, so the block editor loads only when its tab is opened.
+const BlockEditor = lazy(() => import('./BlockEditor'));
 const MINE = 'gp.workshop.mine';
 const LEVEL_NAMES: Record<string, [string, string]> = { Beginner: ['新手', 'Acemi'], Easy: ['简单', 'Kolay'], Intermediate: ['中等', 'Orta'], Advanced: ['高级', 'İleri'], Expert: ['专家', 'Uzman'] };
 const EVENT_NAMES: Record<EventName, [string, string, string]> = {
@@ -41,7 +43,7 @@ export function Workshop() {
   const [defId, setDefId] = useState(() => loadJSON<string>('gp.workshop.pick', EXAMPLES[0].id));
   const def = all.find(d => d.id === defId) ?? EXAMPLES[0];
   const isMine = mine.some(d => d.id === def.id);
-  const [tab, setTab] = useState<'play' | 'rules' | 'json'>('play');
+  const [tab, setTab] = useState<'play' | 'blocks' | 'rules' | 'json'>('play');
   const [count, setCount] = useState(def.players.max);
   const [seats, setSeats] = useState<Seat[]>(['h', 2, 2, 2, 2, 2]);
   // The state is kept with the definition it belongs to, so a switch never pairs a board with the wrong game.
@@ -115,6 +117,14 @@ export function Workshop() {
     setDefId(d.id);
     setTab('play');
   };
+  /** Rules from the block editor: an example is saved as the player's own copy. */
+  const applyRules = (rules: GameDef['rules']) => {
+    let d: GameDef = { ...def, rules };
+    if (!isMine) d = { ...d, id: def.id.replace(/^ex-/, 'my-') + '-' + Date.now().toString(36), name: typeof def.name === 'string' ? def.name + ' *' : { ...def.name, en: def.name.en + ' *', ...(def.name.zh ? { zh: def.name.zh + ' *' } : {}), ...(def.name.tr ? { tr: def.name.tr + ' *' } : {}) } };
+    setMine(m => [...m.filter(x => x.id !== d.id), d]);
+    setDefId(d.id);
+    setTab('play');
+  };
   const remove = () => { setMine(m => m.filter(x => x.id !== def.id)); setDefId(EXAMPLES[0].id); };
   const copy = () => { navigator.clipboard?.writeText(src).then(() => setNote(t('Copied.', '已复制。', 'Kopyalandı.')), () => setNote(t('Select the text and copy it by hand.', '请手动选择并复制。', 'Metni seçip elle kopyala.'))); };
 
@@ -149,7 +159,7 @@ export function Workshop() {
       </div>
 
       <div className="seg wk-tabs" role="tablist">
-        {([['play', t('Play', '试玩', 'Oyna')], ['rules', t('Materials & rules', '材料与规则', 'Malzeme ve kurallar')], ['json', 'JSON']] as const).map(([k, l]) => (
+        {([['play', t('Play', '试玩', 'Oyna')], ['blocks', t('Blocks', '积木', 'Bloklar')], ['rules', t('Materials', '材料', 'Malzemeler')], ['json', 'JSON']] as const).map(([k, l]) => (
           <button key={k} type="button" role="tab" id={'wk-tab-' + k} aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{l}</button>
         ))}
       </div>
@@ -192,6 +202,12 @@ export function Workshop() {
             </div>
           </aside>
         </div>
+      )}
+
+      {tab === 'blocks' && (
+        <Suspense fallback={<p className="muted">{t('Loading the block editor…', '正在加载积木编辑器…', 'Blok düzenleyici yükleniyor…')}</p>}>
+          <BlockEditor def={def} onApply={applyRules} />
+        </Suspense>
       )}
 
       {tab === 'rules' && (
