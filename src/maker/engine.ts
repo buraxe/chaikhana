@@ -797,6 +797,9 @@ export function validate(raw: unknown): string[] {
   return out;
 }
 
+/** JSON with keys in a fixed order, so two equal definitions compare equal however they were built. */
+export const canon = (v: unknown): string => JSON.stringify(v, (_, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).filter(([, y]) => y !== undefined).sort(([a], [b]) => a.localeCompare(b))) : x));
+
 export function txt(t: Text | undefined, lang: 'en' | 'zh' | 'tr'): string {
   if (t === undefined) return '';
   if (typeof t === 'string') return t;

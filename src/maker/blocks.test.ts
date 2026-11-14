@@ -50,3 +50,13 @@ describe('rules ⇄ blocks', () => {
     }
   });
 });
+
+import { parseValues } from './MaterialsEditor';
+describe('card values', () => {
+  it('reads ranges, numbers and words', () => {
+    expect(parseValues('1-4')).toEqual([1, 2, 3, 4]);
+    expect(parseValues('red, blue , 7')).toEqual(['red', 'blue', 7]);
+    expect(parseValues('3-1, x')).toEqual([3, 2, 1, 'x']);
+    expect(parseValues(' , ')).toEqual([]);
+  });
+});

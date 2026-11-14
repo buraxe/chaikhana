@@ -5,34 +5,22 @@ import { sfx } from '../core/sound';
 import { loadJSON, saveJSON } from '../core/storage';
 import { Pick, Seg } from '../ui/bits';
 import { chooseInput, LEVELS } from './ai';
-import { apply, cardsOf, newGame, txt, validate, type EventName, type GameDef, type GState, type Input } from './engine';
+import { apply, canon, newGame, txt, validate, type GameDef, type GState, type Input } from './engine';
 import { EXAMPLES } from './examples';
 import { GameView, playerColor, playerName } from './GameView';
+import { MaterialsEditor } from './MaterialsEditor';
 
 type Seat = 'h' | number;
 // Blockly is large, so the block editor loads only when its tab is opened.
 const BlockEditor = lazy(() => import('./BlockEditor'));
 const MINE = 'gp.workshop.mine';
 const LEVEL_NAMES: Record<string, [string, string]> = { Beginner: ['新手', 'Acemi'], Easy: ['简单', 'Kolay'], Intermediate: ['中等', 'Orta'], Advanced: ['高级', 'İleri'], Expert: ['专家', 'Uzman'] };
-const EVENT_NAMES: Record<EventName, [string, string, string]> = {
-  start: ['When the game starts', '游戏开始时', 'Oyun başlayınca'],
-  turn: ['When a turn starts', '回合开始时', 'Sıra başlayınca'],
-  click: ['When a cell is clicked', '点击格子时', 'Bir kareye tıklanınca'],
-  move: ['When a piece is moved', '移动棋子时', 'Bir taş taşınınca'],
-  roll: ['When the dice are rolled', '掷骰时', 'Zar atılınca'],
-  card: ['When a card is played', '出牌时', 'Bir kart oynanınca'],
-  zone: ['When a pile is clicked', '点击牌堆时', 'Bir yığına tıklanınca'],
-  button: ['When a button is pressed', '按下按钮时', 'Bir düğmeye basılınca'],
-  enter: ['When a piece lands on a cell', '棋子落到格子上时', 'Bir taş bir kareye girince'],
-  after: ['After every action', '每次行动之后', 'Her hamleden sonra'],
-  blocked: ['When nobody can move', '无人可走时', 'Kimse oynayamayınca'],
-};
 
 const BLANK: GameDef = {
   format: 'chaikhana-game', version: 1, id: 'my-game', kind: 'game', name: 'My game',
   players: { min: 2, max: 2 },
   board: { w: 5, h: 5, checker: true },
-  pieces: { stone: { name: 'Stone', shape: 'disc' } },
+  pieces: { stone: { name: { en: 'Stone', zh: '棋子', tr: 'Taş' }, shape: 'disc' } },
   rules: [{ on: 'click', when: { op: 'empty', cell: { op: 'get', name: 'cell' } }, do: [{ op: 'place', piece: 'stone', cell: { op: 'get', name: 'cell' } }, { op: 'if', test: { op: 'line', cell: { op: 'get', name: 'cell' }, n: 4 }, then: [{ op: 'win' }] }] }],
 };
 
@@ -118,9 +106,11 @@ export function Workshop() {
     setTab('play');
   };
   /** Rules from the block editor: an example is saved as the player's own copy. */
-  const applyRules = (rules: GameDef['rules']) => {
-    let d: GameDef = { ...def, rules };
-    if (!isMine) d = { ...d, id: def.id.replace(/^ex-/, 'my-') + '-' + Date.now().toString(36), name: typeof def.name === 'string' ? def.name + ' *' : { ...def.name, en: def.name.en + ' *', ...(def.name.zh ? { zh: def.name.zh + ' *' } : {}), ...(def.name.tr ? { tr: def.name.tr + ' *' } : {}) } };
+  const applyRules = (rules: GameDef['rules']) => saveDef({ ...def, rules });
+  /** Saves an edited game; an example is saved as the player's own copy. */
+  const saveDef = (edited: GameDef) => {
+    let d: GameDef = edited;
+    if (!isMine) d = { ...d, id: def.id.replace(/^ex-/, 'my-') + '-' + Date.now().toString(36), name: typeof d.name === 'string' ? d.name + ' *' : { ...d.name, en: d.name.en + ' *', ...(d.name.zh ? { zh: d.name.zh + ' *' } : {}), ...(d.name.tr ? { tr: d.name.tr + ' *' } : {}) } };
     setMine(m => [...m.filter(x => x.id !== d.id), d]);
     setDefId(d.id);
     setTab('play');
@@ -141,9 +131,9 @@ export function Workshop() {
     <>
       <header className="page-head">
         <h1>{t('Workshop', '工坊', 'Atölye')}</h1>
-        <p className="lede">{t('Make your own games and puzzles. A game is materials (a board, pieces, cards, dice, counters) and rules of the form “when this happens, if that holds, do these”. For now games are written as JSON; the block editor that builds the same rules by dragging comes next.',
-          '制作你自己的游戏和谜题。一个游戏由材料（棋盘、棋子、纸牌、骰子、计数器）和“当……发生时，如果……，就做……”形式的规则组成。目前游戏以JSON编写；用拖拽积木来搭建同样规则的编辑器是下一步。',
-          'Kendi oyunlarını ve bulmacalarını yap. Bir oyun, malzemelerden (tahta, taşlar, kartlar, zar, sayaçlar) ve “şu olunca, şu doğruysa, şunları yap” biçimindeki kurallardan oluşur. Şimdilik oyunlar JSON olarak yazılıyor; aynı kuralları sürükleyerek kuran blok düzenleyici sıradaki adım.')}</p>
+        <p className="lede">{t('Make your own games and puzzles. Set out the materials (a board you paint, pieces, cards, dice, counters), then build the rules from blocks: “when this happens, if that holds, do these”. Try it at once against the computer or a friend.',
+          '制作你自己的游戏和谜题。先准备材料（可以绘制的棋盘、棋子、纸牌、骰子、计数器），再用积木搭建规则：“当……发生时，如果……，就做……”。马上就能和电脑或朋友试玩。',
+          'Kendi oyunlarını ve bulmacalarını yap. Önce malzemeleri hazırla (boyayarak tasarladığın tahta, taşlar, kartlar, zar, sayaçlar), sonra kuralları bloklarla kur: “şu olunca, şu doğruysa, şunları yap”. Hemen bilgisayara ya da bir arkadaşına karşı dene.')}</p>
       </header>
 
       <div className="wk-picker" role="list">
@@ -153,7 +143,7 @@ export function Workshop() {
             <span>{mine.includes(d) ? t('Your game', '我的游戏', 'Senin oyunun') : t('Example', '示例', 'Örnek')} · {d.kind === 'puzzle' ? t('puzzle', '谜题', 'bulmaca') : `${d.players.min}–${d.players.max} ${t('players', '人', 'oyuncu')}`}</span>
           </button>
         ))}
-        <button type="button" className="wk-pick new" id="wk-new" onClick={() => { setSrc(JSON.stringify({ ...BLANK, id: 'my-' + Date.now().toString(36) }, null, 2)); setErrs([]); setTab('json'); }}>
+        <button type="button" className="wk-pick new" id="wk-new" onClick={() => { const d: GameDef = { ...structuredClone(BLANK), id: 'my-' + Date.now().toString(36), name: t('My game', '我的游戏', 'Oyunum') }; setMine(m => [...m, d]); setDefId(d.id); setTab('rules'); }}>
           <b>+ {t('New game', '新游戏', 'Yeni oyun')}</b><span>{t('Start from a blank template', '从空白模板开始', 'Boş şablondan başla')}</span>
         </button>
       </div>
@@ -210,33 +200,7 @@ export function Workshop() {
         </Suspense>
       )}
 
-      {tab === 'rules' && (
-        <div className="wk-rules">
-          <section>
-            <h3>{t('Materials', '材料', 'Malzemeler')}</h3>
-            <ul className="wk-list">
-              <li>{def.kind === 'puzzle' ? t('One-player puzzle', '单人谜题', 'Tek kişilik bulmaca') : t(`${def.players.min}–${def.players.max} players`, `${def.players.min}–${def.players.max}人`, `${def.players.min}–${def.players.max} oyuncu`)}</li>
-              {def.board && <li>{t('Board', '棋盘', 'Tahta')}: {def.board.w}×{def.board.h}{def.board.path === 'snake' ? t(', race track', '，赛道', ', yarış yolu') : ''}</li>}
-              {Object.entries(def.board?.types ?? {}).map(([k, ty]) => <li key={k}><i className="wk-swatch" style={{ background: ty.color }} /> {t('Cell type', '格子类型', 'Kare türü')}: {txt(ty.name, lang)}</li>)}
-              {Object.entries(def.pieces ?? {}).map(([k, p]) => <li key={k}>{t('Piece', '棋子', 'Taş')}: {txt(p.name, lang)} ({p.shape})</li>)}
-              {def.cards && <li>{t('Cards', '纸牌', 'Kartlar')}: {cardsOf(def).length} — {Object.entries(def.cards.fields).map(([f, v]) => `${f} (${v.length})`).join(' × ')}{(def.cards.copies ?? 1) > 1 ? ` × ${def.cards.copies}` : ''}</li>}
-              {Object.entries(def.zones ?? {}).map(([k, z]) => <li key={k}>{t('Zone', '区域', 'Alan')}: {txt(z.name, lang)} ({z.owner === 'each' ? t('one per player', '每人一个', 'oyuncu başına') : t('shared', '共用', 'ortak')})</li>)}
-              {def.dice && <li>{t('Dice', '骰子', 'Zar')}: {def.dice.count} × d{def.dice.faces}</li>}
-              {Object.entries(def.vars ?? {}).map(([k, v]) => <li key={k}>{t('Counter', '计数器', 'Sayaç')}: {txt(v.name, lang)}</li>)}
-            </ul>
-          </section>
-          <section>
-            <h3>{t('Rules', '规则', 'Kurallar')}</h3>
-            <ol className="wk-list rules">
-              {def.rules.map((r, i) => (
-                <li key={i}><span className="wk-event">{t(...EVENT_NAMES[r.on])}{r.cellType ? ` · ${txt(def.board?.types?.[r.cellType]?.name, lang)}` : ''}{r.zone ? ` · ${txt(def.zones?.[r.zone]?.name, lang)}` : ''}</span>
-                  {r.name && <b>{txt(r.name, lang)}</b>}
-                  <span className="muted small">{r.when ? t('with a condition', '带条件', 'koşullu') + ' · ' : ''}{r.do.length} {t('actions', '个动作', 'eylem')}</span></li>
-              ))}
-            </ol>
-          </section>
-        </div>
-      )}
+      {tab === 'rules' && <MaterialsEditor key={def.id + canon(def)} def={def} onSave={saveDef} />}
 
       {tab === 'json' && (
         <div className="wk-json">

@@ -5,10 +5,7 @@ import * as Zh from 'blockly/msg/zh-hans';
 import { useEffect, useRef, useState } from 'react';
 import { useLang, useT } from '../core/i18n';
 import { blockDefinitions, rulesToWorkspace, toolbox, workspaceToRules, type WorkspaceState } from './blocks';
-import { validate, type GameDef, type Rule } from './engine';
-
-/** JSON with keys in a fixed order, so two equal rule sets compare equal however they were built. */
-const canon = (v: unknown): string => JSON.stringify(v, (_, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => a.localeCompare(b))) : x));
+import { canon, validate, type GameDef, type Rule } from './engine';
 
 /** Reads the page's colour tokens so the block area matches the light or dark theme. */
 function theme(): Blockly.Theme {
