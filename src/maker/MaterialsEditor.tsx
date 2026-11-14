@@ -236,8 +236,36 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
         <label className="check"><input type="checkbox" id="wk-m-words" checked={!!d.words} onChange={e => up(x => { if (e.target.checked) x.words = { list: [], length: 5, rows: 6, locale: lang === 'tr' ? 'tr' : 'en' }; else delete x.words; })} /> {t('Word puzzle', '猜词', 'Kelime bulmacası')}</label>}>
         {d.words ? <>
           <div className="wk-row">
-            <F label={t('Letters per word', '单词长度', 'Harf sayısı')}><input id="wk-m-wlen" type="number" min={2} max={12} value={d.words.length} onChange={e => up(x => { x.words!.length = Math.max(2, Math.min(12, +e.target.value || 5)); })} /></F>
-            <F label={t('Guess rows', '猜测行数', 'Tahmin satırı')}><input type="number" min={1} max={12} value={d.words.rows ?? 6} onChange={e => up(x => { x.words!.rows = Math.max(1, Math.min(12, +e.target.value || 6)); })} /></F>
+            <F label={t('Kind of puzzle', '谜题类型', 'Bulmaca türü')}>
+              <select id="wk-m-wmode" value={d.words.mode ?? 'guess'} onChange={e => up(x => {
+                const m = e.target.value as NonNullable<GameDef['words']>['mode'];
+                x.words!.mode = m;
+                // Each kind starts with rules that make it playable; they can be changed in Blocks.
+                const get = (name: string) => ({ op: 'get', name }), guessE = get('guess');
+                if (m === 'cross') { x.words!.length = 9; x.words!.size ??= 13; x.words!.count ??= 12; x.rules = [{ on: 'start', do: [{ op: 'buildPuzzle' }] }, { on: 'after', when: { op: 'crossDone' }, do: [{ op: 'win' }] }]; }
+                else if (m === 'search') { x.words!.length = 10; x.words!.size ??= 10; x.words!.count ??= 8; x.words!.diagonal ??= true; x.rules = [{ on: 'start', do: [{ op: 'buildPuzzle' }] }, { on: 'word', when: { op: 'placed', text: guessE }, do: [{ op: 'markFound', text: guessE }] }, { on: 'after', when: { op: 'eq', a: { op: 'found' }, b: { op: 'total' } }, do: [{ op: 'win' }] }]; }
+                else if (m === 'anagram') { x.words!.length = 0; x.rules = [{ on: 'start', do: [{ op: 'pickWord' }] }, { on: 'word', when: { op: 'eq', a: guessE, b: { op: 'secret' } }, do: [{ op: 'win' }] }]; }
+                else { x.words!.length = 5; x.rules = [{ on: 'start', do: [{ op: 'pickWord' }] }, { on: 'word', when: { op: 'eq', a: { op: 'len', text: guessE }, b: { op: 'wordLen' } }, do: [{ op: 'addGuess', text: guessE }, { op: 'if', test: { op: 'eq', a: guessE, b: { op: 'secret' } }, then: [{ op: 'win' }], else: [{ op: 'if', test: { op: 'ge', a: { op: 'guesses' }, b: 6 }, then: [{ op: 'lose' }] }] }] }]; }
+              })}>
+                <option value="guess">{t('Guess the word (Wordle)', '猜单词（Wordle）', 'Kelimeyi tahmin et (Wordle)')}</option>
+                <option value="cross">{t('Crossword', '填字游戏', 'Kare bulmaca')}</option>
+                <option value="search">{t('Word search', '找词游戏', 'Kelime avı')}</option>
+                <option value="anagram">{t('Anagram', '字母重组', 'Anagram')}</option>
+              </select>
+            </F>
+            {(d.words.mode ?? 'guess') === 'guess' && <>
+              <F label={t('Letters per word', '单词长度', 'Harf sayısı')}><input id="wk-m-wlen" type="number" min={2} max={12} value={d.words.length} onChange={e => up(x => { x.words!.length = Math.max(2, Math.min(12, +e.target.value || 5)); })} /></F>
+              <F label={t('Guess rows', '猜测行数', 'Tahmin satırı')}><input type="number" min={1} max={12} value={d.words.rows ?? 6} onChange={e => up(x => { x.words!.rows = Math.max(1, Math.min(12, +e.target.value || 6)); })} /></F>
+            </>}
+            {d.words.mode === 'anagram' && <F label={t('Letters (0: any)', '字母数（0为不限）', 'Harf sayısı (0: hepsi)')}><input id="wk-m-wlen" type="number" min={0} max={12} value={d.words.length} onChange={e => up(x => { x.words!.length = Math.max(0, Math.min(12, +e.target.value || 0)); })} /></F>}
+            {(d.words.mode === 'cross' || d.words.mode === 'search') && <>
+              <F label={t('Grid size', '格子大小', 'Izgara boyutu')}><input id="wk-m-wsize" type="number" min={5} max={20} value={d.words.size ?? 10} onChange={e => up(x => { x.words!.size = Math.max(5, Math.min(20, +e.target.value || 10)); })} /></F>
+              <F label={t('Words per puzzle', '每题词数', 'Bulmaca başına kelime')}><input id="wk-m-wcount" type="number" min={2} max={30} value={d.words.count ?? 8} onChange={e => up(x => { x.words!.count = Math.max(2, Math.min(30, +e.target.value || 8)); })} /></F>
+            </>}
+            {d.words.mode === 'search' && <>
+              <label className="check"><input type="checkbox" checked={!!d.words.diagonal} onChange={e => up(x => { x.words!.diagonal = e.target.checked; })} /> {t('Diagonal', '斜向', 'Çapraz')}</label>
+              <label className="check"><input type="checkbox" checked={!!d.words.backwards} onChange={e => up(x => { x.words!.backwards = e.target.checked; })} /> {t('Backwards', '倒序', 'Ters')}</label>
+            </>}
             <F label={t('Language of the words', '单词语言', 'Kelimelerin dili')}>
               <select value={d.words.locale ?? 'en'} onChange={e => up(x => { x.words!.locale = e.target.value; })}>
                 <option value="tr">Türkçe (i → İ)</option><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option>
@@ -251,6 +279,20 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
             <textarea id="wk-m-list" rows={5} defaultValue={d.words.list.join(' ')} key={d.words.list.join(' ')} placeholder={t('Words separated by spaces, commas or new lines', '用空格、逗号或换行分隔', 'Boşluk, virgül ya da satırla ayrılmış kelimeler')}
               onBlur={e => up(x => { x.words!.list = [...new Set(e.target.value.split(/[\s,;]+/).map(w => w.trim().toLocaleLowerCase(x.words!.locale || 'en')).filter(Boolean))]; })} />
           </F>
+          {(d.words.mode === 'cross' || d.words.mode === 'anagram') && (
+            <F label={t(`Clues, one per line as “word: clue” (${Object.keys(d.words.clues ?? {}).length})`, `提示，每行一个，格式为“单词: 提示”（${Object.keys(d.words.clues ?? {}).length}）`, `Tanımlar, her satıra “kelime: tanım” (${Object.keys(d.words.clues ?? {}).length})`)} wide>
+              <textarea id="wk-m-clues" rows={6} defaultValue={Object.entries(d.words.clues ?? {}).map(([k, v]) => `${k}: ${v}`).join('\n')} key={JSON.stringify(d.words.clues ?? {})}
+                placeholder={t('apple: Fruit said to have fallen on Newton', 'apple: 据说砸到牛顿的水果', 'elma: Newton’un başına düştüğü anlatılan meyve')}
+                onBlur={e => up(x => {
+                  const cl: Record<string, string> = {};
+                  for (const line of e.target.value.split('\n')) { const i = line.indexOf(':'); if (i > 0) cl[line.slice(0, i).trim().toLocaleLowerCase(x.words!.locale || 'en')] = line.slice(i + 1).trim(); }
+                  x.words!.clues = cl;
+                  // Clued words join the list.
+                  x.words!.list = [...new Set([...x.words!.list, ...Object.keys(cl)])];
+                })} />
+            </F>
+          )}
+          {d.words.groups && <p className="muted small">{t(`This game uses ${d.words.groups.length} themes; each puzzle picks one. Themes are edited in JSON.`, `本游戏使用 ${d.words.groups.length} 个主题，每题随机选一个。主题在JSON中编辑。`, `Bu oyunda ${d.words.groups.length} tema var; her bulmaca birini seçer. Temalar JSON’da düzenlenir.`)}</p>}
           <p className="muted small">{t('A secret is drawn from the list with “pick a secret word”; guesses are typed on the keyboard and marked green, yellow or grey with “mark the guess”. Rules can also require that a guess be in the list.', '用“选一个谜底单词”从词表中抽出谜底；猜测用键盘输入，用“标出猜测”标成绿、黄或灰。规则还可以要求猜测必须在词表中。', '“Gizli bir kelime seç” bloğu listeden bir kelime çeker; tahminler klavyeyle yazılır ve “tahmini işaretle” ile yeşil, sarı ya da gri işaretlenir. Kurallar tahminin listede olmasını da şart koşabilir.')}</p>
         </> : <p className="muted small">{t('Turn this on for Wordle-style puzzles: a word list, a keyboard and coloured guesses.', '开启后可做 Wordle 式谜题：词表、键盘和带颜色的猜测。', 'Wordle tarzı bulmacalar için aç: kelime listesi, klavye ve renkli tahminler.')}</p>}
       </Sec>

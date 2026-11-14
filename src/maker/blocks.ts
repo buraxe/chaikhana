@@ -29,8 +29,8 @@ put(EXPR_CAT, 'board', 'empty piece owner height value type prop row col cellAt 
 put(EXPR_CAT, 'dirs', 'step dirs adjacent flank run around anyDir sumDirs');
 put(EXPR_CAT, 'cards', 'die sum rolled field top size');
 put(EXPR_CAT, 'players', 'me next players var');
-put(EXPR_CAT, 'words', 'len secret inList guesses hits wordLen');
-put(ACT_CAT, 'words', 'pickWord addGuess');
+put(EXPR_CAT, 'words', 'len secret inList guesses hits wordLen placed found total crossDone reveals');
+put(ACT_CAT, 'words', 'pickWord addGuess buildPuzzle markFound');
 put(ACT_CAT, 'pieces', 'place remove move setOwner');
 put(ACT_CAT, 'flow', 'if repeat while forCells forDirs forPlayers let');
 put(ACT_CAT, 'deal', 'fill shuffle deal moveCard roll');

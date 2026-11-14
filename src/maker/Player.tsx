@@ -16,14 +16,17 @@ const LEVEL_NAMES: Record<string, [string, string]> = { Beginner: ['新手', 'Ac
  * Plays any workshop game: seats for people or the computer, undo, a pass-the-device screen
  * for hidden hands, hints for puzzles. With `testing`, also the rule log and "why not" panel.
  */
-export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
-  def: GameDef; testing?: boolean; onOpenRule?: (rule: number, paths: string[]) => void; side?: ReactNode; onFinish?: (st: GState) => void;
+export function Player({ def, testing = false, onOpenRule, side, onFinish, top }: {
+  def: GameDef; testing?: boolean; onOpenRule?: (rule: number, paths: string[]) => void; side?: ReactNode; onFinish?: (st: GState, ms: number) => void; top?: ReactNode;
 }) {
   const t = useT(), lang = useLang();
   const [count, setCount] = useState(def.players.max);
   const [seats, setSeats] = useState<Seat[]>(['h', 2, 2, 2, 2, 2]);
   // The state is kept with the definition it belongs to, so a switch never pairs a board with the wrong game.
-  const [game, setGame] = useState<{ def: GameDef; st: GState; hist: GState[] } | null>(null);
+  const [game, setGameState] = useState<{ def: GameDef; st: GState; hist: GState[] } | null>(null);
+  // Several inputs can arrive in one moment (revealing a whole word): each must build on the one before.
+  const gameRef = useRef(game);
+  const setGame = (g: { def: GameDef; st: GState; hist: GState[] } | null) => { gameRef.current = g; setGameState(g); };
   const st = game && game.def === def ? game.st : null;
   const [seenBy, setSeenBy] = useState<number | null>(null);
   const [watch, setWatch] = useState(() => loadJSON<boolean>('gp.workshop.watch', false));
@@ -32,7 +35,7 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
   const [why, setWhy] = useState<Why | null>(null);
   const [hint, setHint] = useState<Input | null>(null);
   const [check, setCheck] = useState<Solved | null>(null);
-  const logId = useRef(0);
+  const logId = useRef(0), startedAt = useRef(Date.now());
   const watching = testing && watch;
   useEffect(() => { saveJSON('gp.workshop.watch', watch); }, [watch]);
 
@@ -40,6 +43,7 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
     setCount(def.players.max);
     setGame({ def, st: newGame(def, def.players.max), hist: [] });
     setLog([]); setWhy(null); setHint(null); setCheck(null); setSeenBy(null);
+    startedAt.current = Date.now();
   }, [def]);
 
   const seatOf = (p: number): Seat => (def.players.max === 1 ? 'h' : seats[p]);
@@ -51,9 +55,10 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
   const puzzle = def.kind === 'puzzle' || def.players.max === 1;
 
   const play = (i: Input) => {
+    const game = gameRef.current;
     if (!game || game.def !== def) return;
     const s = game.st, { state: n, trace } = applyTraced(def, s, i);
-    if (n.over && !s.over) { sfx(n.over.winner >= 0 && seatOf(n.over.winner) === 'h' ? 'win' : n.over.winner < 0 ? 'draw' : 'lose'); onFinish?.(n); }
+    if (n.over && !s.over) { sfx(n.over.winner >= 0 && seatOf(n.over.winner) === 'h' ? 'win' : n.over.winner < 0 ? 'draw' : 'lose'); onFinish?.(n, Date.now() - startedAt.current); }
     else sfx(i.k === 'roll' ? 'dice' : i.k === 'card' || i.k === 'zone' ? 'card' : i.k === 'word' ? 'tile' : 'stone', 0.6);
     setGame({ def, st: n, hist: [...game.hist.slice(-200), s] });
     setWhy(null); setHint(null);
@@ -76,7 +81,7 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
     return () => clearTimeout(id);
   }, [st, aiTurn, hold]); // eslint-disable-line
 
-  const restart = () => { setSeenBy(null); setHint(null); setCheck(null); setLog([]); setGame({ def, st: newGame(def, count), hist: [] }); };
+  const restart = () => { startedAt.current = Date.now(); setSeenBy(null); setHint(null); setCheck(null); setLog([]); setGame({ def, st: newGame(def, count), hist: [] }); };
   const explain = (i: Input) => { if (watching && st) setWhy({ input: i, items: explainInput(def, st, i) }); };
   const askHint = () => {
     if (!st) return;
@@ -91,7 +96,7 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
     : st.over ? (puzzle
       ? (st.over.winner === 0 ? t('Solved!', '完成！', 'Çözüldü!') : st.over.stuck ? t('No moves left.', '无路可走了。', 'Hamle kalmadı.') : t('Not solved.', '未完成。', 'Çözülemedi.'))
       : st.over.winner >= 0 ? t(`${playerName(def, st.over.winner, 'en')} wins!`, `${playerName(def, st.over.winner, 'zh')}获胜！`, `${playerName(def, st.over.winner, 'tr')} kazandı!`) : t('Draw.', '和棋。', 'Berabere.'))
-    : st.players === 1 ? (def.words ? t(`Guess ${(st.words?.guesses.length ?? 0) + 1} of ${def.words.rows ?? 6}`, `第 ${(st.words?.guesses.length ?? 0) + 1} 次猜测，共 ${def.words.rows ?? 6} 次`, `${def.words.rows ?? 6} tahminden ${(st.words?.guesses.length ?? 0) + 1}.`) : t('Your move.', '请走。', 'Sıra sende.'))
+    : st.players === 1 ? (def.words && (def.words.mode ?? 'guess') === 'guess' ? t(`Guess ${(st.words?.guesses.length ?? 0) + 1} of ${def.words.rows ?? 6}`, `第 ${(st.words?.guesses.length ?? 0) + 1} 次猜测，共 ${def.words.rows ?? 6} 次`, `${def.words.rows ?? 6} tahminden ${(st.words?.guesses.length ?? 0) + 1}.`) : t('Your move.', '请走。', 'Sıra sende.'))
     : aiTurn ? t(`${playerName(def, st.turn, 'en')} (computer) is thinking…`, `${playerName(def, st.turn, 'zh')}（电脑）思考中…`, `${playerName(def, st.turn, 'tr')} (bilgisayar) düşünüyor…`)
     : t(`${playerName(def, st.turn, 'en')} to move`, `轮到${playerName(def, st.turn, 'zh')}`, `Sıra: ${playerName(def, st.turn, 'tr')}`);
   const checkText = !check ? '' : check.status === 'solved'
@@ -103,6 +108,7 @@ export function Player({ def, testing = false, onOpenRule, side, onFinish }: {
   return (
     <div className="play">
       <div className="play-main">
+        {top}
         <div className="statline"><span role="status" aria-live="polite">{st.players > 1 && !st.over && <i className="wk-dot" style={{ background: playerColor(def, st.turn) }} />}{status}</span>
           {st.msg && <span className="wk-msg">{txt(st.msg, lang)}</span>}</div>
         <GameView def={def} st={st} viewer={passing ? -1 : viewer} canAct={!aiTurn && !passing} onInput={play} onExplain={watching ? explain : undefined} hint={hint} />

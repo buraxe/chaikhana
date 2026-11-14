@@ -45,13 +45,24 @@ interpreted by the engine, so a game from a stranger is safe to open.
   "dice":   { "count": 2, "faces": 6 },
   "vars":   { "score": { "name": "Score", "per": "player", "init": 0, "show": true } },
   "buttons":{ "pass": { "name": "Pass" } },
-  "words":  { "list": ["kalem", "…"], "length": 5, "rows": 6, "locale": "tr", "alphabet": "ERTYUIOPĞÜ ASDFGHJKLŞİ ZCVBNMÖÇ" },
+  "words":  { "mode": "guess", "list": ["kalem", "…"], "length": 5, "rows": 6, "locale": "tr", "alphabet": "ERTYUIOPĞÜ ASDFGHJKLŞİ ZCVBNMÖÇ" },
   "rules": [
     { "on": "click", "when": { "op": "empty", "cell": { "op": "get", "name": "cell" } },
       "do": [ { "op": "place", "piece": "stone", "cell": { "op": "get", "name": "cell" } } ] }
   ]
 }
 ```
+
+**Word puzzles** come in four kinds (`words.mode`), each with its own generator and screen:
+
+| mode | what it is | key blocks |
+| --- | --- | --- |
+| `guess` | Wordle: a secret word, guesses marked green / yellow / grey | `pickWord`, `addGuess`, `secret`, `guesses`, `inList` |
+| `anagram` | unscramble the secret; `clues` give a hint | `pickWord`, `secret` |
+| `search` | words hidden in a grid (`size`, `count`, `diagonal`, `backwards`, optional themed `groups`) | `buildPuzzle`, `placed`, `markFound`, `found`, `total` |
+| `cross` | a crossword built from the clued words (`clues`, `size`, `count`); typing needs no rule | `buildPuzzle`, `crossDone`, `reveals` |
+
+`buildPuzzle` draws a new puzzle from the list every game. The generators are in `src/maker/wordgen.ts`. The site's own word games (Crossword, Word Search, Word Guess, Anagrams in `src/games/words/`) are workshop definitions built from the banks next to them.
 
 **Rules** are "when this happens, if that holds, do these". Events: `start`, `turn`, `click`,
 `move`, `roll`, `card`, `zone`, `button`, `enter` (a piece lands on a cell), `after` (every

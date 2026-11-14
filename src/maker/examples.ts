@@ -213,7 +213,7 @@ export const LIGHTS: GameDef = {
 };
 
 const guess = get('guess');
-const wordRules = (rows: number, mustBeWord: boolean) => [
+export const wordRules = (rows: number, mustBeWord: boolean) => [
   { on: 'start' as const, do: [o('pickWord')] },
   { on: 'word' as const, name: { en: 'Mark the guess', zh: '标出猜测', tr: 'Tahmini işaretle' },
     when: mustBeWord ? and(eq(o('len', { text: guess }), o('wordLen')), o('inList', { text: guess })) : eq(o('len', { text: guess }), o('wordLen')),
@@ -222,8 +222,8 @@ const wordRules = (rows: number, mustBeWord: boolean) => [
       iff(eq(guess, o('secret')), [o('win')], [iff(o('ge', { a: o('guesses'), b: rows }), [o('lose')])]),
     ] },
 ];
-const TR_WORDS = 'kalem kitap araba deniz güneş bulut çiçek elmas kavun kiraz armut limon biber soğan masal şarkı orman nehir köpek tavuk horoz koyun aslan karga serçe balık yunus martı çorba pilav ekmek tatlı şeker bahar gülüş sevgi hayat dünya insan çocuk bebek sınıf kağıt silgi dolap kapak perde yatak saksı tabak kaşık çatal bıçak kahve şehir köprü sokak meyve sebze mısır havuç incir kayık vapur taksi düdük zurna davul gitar keman roman resim fırça tuval sahne zaman hafta aylık sabah öğlen akşam karlı sisli sıcak soğuk serin temiz kirli güzel büyük küçük geniş derin alçak hızlı yavaş mutlu üzgün sakin cesur yeşil beyaz siyah'.split(' ');
-const EN_WORDS = 'apple beach bread chair cloud dance dream earth field flame fruit ghost grape green heart horse house juice knife laugh lemon light magic money mouse music night ocean paint party peace piano plant queen quiet river robot salad sheep shirt smile snake sound space spoon sport stone storm sugar sweet table tiger toast train truth water whale world young zebra brave brick candy chess clock crown eagle flour glass honey lucky metal novel onion pearl pizza radio scarf shell skirt south north tooth tower uncle voice wheel woman youth bloom cabin coral frost globe jelly lunar maple olive pupil solar'.split(' ');
+export const TR_WORDS = 'kalem kitap araba deniz güneş bulut çiçek elmas kavun kiraz armut limon biber soğan masal şarkı orman nehir köpek tavuk horoz koyun aslan karga serçe balık yunus martı çorba pilav ekmek tatlı şeker bahar gülüş sevgi hayat dünya insan çocuk bebek sınıf kağıt silgi dolap kapak perde yatak saksı tabak kaşık çatal bıçak kahve şehir köprü sokak meyve sebze mısır havuç incir kayık vapur taksi düdük zurna davul gitar keman roman resim fırça tuval sahne zaman hafta aylık sabah öğlen akşam karlı sisli sıcak soğuk serin temiz kirli güzel büyük küçük geniş derin alçak hızlı yavaş mutlu üzgün sakin cesur yeşil beyaz siyah'.split(' ');
+export const EN_WORDS = 'apple beach bread chair cloud dance dream earth field flame fruit ghost grape green heart horse house juice knife laugh lemon light magic money mouse music night ocean paint party peace piano plant queen quiet river robot salad sheep shirt smile snake sound space spoon sport stone storm sugar sweet table tiger toast train truth water whale world young zebra brave brick candy chess clock crown eagle flour glass honey lucky metal novel onion pearl pizza radio scarf shell skirt south north tooth tower uncle voice wheel woman youth bloom cabin coral frost globe jelly lunar maple olive pupil solar'.split(' ');
 
 export const WORD_TR: GameDef = {
   format: 'chaikhana-game', version: 1, id: 'ex-word-tr', kind: 'puzzle',
@@ -242,4 +242,38 @@ export const WORD_EN: GameDef = {
   rules: wordRules(6, true),
 };
 
-export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER, REVERSI, HEX, CARD_DUEL, LIGHTS, WORD_TR, WORD_EN];
+const MINI_CLUES: Record<string, string> = {
+  çay: 'İnce belli bardakta içilir', simit: 'Susamlı halka', tavla: 'Zarla oynanan kahvehane oyunu', okey: 'Taşlarla oynanan dört kişilik oyun',
+  kahve: 'Falına bakılan içecek', lokum: 'Turkish delight', vapur: 'İki yaka arasında yolcu taşır', martı: 'Deniz kıyısının kuşu',
+  ankara: 'Başkent', boğaz: 'İstanbul’u ikiye ayıran su yolu', kule: 'Galata’da yükselen yapı', çarşı: 'Kapalı olanı ünlüdür',
+  bağlama: 'Telli halk çalgısı', ney: 'Kamıştan üflemeli çalgı', masal: 'Bir varmış bir yokmuş', lale: 'Bir dönemin adını veren çiçek',
+  dolma: 'İçi pirinçle doldurulan yemek', ayran: 'Yoğurtlu içecek', kebap: 'Şişte ya da ızgarada pişen et', pide: 'Karadeniz’in ünlü fırın yemeği',
+};
+export const MINI_CROSS: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-cross', kind: 'puzzle',
+  name: { en: 'Mini crossword (Turkish)', zh: '迷你填字（土耳其语）', tr: 'Mini Bulmaca' },
+  about: { en: 'A crossword built anew every game from twenty clued words. Change the clues under Materials to make your own.', zh: '每局都从二十个带提示的单词重新生成的填字游戏。在“材料”中修改提示，做你自己的版本。', tr: 'Her oyunda yirmi tanımlı kelimeden yeniden üretilen bir kare bulmaca. Malzemeler’den tanımları değiştirip kendi bulmacanı yap.' },
+  players: { min: 1, max: 1 },
+  words: { mode: 'cross', list: Object.keys(MINI_CLUES), clues: MINI_CLUES, length: 9, size: 11, count: 9, locale: 'tr', alphabet: 'ERTYUIOPĞÜ ASDFGHJKLŞİ ZCVBNMÖÇ' },
+  rules: [
+    { on: 'start', do: [o('buildPuzzle')] },
+    { on: 'after', name: { en: 'Every letter right', zh: '全部正确', tr: 'Bütün harfler doğru' }, when: o('crossDone'), do: [o('win')] },
+  ],
+};
+export const MINI_SEARCH: GameDef = {
+  format: 'chaikhana-game', version: 1, id: 'ex-search', kind: 'puzzle',
+  name: { en: 'Word search', zh: '找词游戏', tr: 'Kelime Avı' },
+  about: { en: 'Words hidden in a grid of letters, across, down and diagonally. Each game picks one of two themes and hides the words anew.', zh: '词语藏在字母格中，横、竖、斜都有。每局从两个主题中选一个，重新藏词。', tr: 'Harf tablosuna yatay, dikey ve çapraz gizlenmiş kelimeler. Her oyun iki temadan birini seçer ve kelimeleri yeniden gizler.' },
+  players: { min: 1, max: 1 },
+  words: { mode: 'search', list: [], length: 9, size: 9, count: 7, diagonal: true, locale: 'tr', groups: [
+    { name: { en: 'Coffeehouse', zh: '茶馆', tr: 'Kahvehane' }, words: 'çay kahve tavla okey zar pul domino kart sıra'.split(' ') },
+    { name: { en: 'Sea', zh: '大海', tr: 'Deniz' }, words: 'dalga martı gemi kayık balık kum ada liman yelken'.split(' ') },
+  ] },
+  rules: [
+    { on: 'start', do: [o('buildPuzzle')] },
+    { on: 'word', name: { en: 'Found one', zh: '找到一个', tr: 'Birini buldu' }, when: o('placed', { text: get('guess') }), do: [o('markFound', { text: get('guess') })] },
+    { on: 'after', name: { en: 'All found', zh: '全部找到', tr: 'Hepsi bulundu' }, when: eq(o('found'), o('total')), do: [o('win')] },
+  ],
+};
+
+export const EXAMPLES: GameDef[] = [TICTACTOE, CONNECT4, SNAKES_LADDERS, PEG, COLOR_NUMBER, REVERSI, HEX, CARD_DUEL, LIGHTS, WORD_TR, WORD_EN, MINI_CROSS, MINI_SEARCH];

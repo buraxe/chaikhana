@@ -497,6 +497,38 @@ const ART: Record<string, JSX.Element> = {
       {[1, 3, 5, 7].map((n, r) => range(n).map(i => <g key={r + '-' + i}><path className={'k w2' + (r === 3 && i > 4 ? ' sh' : '')} d={`M${32 - (n - 1) * 3.5 + i * 7} ${12 + r * 12}v9`} /><circle className="r" cx={32 - (n - 1) * 3.5 + i * 7} cy={11 + r * 12} r="1.6" /></g>))}
     </>
   ),
+  crossword: (
+    <>
+      {range(5).map(r => range(5).map(c => {
+        const black = [[0, 3], [1, 1], [2, 4], [3, 0], [3, 2], [4, 3]].some(([a, b]) => a === r && b === c);
+        return <rect key={r * 5 + c} className={black ? 'f' : 'k p w05'} x={7 + c * 10} y={7 + r * 10} width="10" height="10" />;
+      }))}
+      <text className="t s" x="8.5" y="12">1</text><text className="t s" x="28.5" y="12">2</text>
+      <text className="t b r-t" x="12" y="25" textAnchor="middle">A</text><text className="t b" x="32" y="25" textAnchor="middle">Y</text>
+    </>
+  ),
+  'word-search': (
+    <>
+      {['KELIM', 'ADENZ', 'ROYUN', 'TAVLA', 'SIMIT'].map((row, r) => [...row].map((ch, c) => <text key={r * 5 + c} className="t s" x={12 + c * 10} y={15 + r * 10} textAnchor="middle">{ch}</text>))}
+      <rect className="r-s w15" x="6" y="37" width="52" height="11" rx="5.5" fill="none" />
+      <path className="r-s w15" d="M8 9l46 40" strokeDasharray="2 2" />
+    </>
+  ),
+  wordle: (
+    <>
+      {range(3).map(r => range(5).map(c => {
+        const m = [['x', 'y', 'x', 'g', 'x'], ['g', 'x', 'y', 'g', 'x'], ['g', 'g', 'g', 'g', 'g']][r][c];
+        return <rect key={r * 5 + c} className={m === 'g' ? 'f' : m === 'y' ? 'r' : 'k p w05'} x={6 + c * 10.6} y={14 + r * 12} width="9" height="10" rx="1.5" />;
+      }))}
+    </>
+  ),
+  anagram: (
+    <>
+      {['M', 'R', 'A', 'G', 'A', 'N'].map((ch, i) => <g key={i}><rect className="k p" x={4 + i * 9.6} y={i % 2 ? 12 : 8} width="8.5" height="11" rx="1.5" /><text className="t s" x={8.25 + i * 9.6} y={(i % 2 ? 12 : 8) + 8.5} textAnchor="middle">{ch}</text></g>)}
+      <path className="k w15" d="M20 32c4 6 20 6 24 0" /><path className="k w15" d="M40 30l4 2-1 4" />
+      {['A', 'N', 'A', 'G', 'R', 'A', 'M'].slice(0, 6).map((ch, i) => <g key={'b' + i}><rect className={'k ' + (i < 3 ? 'sh' : 'p')} x={4 + i * 9.6} y="42" width="8.5" height="11" rx="1.5" /><text className="t s" x={8.25 + i * 9.6} y="50.5" textAnchor="middle">{ch}</text></g>)}
+    </>
+  ),
   'minesweeper-3d': (
     <>
       <path className="k w15" d="M32 8L54 20.5V45.5L32 58L10 45.5V20.5Z" /><path className="k w15" d="M10 20.5L32 33L54 20.5M32 33V58" />

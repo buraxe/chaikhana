@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useT } from '../core/i18n';
 import { accepts, compile, upper, type GameDef, type GState, type Input } from './engine';
 
@@ -63,6 +63,59 @@ export function WordBoard({ def, st, canAct, onInput, onExplain }: { def: GameDe
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/** Anagrams: the secret's letters as tiles; tap them (or type) to spell the word. The clue helps. */
+export function AnagramBoard({ def, st, canAct, onInput }: { def: GameDef; st: GState; canAct: boolean; onInput: (i: Input) => void }) {
+  const t = useT(), w = st.words!, letters = [...(w.scramble ?? '')];
+  const [order, setOrder] = useState<number[]>(() => letters.map((_, i) => i));
+  const [used, setUsed] = useState<number[]>([]);
+  const [msg, setMsg] = useState('');
+  useEffect(() => { setOrder(letters.map((_, i) => i)); setUsed([]); setMsg(''); }, [w.scramble, w.secret]); // eslint-disable-line
+  const clue = useMemo(() => {
+    const cl = def.words?.clues ?? {};
+    for (const [k, v] of Object.entries(cl)) if (upper(def, k.trim()) === w.secret) return v;
+    return '';
+  }, [def, w.secret]);
+  const typed = used.map(i => letters[i]).join('');
+  const add = (i: number) => { if (!canAct || used.includes(i)) return; setMsg(''); setUsed(u => [...u, i]); };
+  const back = () => { setMsg(''); setUsed(u => u.slice(0, -1)); };
+  const enter = () => {
+    if (used.length !== letters.length) { setMsg(t('Use every letter.', '要用上所有字母。', 'Bütün harfleri kullan.')); return; }
+    const inp: Input = { k: 'word', text: typed };
+    if (!accepts(def, st, inp)) { setMsg(t('Not that one: try again.', '不对，再试试。', 'Olmadı, yeniden dene.')); setUsed([]); return; }
+    onInput(inp);
+  };
+  const mix = () => setOrder(o => { const a = o.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; });
+  useEffect(() => {
+    if (!canAct) return;
+    const on = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const el = e.target as HTMLElement;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')) return;
+      if (e.key === 'Enter') { e.preventDefault(); enter(); }
+      else if (e.key === 'Backspace') { e.preventDefault(); back(); }
+      else if (e.key.length === 1) { const ch = upper(def, e.key), i = order.find(k => letters[k] === ch && !used.includes(k)); if (i !== undefined) { e.preventDefault(); add(i); } }
+    };
+    window.addEventListener('keydown', on);
+    return () => window.removeEventListener('keydown', on);
+  });
+  return (
+    <div className="wk-words wk-anagram">
+      {clue && <p className="wk-clue">💡 {clue}</p>}
+      <div className="wk-wrow" style={{ ['--len' as string]: letters.length }}>{letters.map((_, k) => <span key={k} className={'wk-wcell' + (typed[k] ? ' typed' : '')}>{[...typed][k] ?? ''}</span>)}</div>
+      {msg && <p className="wk-aim" role="status">{msg}</p>}
+      {!st.over && <>
+        <div className="wk-tiles">{order.map(i => <button key={i} type="button" className="wk-tile" disabled={!canAct || used.includes(i)} onClick={() => add(i)}>{letters[i]}</button>)}</div>
+        <div className="tools">
+          <button type="button" className="btn sm" id="wk-mix" onClick={mix}>⇄ {t('Shuffle', '打乱', 'Karıştır')}</button>
+          <button type="button" className="btn sm" id="wk-aback" onClick={back} disabled={!used.length}>⌫</button>
+          <button type="button" className="btn sm primary" id="wk-aenter" onClick={enter} disabled={!canAct}>{t('Enter', '确定', 'Gir')}</button>
+        </div>
+      </>}
+      {st.over && <p className="wk-reveal">{t('Last word', '最后一个词', 'Son kelime')}: <b>{w.secret}</b></p>}
     </div>
   );
 }

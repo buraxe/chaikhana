@@ -2,7 +2,7 @@ import type { Category, GameMeta } from './game';
 import type { Lang } from './store';
 
 /** Games that are built and playable. Everything else in the catalogue is roadmap. */
-export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'mahjong', 'sifeng', 'kenken', 'hashi', 'sokoban', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'connect-four', 'tictactoe', 'hanoi', 'lights-out', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'rubik', 'reversi', 'nonogram', 'mastermind', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'battleship', 'qubic', 'football-70', 'minesweeper-3d', 'checkers', 'chinese-checkers', 'dominoes', 'ultimate-ttt', 'nim']);
+export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'mahjong', 'sifeng', 'kenken', 'hashi', 'sokoban', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'connect-four', 'tictactoe', 'hanoi', 'lights-out', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'rubik', 'reversi', 'nonogram', 'mastermind', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'battleship', 'qubic', 'football-70', 'minesweeper-3d', 'checkers', 'chinese-checkers', 'dominoes', 'ultimate-ttt', 'nim', 'crossword', 'word-search', 'wordle', 'anagram']);
 
 type Row = [id: string, name: string, zh: string, cat: Category, minP: number, maxP: number,
   minutes: number, depth: 1 | 2 | 3, trad: 0 | 1, dim: 2 | 3, phase: number, tr: string];
@@ -16,6 +16,10 @@ const ROWS: Row[] = [
   ['kenken', 'KenKen', '聪明格', 'logic', 1, 1, 15, 2, 0, 2, 2, 'KenKen'],
   ['hashi', 'Hashi (Bridges)', '数桥', 'logic', 1, 1, 15, 2, 0, 2, 2, 'Hashi (Köprüler)'],
   ['hidato', 'Hidato', 'Hidato', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Hidato'],
+  ['crossword', 'Crossword', '填字游戏', 'logic', 1, 1, 15, 2, 0, 2, 2, 'Bulmaca'],
+  ['word-search', 'Word Search', '找词游戏', 'logic', 1, 1, 10, 1, 0, 2, 2, 'Kelime Avı'],
+  ['wordle', 'Word Guess', '猜词', 'logic', 1, 1, 5, 1, 0, 2, 2, 'Kelime Tahmini'],
+  ['anagram', 'Anagrams', '字母重组', 'logic', 1, 1, 10, 1, 0, 2, 2, 'Anagram'],
   ['futoshiki', 'Futoshiki', '不等式数独', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Futoshiki'],
   ['slitherlink', 'Slitherlink', '数回', 'logic', 1, 1, 20, 3, 0, 2, 2, 'Slitherlink'],
   ['sokoban', 'Sokoban', '推箱子', 'logic', 1, 1, 10, 2, 0, 2, 2, 'Sokoban'],

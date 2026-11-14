@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { useLang, useT } from '../core/i18n';
-import { WordBoard } from './WordBoard';
+import { CrossBoard } from './CrossBoard';
+import { SearchBoard } from './SearchBoard';
+import { AnagramBoard, WordBoard } from './WordBoard';
 import { canSee, cardsOf, cellPropsOf, cellTypeOf, compile, isHole, legal, txt, zoneOfKey, type GameDef, type GState, type Input, type PieceDef } from './engine';
 
 const DEFAULT_COLORS = ['#c0392b', '#1f4e9c', '#1e7a4a', '#e0a020', '#7b3fa0', '#1a8a8a'];
@@ -150,7 +152,10 @@ export function GameView({ def, st, viewer, canAct, onInput, onExplain, hint }: 
   const buttons = Object.entries(def.buttons ?? {}).filter(([id]) => moves.some(m => m.k === 'button' && m.id === id));
   return (
     <div className="wk-view">
-      {def.words && <WordBoard def={def} st={st} canAct={canAct} onInput={onInput} onExplain={onExplain} />}
+      {def.words && st.words && (def.words.mode === 'cross' ? <CrossBoard def={def} st={st} canAct={canAct} onInput={onInput} />
+        : def.words.mode === 'search' ? <SearchBoard def={def} st={st} canAct={canAct} onInput={onInput} />
+        : def.words.mode === 'anagram' ? <AnagramBoard def={def} st={st} canAct={canAct} onInput={onInput} />
+        : <WordBoard def={def} st={st} canAct={canAct} onInput={onInput} onExplain={onExplain} />)}
       {selCard !== null && <p className="wk-aim" role="status">{t('Now choose a cell for the card.', '现在为这张牌选一个格子。', 'Şimdi kart için bir kare seç.')}</p>}
       {board}
       {(def.dice || buttons.length > 0) && (

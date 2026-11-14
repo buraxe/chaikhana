@@ -104,6 +104,11 @@ export const EXPR_TEXT: Record<string, T3> = {
   guesses: ['guesses made', '已猜次数', 'yapılan tahmin'],
   hits: ['letters of %1 in the right place', '%1 中位置正确的字母数', '%1 içinde yeri doğru harf sayısı'],
   wordLen: ['letters per word', '单词长度', 'kelime uzunluğu'],
+  placed: ['%1 is a hidden word not yet found', '%1 是还没找到的隐藏词', '%1 henüz bulunmamış gizli bir kelime'],
+  found: ['words found', '已找到的词数', 'bulunan kelime'],
+  total: ['hidden words', '隐藏词总数', 'gizli kelime sayısı'],
+  crossDone: ['every letter is right', '所有字母都正确', 'bütün harfler doğru'],
+  reveals: ['letters revealed', '已揭开的字母数', 'açılan harf sayısı'],
 };
 
 export const ACT_TEXT: Record<string, T3> = {
@@ -134,6 +139,8 @@ export const ACT_TEXT: Record<string, T3> = {
   say: ['say %1', '显示 %1', 'göster: %1'],
   pickWord: ['pick a secret word', '选一个谜底单词', 'gizli bir kelime seç'],
   addGuess: ['mark the guess %1', '标出猜测 %1', '%1 tahminini işaretle'],
+  buildPuzzle: ['build a new puzzle from the words', '用词表生成新谜题', 'kelimelerden yeni bir bulmaca üret'],
+  markFound: ['mark %1 as found', '把 %1 标为已找到', '%1 kelimesini bulundu işaretle'],
 };
 
 export const LIT_TEXT = {

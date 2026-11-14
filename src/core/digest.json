@@ -625,6 +625,69 @@
     "h": "Yığınlardan nesne alma oyunları çok eskidir; Çin’deki 捡石子 “taş toplama” oyunu sık sık Nim’le ilişkilendirilir."
    }
   },
+  "crossword": {
+   "names": {
+    "en": "Crossword",
+    "zh": "填字游戏",
+    "tr": "Bulmaca",
+    "pinyin": "Tiánzì yóuxì",
+    "trad": "填字遊戲"
+   },
+   "en": {
+    "s": "Fill the white squares with words from their clues; every word crosses others, so each answer helps with the next. A new crossword is built for every game.",
+    "h": "The first crossword was published by Arthur Wynne in the New York World on 21 December 1913, a diamond-shaped \"word-cross\"."
+   },
+   "zh": {
+    "s": "根据提示把单词填进白格；每个词都与别的词交叉，所以一个答案会帮你解出下一个。每局都会生成新的填字游戏。",
+    "h": "第一份填字游戏由亚瑟·温恩于1913年12月21日刊登在《纽约世界报》上，是一个菱形的“字十字”。"
+   },
+   "tr": {
+    "s": "Beyaz karelere tanımlarından yola çıkarak kelimeleri yaz; her kelime başkalarıyla kesiştiği için her cevap bir sonrakine yardım eder. Her oyunda yeni bir bulmaca üretilir.",
+    "h": "İlk çapraz bulmacayı Arthur Wynne 21 Aralık 1913’te New York World gazetesinde baklava biçimli bir “kelime haçı” olarak yayımladı."
+   }
+  },
+  "wordle": {
+   "names": {
+    "en": "Word Guess",
+    "zh": "猜词",
+    "tr": "Kelime Tahmini",
+    "pinyin": "Cāi cí",
+    "trad": "猜詞"
+   },
+   "en": {
+    "s": "Guess the secret five-letter word in six tries. After each guess the letters turn green, yellow or grey to show how close you are.",
+    "h": "Guessing a hidden word letter by letter goes back to the pencil game Jotto (1955) and the TV show Lingo."
+   },
+   "zh": {
+    "s": "在六次之内猜出五个字母的秘密单词。每次猜完，字母会变成绿色、黄色或灰色，告诉你离答案有多近。",
+    "h": "逐个字母猜出隐藏单词的玩法，可以追溯到纸笔游戏Jotto（1955）和电视节目Lingo。"
+   },
+   "tr": {
+    "s": "Gizli beş harfli kelimeyi altı tahminde bul. Her tahminden sonra harfler yeşil, sarı ya da gri olur ve ne kadar yaklaştığını gösterir.",
+    "h": "Gizli bir kelimeyi harf harf tahmin etmek, kâğıt kalem oyunu Jotto’ya (1955) ve Lingo yarışmasına uzanır. 2021’de mühendis Josh Wardle eşi için Wordle’ı yaptı: günde bir kelime ve paylaşılabilen renkli kareler."
+   }
+  },
+  "anagram": {
+   "names": {
+    "en": "Anagrams",
+    "zh": "字母重组",
+    "tr": "Anagram",
+    "pinyin": "Zìmǔ chóngzǔ",
+    "trad": "字母重組"
+   },
+   "en": {
+    "s": "Ten words with their letters shuffled, each with a clue. Put the letters back in order. Every game draws new words.",
+    "h": "Anagrams are as old as writing with letters: the Greek poet Lycophron made them in the third century BC, and in the seventeenth century scientists such as Galileo hid their discoveries in anagrams to claim them before publishing."
+   },
+   "zh": {
+    "s": "十个字母被打乱的单词，每个都有提示。把字母排回正确顺序。每局都会抽取新词。",
+    "h": "字母重组和字母文字一样古老：古希腊诗人吕哥弗隆在公元前三世纪就写过；十七世纪，伽利略等科学家把发现藏在字母重组里，以便在发表之前宣示优先权。"
+   },
+   "tr": {
+    "s": "Harfleri karıştırılmış on kelime, her birinin bir tanımı var. Harfleri doğru sıraya diz. Her oyun yeni kelimeler çeker.",
+    "h": "Anagram, harfli yazı kadar eskidir: Yunan şair Lykophron MÖ üçüncü yüzyılda anagram yapmıştı; on yedinci yüzyılda Galileo gibi bilim insanları buluşlarını yayımlamadan önce sahiplenmek için anagramlara gizlerdi."
+   }
+  },
   "futoshiki": {
    "names": {
     "en": "Futoshiki",

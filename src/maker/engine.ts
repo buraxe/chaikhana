@@ -7,6 +7,8 @@
  * now and the visual block editor later.
  */
 
+import { buildCrossword, buildSearch, lettersOf, scramble, type Placed } from './wordgen';
+
 // ───────────────────────────── Definition ─────────────────────────────
 
 export type Text = string | { en: string; zh?: string; tr?: string };
@@ -63,10 +65,26 @@ export interface CardsDef {
 }
 export interface ZoneDef { name: Text; owner: 'each' | 'shared'; show: 'all' | 'owner' | 'count' | 'top' }
 export interface WordsDef {
+  /**
+   * Which kind of word puzzle: guess (Wordle: a secret word, marked guesses), anagram (unscramble
+   * the secret), search (find hidden words in a grid of letters), cross (a crossword built from
+   * the list and its clues). Default: guess.
+   */
+  mode?: 'guess' | 'anagram' | 'search' | 'cross';
   /** The words the secret is drawn from (and, if a rule asks, the guesses must be among). */
   list: string[];
-  /** Letters per word. */
+  /** Letters per word for guess and anagram (0: any length); the longest word allowed for search and cross. */
   length: number;
+  /** A clue for each word (crossword, and a hint for anagrams). */
+  clues?: Record<string, string>;
+  /** Word search themes: each puzzle uses one group (its name is shown) instead of the whole list. */
+  groups?: { name: Text; words: string[] }[];
+  /** Search and cross: the grid's size, and how many words each puzzle uses. */
+  size?: number;
+  count?: number;
+  /** Search: words may run diagonally, or backwards. */
+  diagonal?: boolean;
+  backwards?: boolean;
   /** How many guess rows to show. */
   rows?: number;
   /** The keyboard's letters, in order; spaces start a new keyboard row. */
@@ -140,6 +158,7 @@ export const EXPRS: Record<string, Spec> = {
   size: { args: { zone: 'zone', player: 'e' }, opt: ['player'], out: 'n' },
   len: { args: { text: 'e' }, out: 'n' }, secret: { args: {}, out: 's' }, inList: { args: { text: 'e' }, out: 'b' },
   guesses: { args: {}, out: 'n' }, hits: { args: { text: 'e' }, out: 'n' }, wordLen: { args: {}, out: 'n' },
+  placed: { args: { text: 'e' }, out: 'b' }, found: { args: {}, out: 'n' }, total: { args: {}, out: 'n' }, crossDone: { args: {}, out: 'b' }, reveals: { args: {}, out: 'n' },
 };
 export const ACTS: Record<string, Spec> = {
   place: { args: { piece: 'piece', cell: 'e', owner: 'e', value: 'e' }, opt: ['owner', 'value'] },
@@ -166,6 +185,8 @@ export const ACTS: Record<string, Spec> = {
   say: { args: { text: 'text' } },
   pickWord: { args: {} },
   addGuess: { args: { text: 'e' } },
+  buildPuzzle: { args: {} },
+  markFound: { args: { text: 'e' } },
 };
 const EVENTS: EventName[] = ['start', 'turn', 'click', 'move', 'roll', 'card', 'zone', 'button', 'enter', 'after', 'blocked', 'word'];
 /** What each event makes available to its rule through "get". */
@@ -194,7 +215,13 @@ export interface GState {
   error: string | null;
   plies: number;
   /** Word puzzles: the secret and every guess with its marks (g right place, y elsewhere in the word, . not in it). */
-  words?: { secret: string; guesses: { text: string; marks: string }[] };
+  words?: {
+    secret: string; guesses: { text: string; marks: string }[];
+    /** Anagram: the secret's letters, shuffled. */
+    scramble?: string;
+    /** Search and cross: the letters of the grid ('' is a black square), the hidden words, which are found, what the player wrote. */
+    grid?: string[]; gw?: number; gh?: number; placed?: Placed[]; found?: number[]; filled?: string[]; reveals?: number; theme?: Text;
+  };
   /** Completed rounds: goes up each time play comes back to the first player. */
   round: number;
   last: number[];
@@ -206,10 +233,13 @@ export type Input =
   | { k: 'card'; card: number; zone: string; cell?: number }
   | { k: 'zone'; zone: string }
   | { k: 'button'; id: string }
-  | { k: 'word'; text: string };
+  | { k: 'word'; text: string }
+  /** Crossword: write a letter in a cell ('' clears it), or ask for its letter. */
+  | { k: 'letter'; cell: number; ch: string }
+  | { k: 'reveal'; cell: number };
 
 export const inputKey = (i: Input): string =>
-  i.k === 'click' ? 'c' + i.cell : i.k === 'move' ? `m${i.from}-${i.to}` : i.k === 'roll' ? 'r' : i.k === 'card' ? `k${i.card}` + (i.cell === undefined ? '' : '@' + i.cell) : i.k === 'zone' ? 'z' + i.zone : i.k === 'word' ? 'w' + i.text : 'b' + i.id;
+  i.k === 'click' ? 'c' + i.cell : i.k === 'move' ? `m${i.from}-${i.to}` : i.k === 'roll' ? 'r' : i.k === 'card' ? `k${i.card}` + (i.cell === undefined ? '' : '@' + i.cell) : i.k === 'zone' ? 'z' + i.zone : i.k === 'word' ? 'w' + i.text : i.k === 'letter' ? `l${i.cell}:${i.ch}` : i.k === 'reveal' ? 'v' + i.cell : 'b' + i.id;
 
 // ───────────────────────────── Compiled definition ─────────────────────────────
 
@@ -252,6 +282,11 @@ export function compile(def: GameDef): Compiled {
   return out;
 }
 export const cardsOf = (def: GameDef) => compile(def).cards;
+/** Which hidden word (not yet found) these letters spell, forwards or backwards; -1 if none. */
+function placedIndex(st: GState, text: string): number {
+  const ps = st.words?.placed ?? [], rev = lettersOf(text).reverse().join('');
+  return ps.findIndex((p, i) => !st.words!.found?.includes(i) && (p.word === text || p.word === rev));
+}
 /** Upper case in the game's own language (Turkish i → İ, ı → I). */
 export const upper = (def: GameDef, s: string) => s.toLocaleUpperCase(def.words?.locale || 'en');
 /** Wordle marks for a guess: g right letter in the right place, y in the word elsewhere, . not in it (repeats counted). */
@@ -484,6 +519,11 @@ export function ev(x: Ctx, e: Expr): Val {
     case 'guesses': return st.words?.guesses.length ?? 0;
     case 'hits': { const t = upper(x.def, String(g('text'))); return [...markGuess(t, st.words?.secret ?? '')].filter(m => m === 'g').length; }
     case 'wordLen': return x.def.words?.length ?? 0;
+    case 'placed': return placedIndex(st, upper(x.def, String(g('text')))) >= 0;
+    case 'found': return st.words?.found?.length ?? 0;
+    case 'total': return st.words?.placed?.length ?? 0;
+    case 'crossDone': { const w = st.words; return !!w?.grid && w.grid.every((ch, i) => !ch || w.filled?.[i] === ch); }
+    case 'reveals': return st.words?.reveals ?? 0;
     default: throw new GameError(`unknown block "${String(n.op)}"`);
   }
 }
@@ -610,8 +650,32 @@ function run(x: Ctx, acts: unknown, path = 'do'): void {
       }
       case 'say': st.msg = n.text as Text; break;
       case 'pickWord': {
-        const list = x.c.words;
-        st.words = { secret: list.length ? list[Math.floor(rand(st) * list.length)] : '', guesses: [] };
+        const list = x.c.words.filter(w => !x.def.words?.length || x.def.words.mode !== 'anagram' || lettersOf(w).length === x.def.words.length);
+        const secret = list.length ? list[Math.floor(rand(st) * list.length)] : '';
+        st.words = { ...(st.words ?? { guesses: [] }), secret, guesses: [], ...(x.def.words?.mode === 'anagram' ? { scramble: scramble(secret, () => rand(st)) } : {}) };
+        break;
+      }
+      case 'buildPuzzle': {
+        const wd = x.def.words;
+        if (!wd) break;
+        const r = () => rand(st), size = wd.size ?? (wd.mode === 'cross' ? 15 : 10), count = wd.count ?? (wd.mode === 'cross' ? 12 : 8);
+        if (wd.mode === 'cross') {
+          const all = x.c.words.map((w, i) => ({ word: w, clue: wd.clues?.[wd.list[i]?.trim()] ?? wd.clues?.[w] }));
+          // With clues written, only clued words go in: a crossword answer without a clue cannot be found.
+          const entries = all.some(e => e.clue) ? all.filter(e => e.clue) : all;
+          const b = buildCrossword(entries, r, { size, count });
+          st.words = { secret: '', guesses: [], grid: b.grid, gw: b.w, gh: b.h, placed: b.placed, found: [], filled: b.grid.map(() => ''), reveals: 0 };
+        } else {
+          const g2 = wd.groups?.length ? wd.groups[Math.floor(r() * wd.groups.length)] : null;
+          const words = g2 ? g2.words.map(w => upper(x.def, w.trim())).filter(Boolean) : x.c.words;
+          const b = buildSearch(words, r, { size, count, diagonal: wd.diagonal, backwards: wd.backwards, filler: wd.alphabet ? upper(x.def, wd.alphabet) : undefined });
+          st.words = { secret: '', guesses: [], grid: b.grid, gw: b.w, gh: b.h, placed: b.placed, found: [], ...(g2 ? { theme: g2.name } : {}) };
+        }
+        break;
+      }
+      case 'markFound': {
+        const i = placedIndex(st, upper(x.def, String(g('text'))));
+        if (i >= 0 && st.words) st.words.found = [...(st.words.found ?? []), i];
         break;
       }
       case 'addGuess': {
@@ -657,7 +721,7 @@ export function clone(st: GState): GState {
   const zones: Record<string, number[]> = {}, vars: Record<string, number[]> = {};
   for (const k in st.zones) zones[k] = st.zones[k].slice();
   for (const k in st.vars) vars[k] = st.vars[k].slice();
-  return { ...st, board: st.board.map(s => s.map(p => ({ ...p }))), zones, vars, dice: st.dice.slice(), last: st.last.slice(), over: st.over && { ...st.over }, ...(st.words ? { words: { secret: st.words.secret, guesses: st.words.guesses.slice() } } : {}) };
+  return { ...st, board: st.board.map(s => s.map(p => ({ ...p }))), zones, vars, dice: st.dice.slice(), last: st.last.slice(), over: st.over && { ...st.over }, ...(st.words ? { words: { ...st.words, guesses: st.words.guesses.slice(), ...(st.words.found ? { found: st.words.found.slice() } : {}), ...(st.words.filled ? { filled: st.words.filled.slice() } : {}) } } : {}) };
 }
 
 function guard(st: GState, f: () => void) {
@@ -713,6 +777,7 @@ function triggered(def: GameDef, st: GState, inp: Input): number {
     case 'zone': x.b = { zone: zoneOfKey(inp.zone)[0] }; return c.byEvent.zone.filter(r => matches(x, r, -1, zoneOfKey(inp.zone)[0], '')).length;
     case 'button': x.b = { button: inp.id }; return c.byEvent.button.filter(r => matches(x, r, -1, '', inp.id)).length;
     case 'word': x.b = { guess: upper(def, inp.text) }; return c.byEvent.word.filter(r => matches(x, r, -1, '', '')).length;
+    case 'letter': case 'reveal': return st.words?.grid?.[inp.cell] ? 1 : 0;
   }
 }
 
@@ -762,7 +827,7 @@ export function legal(def: GameDef, st: GState, first = false): Input[] {
 function settle(def: GameDef, st: GState) {
   for (let skipped = 0; !st.over && skipped <= st.players; skipped++) {
     // Typed words cannot be listed in advance, so a game with word rules is never stuck.
-    if (compile(def).byEvent.word.length || legal(def, st, true).length) return;
+    if (def.words || legal(def, st, true).length) return;
     if (st.players === 1 || skipped === st.players) {
       fire(ctx(def, st), compile(def).byEvent.blocked);
       if (!st.over) st.over = { winner: -1, stuck: true };
@@ -795,6 +860,15 @@ export function apply(def: GameDef, st0: GState, inp: Input): GState {
       case 'zone': { const z = zoneOfKey(inp.zone)[0]; x.b = { zone: z }; ran = fire(x, c.byEvent.zone, -1, z); break; }
       case 'button': x.b = { button: inp.id }; ran = fire(x, c.byEvent.button, -1, '', inp.id); break;
       case 'word': x.b = { guess: upper(def, inp.text) }; ran = fire(x, c.byEvent.word); break;
+      case 'letter': case 'reveal': {
+        // Writing in a crossword needs no rule; "after every action" rules decide when it is solved.
+        const w = st.words;
+        if (!w?.grid?.[inp.cell] || !w.filled) break;
+        if (inp.k === 'letter') w.filled[inp.cell] = inp.ch ? upper(def, inp.ch) : '';
+        else if (w.filled[inp.cell] !== w.grid[inp.cell]) { w.filled[inp.cell] = w.grid[inp.cell]; w.reveals = (w.reveals ?? 0) + 1; }
+        ran = 1;
+        break;
+      }
     }
     if (!ran) return;
     st.plies++;
@@ -846,6 +920,7 @@ export function explainInput(def: GameDef, st: GState, inp: Input): Explained[] 
     case 'zone': ev2 = 'zone'; zone = zoneOfKey(inp.zone)[0]; x.b = { zone }; break;
     case 'button': ev2 = 'button'; button = inp.id; x.b = { button }; break;
     case 'word': ev2 = 'word'; x.b = { guess: upper(def, inp.text) }; break;
+    case 'letter': case 'reveal': return [];
   }
   return c.byEvent[ev2].map(r => {
     let why: Explained['why'];
@@ -877,8 +952,17 @@ export function validate(raw: unknown, lang: 'en' | 'zh' | 'tr' = 'en'): string[
   if (def.board?.grid !== undefined && !['square', 'hex'].includes(def.board.grid)) out.push(L('"grid" must be "square" or "hex".', '“grid”必须是“square”或“hex”。', '“grid” değeri “square” ya da “hex” olmalı.'));
   if (def.words) {
     const wd = def.words;
-    if (!(wd.length >= 2 && wd.length <= 12)) out.push(L('Words must have 2 to 12 letters.', '单词必须有2到12个字母。', 'Kelimeler 2 ile 12 harf arasında olmalı.'));
-    else if (!Array.isArray(wd.list) || !wd.list.length) out.push(L('The word list is empty.', '词表是空的。', 'Kelime listesi boş.'));
+    const mode = wd.mode ?? 'guess', fixed = mode === 'guess' || (mode === 'anagram' && wd.length > 0);
+    const allWords = [...(wd.list ?? []), ...(wd.groups ?? []).flatMap(g2 => g2.words)];
+    if (!['guess', 'anagram', 'search', 'cross'].includes(mode)) out.push(L('Unknown word puzzle kind.', '未知的猜词类型。', 'Bilinmeyen kelime bulmacası türü.'));
+    else if (mode === 'guess' && !(wd.length >= 2 && wd.length <= 12)) out.push(L('Words must have 2 to 12 letters.', '单词必须有2到12个字母。', 'Kelimeler 2 ile 12 harf arasında olmalı.'));
+    else if (!allWords.length) out.push(L('The word list is empty.', '词表是空的。', 'Kelime listesi boş.'));
+    else if (!fixed) {
+      const max = mode === 'anagram' ? 12 : wd.size ?? (mode === 'cross' ? 15 : 10);
+      const bad = allWords.filter(x => { const n = [...x.trim()].length; return n < 2 || n > max; });
+      if (bad.length) { const ws = bad.slice(0, 5).join(', ') + (bad.length > 5 ? '…' : ''); out.push(L(`These words are too short or too long for the grid (2–${max}): ${ws}`, `这些单词太短或太长（2–${max}）：${ws}`, `Bu kelimeler ızgara için çok kısa ya da uzun (2–${max}): ${ws}`)); }
+      if (mode === 'cross' && wd.list.length < 4) out.push(L('A crossword needs at least 4 words.', '填字游戏至少需要4个单词。', 'Kare bulmaca için en az 4 kelime gerekir.'));
+    }
     else { const bad = wd.list.filter(x => [...x.trim()].length !== wd.length); if (bad.length) { const ws = bad.slice(0, 5).join(', ') + (bad.length > 5 ? '…' : ''); out.push(L(`These words do not have ${wd.length} letters: ${ws}`, `这些单词不是${wd.length}个字母：${ws}`, `Bu kelimeler ${wd.length} harfli değil: ${ws}`)); } }
   }
   if (!def.players || !(def.players.min >= 1) || !(def.players.max >= def.players.min) || def.players.max > 6) out.push(L('Players: the smallest and largest number must be between 1 and 6.', '玩家人数：最少和最多都必须在1到6之间。', 'Oyuncu sayısı: en az ve en çok 1 ile 6 arasında olmalı.'));
