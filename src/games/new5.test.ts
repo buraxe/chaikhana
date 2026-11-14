@@ -66,7 +66,7 @@ describe('dokuz taş', () => {
 });
 
 import * as B from './bulls/rules';
-import * as S from './battleship/rules';
+import * as S from './sea-battle/rules';
 describe('sayı bulmaca', () => {
   it('scores plus and minus', () => {
     expect(B.score('1234', '1243')).toEqual([2, 2]);
@@ -100,8 +100,8 @@ describe('amiral battı', () => {
   });
 });
 
-import * as Q from './qubic/rules';
-describe('qubic', () => {
+import * as Q from './cube-ttt/rules';
+describe('cube-ttt', () => {
   it('has 76 lines', () => { expect(Q.LINES.length).toBe(76); });
   it('wins along a space diagonal and the computer blocks and takes wins', () => {
     let s = Q.newGame();

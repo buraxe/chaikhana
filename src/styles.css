@@ -120,7 +120,12 @@ main.main { padding-block: 28px 56px; display: flex; flex-direction: column; gap
   .nav a { border-bottom: 0; border-left: 2px solid transparent; }
   .nav a.on { border-left-color: var(--red); }
 }
-.foot { padding-block: 4px 32px; color: var(--on-wall-muted); font-size: .82rem; text-align: center; }
+.foot { padding-block: 4px 32px; color: var(--on-wall-muted); font-size: .82rem; text-align: center; display: flex; flex-direction: column; gap: 6px; }
+.foot a { color: inherit; }
+.legal-list { display: flex; flex-direction: column; gap: 12px; padding-left: 1.2em; }
+.legal-text { display: flex; flex-direction: column; gap: 14px; max-width: 68ch; }
+.legal-text h2 { font-size: 1.15rem; margin-bottom: 4px; }
+.legal-pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .78rem; line-height: 1.5; max-height: 420px; overflow: auto; padding: 12px; border: 1px solid var(--paper-rule); border-radius: 6px; }
 /* Type */
 h1 { font: 600 clamp(2rem, 4.2vw, 3rem)/1.08 var(--display); letter-spacing: -.005em; text-wrap: balance; }
 h1 .zh, h2 .zh { font-size: .62em; color: var(--red); font-weight: 500; }

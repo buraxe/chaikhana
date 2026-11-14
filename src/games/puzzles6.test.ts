@@ -3,7 +3,7 @@ import { mulberry32 } from '../core/rng';
 import * as F from './futoshiki/rules';
 import * as B from './binary/rules';
 import * as K from './kakuro/rules';
-import * as S from './slitherlink/rules';
+import * as S from './loop-line/rules';
 import * as N from './ninerings/rules';
 
 const time = <T,>(f: () => T): [T, number] => { const t = performance.now(); const r = f(); return [r, performance.now() - t]; };
@@ -43,7 +43,7 @@ describe('kakuro', () => {
     }
   });
 });
-describe('slitherlink', () => {
+describe('loop-line', () => {
   it('generates unique single loops', () => {
     for (const [w, h] of [[5, 5], [7, 7], [10, 10]]) for (let s = 0; s < 3; s++) {
       const [p, ms] = time(() => S.generate(w, h, mulberry32(s * 11 + w)));

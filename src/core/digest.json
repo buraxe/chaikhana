@@ -61,11 +61,11 @@
     "h": "Gizli mayınlı ızgara oyunları ev bilgisayarlarında 1980’lerin başında görüldü; 1983 tarihli Mined-Out bunlardan biridir."
    }
   },
-  "connect-four": {
+  "four-in-a-row": {
    "names": {
-    "en": "Connect Four",
-    "tr": "Dört Bağla",
+    "en": "Four in a Row",
     "zh": "四子棋",
+    "tr": "Dört Taş",
     "pinyin": "sìzǐqí"
    },
    "en": {
@@ -121,11 +121,11 @@
     "h": "Bulmacayı Fransız matematikçi Édouard Lucas icat etti ve 1883’te Lucas d’Amiens’in harf değiştirmesi olan N."
    }
   },
-  "lights-out": {
+  "lights-off": {
    "names": {
-    "en": "Lights Out",
-    "tr": "Işıkları Söndür",
+    "en": "Lights Off",
     "zh": "关灯游戏",
+    "tr": "Işıkları Söndür",
     "pinyin": "guāndēng yóuxì"
    },
    "en": {
@@ -281,26 +281,6 @@
     "h": "101 Okey, Okey ile aynı taşları kullanır ama perlerin masaya indirildiği bir oyun gibi oynanır."
    }
   },
-  "rubik": {
-   "names": {
-    "en": "Rubik's Cube",
-    "tr": "Rubik Küpü",
-    "zh": "魔方",
-    "pinyin": "mófāng"
-   },
-   "en": {
-    "s": "Turn the layers until every face shows a single colour again.",
-    "h": "The Hungarian architecture professor Ernő Rubik built the first cube in 1974 while looking for a way to explain three-dimensional movement to his students."
-   },
-   "zh": {
-    "s": "转动各层，直到每一面重新变成单一颜色。",
-    "h": "1974年，匈牙利建筑学教授鲁比克·艾尔诺为了向学生讲解三维运动，做出了第一个魔方。"
-   },
-   "tr": {
-    "s": "Her yüz yeniden tek renk olana kadar katmanları çevir.",
-    "h": "Macar mimarlık profesörü Ernő Rubik ilk küpü 1974’te, öğrencilerine üç boyutlu hareketi anlatmanın bir yolunu ararken yaptı."
-   }
-  },
   "reversi": {
    "names": {
     "en": "Reversi",
@@ -339,26 +319,6 @@
    "tr": {
     "s": "Her satırın ve sütunun yanındaki sayılardan hangi karelerin dolu olduğunu bul. Tamamlanan ızgara bir resimdir.",
     "h": "Nonogramlar 1987’de Japon grafik tasarımcı Non Ishida ve Tetsuya Nishio tarafından birbirinden bağımsız olarak icat edildi. 1990’ların başında nonogram adının da konduğu İngiliz gazetelerinde sevildi; picross, griddler ve sayılarla boyama adlarıyla da bilinir."
-   }
-  },
-  "mastermind": {
-   "names": {
-    "en": "Mastermind",
-    "tr": "Mastermind",
-    "zh": "珠玑妙算",
-    "pinyin": "zhūjī miàosuàn"
-   },
-   "en": {
-    "s": "Crack a hidden code of coloured pegs using the clues each guess earns.",
-    "h": "Mordecai Meirowitz, an Israeli postmaster and telecommunications expert, invented Mastermind in 1970, and Invicta Plastics in England published it."
-   },
-   "zh": {
-    "s": "根据每次猜测得到的提示，破解一组由彩色钉子组成的隐藏密码。",
-    "h": "1970年，以色列邮政局长、通信专家莫迪凯·梅罗维茨发明了珠玑妙算，由英国的 Invicta Plastics 公司出版。"
-   },
-   "tr": {
-    "s": "Her tahminin kazandırdığı ipuçlarıyla renkli çivilerden oluşan gizli bir şifreyi kır.",
-    "h": "İsrailli posta müdürü ve telekomünikasyon uzmanı Mordecai Meirowitz, Mastermind’ı 1970’te icat etti; İngiltere’de Invicta Plastics yayımladı."
    }
   },
   "dots-boxes": {
@@ -441,46 +401,6 @@
     "h": "Sayı Bulmaca, muhtemelen yüz yılı aşkın, eski bir kâğıt-kalem oyunudur ve Mastermind’ın atasıdır; İngilizcede Bulls and Cows diye bilinir. 1960’ların sonunda ilk bilgisayarlarda Moo adıyla oynandı."
    }
   },
-  "battleship": {
-   "names": {
-    "en": "Battleship",
-    "tr": "Amiral Battı",
-    "zh": "海战棋",
-    "pinyin": "hǎizhàn qí"
-   },
-   "en": {
-    "s": "Hide your fleet on a grid and hunt the enemy’s, one shot at a time.",
-    "h": "Battleship began as a pencil-and-paper game around the First World War; similar games were played in Russia and France."
-   },
-   "zh": {
-    "s": "把自己的舰队藏在格子里，一炮一炮地搜寻敌方舰队。",
-    "h": "海战棋大约在第一次世界大战时期作为纸笔游戏出现，俄国和法国也有类似玩法。"
-   },
-   "tr": {
-    "s": "Filonu bir ızgaraya sakla ve düşmanınkini birer atışla avla.",
-    "h": "Amiral Battı, Birinci Dünya Savaşı sıralarında kâğıt-kalem oyunu olarak doğdu; Rusya’da ve Fransa’da da benzerleri oynanıyordu."
-   }
-  },
-  "qubic": {
-   "names": {
-    "en": "3D Tic-Tac-Toe",
-    "tr": "3B XOX",
-    "zh": "立体井字棋",
-    "pinyin": "lìtǐ jǐngzì qí"
-   },
-   "en": {
-    "s": "Four in a line on a 4×4×4 cube: rows, columns, pillars and diagonals through all three dimensions.",
-    "h": "Three-dimensional noughts and crosses was sold by Parker Brothers in 1964 as Qubic, on four clear plastic layers stacked one above the other."
-   },
-   "zh": {
-    "s": "在4×4×4的立方体上连成四子：横、竖、贯穿各层的柱，以及跨越三维的斜线。",
-    "h": "1964年，美国 Parker Brothers 公司推出了立体井字棋 Qubic，由四层上下叠放的透明塑料棋盘组成。"
-   },
-   "tr": {
-    "s": "4×4×4’lük bir küpte dört taşı bir çizgiye diz: satırlar, sütunlar, katları delen sütunlar ve üç boyutlu çaprazlar.",
-    "h": "Üç boyutlu XOX, 1964’te Parker Brothers tarafından üst üste dizilmiş dört şeffaf plastik katla Qubic adıyla satıldı."
-   }
-  },
   "football-70": {
    "names": {
     "en": "7-0 Challenge",
@@ -494,7 +414,7 @@
    },
    "zh": {
     "s": "抽一支球队，选一名球员，凑齐首发十一人，然后踢七场杯赛。七战全胜就是7比0。",
-    "h": "这类选人游戏源于梦幻足球，以及球迷关于“历史最佳阵容”的深夜争论：如果每抽到一支球队只能选一个人，会组成怎样的阵容？这个版本有三个非授权联赛：欧洲豪门、土耳其超级联赛和中国超级联赛。"
+    "h": "这类选人游戏源于梦幻足球，以及球迷关于“历史最佳阵容”的深夜争论：如果每抽到一支球队只能选一个人，会组成怎样的阵容？这个版本有三个虚构的联赛：巨人联赛、安纳托利亚联赛和东方联赛。"
    },
    "tr": {
     "s": "Bir kulüp çek, bir oyuncu al, ilk on birini tamamla ve yedi maçlık kupa yoluna çık. Yedide yedi galibiyet 7-0’dır.",
@@ -646,27 +566,6 @@
     "h": "İlk çapraz bulmacayı Arthur Wynne 21 Aralık 1913’te New York World gazetesinde baklava biçimli bir “kelime haçı” olarak yayımladı."
    }
   },
-  "wordle": {
-   "names": {
-    "en": "Word Guess",
-    "zh": "猜词",
-    "tr": "Kelime Tahmini",
-    "pinyin": "Cāi cí",
-    "trad": "猜詞"
-   },
-   "en": {
-    "s": "Guess the secret five-letter word in six tries. After each guess the letters turn green, yellow or grey to show how close you are.",
-    "h": "Guessing a hidden word letter by letter goes back to the pencil game Jotto (1955) and the TV show Lingo."
-   },
-   "zh": {
-    "s": "在六次之内猜出五个字母的秘密单词。每次猜完，字母会变成绿色、黄色或灰色，告诉你离答案有多近。",
-    "h": "逐个字母猜出隐藏单词的玩法，可以追溯到纸笔游戏Jotto（1955）和电视节目Lingo。"
-   },
-   "tr": {
-    "s": "Gizli beş harfli kelimeyi altı tahminde bul. Her tahminden sonra harfler yeşil, sarı ya da gri olur ve ne kadar yaklaştığını gösterir.",
-    "h": "Gizli bir kelimeyi harf harf tahmin etmek, kâğıt kalem oyunu Jotto’ya (1955) ve Lingo yarışmasına uzanır. 2021’de mühendis Josh Wardle eşi için Wordle’ı yaptı: günde bir kelime ve paylaşılabilen renkli kareler."
-   }
-  },
   "anagram": {
    "names": {
     "en": "Anagrams",
@@ -707,27 +606,6 @@
    "tr": {
     "s": "Farklı bir Latin karesi: her satır ve sütunda her sayı bir kez olacak şekilde ızgarayı doldur, komşu kareler arasındaki “büyüktür” ve “küçüktür” işaretlerine de uy.",
     "h": "Futoshiki Japoncada “eşitsizlik” demektir."
-   }
-  },
-  "hidato": {
-   "names": {
-    "en": "Hidato",
-    "zh": "数字蛇",
-    "tr": "Hidato",
-    "pinyin": "Shùzì shé",
-    "trad": "數字蛇"
-   },
-   "en": {
-    "s": "Fill the grid with a chain of numbers from 1 to the last, each one touching the next sideways or diagonally, like a snake winding through every square.",
-    "h": "Hidato was invented in 2005 by the Israeli mathematician Gyora Benedek; the name comes from the Hebrew for “riddle”."
-   },
-   "zh": {
-    "s": "用一串从1到最后一个数的数字填满方格，每个数都要和下一个数横、竖或斜着相邻，像一条蛇穿过所有格子。",
-    "h": "Hidato由以色列数学家吉奥拉·贝内德克于2005年发明，名字来自希伯来语的“谜语”。"
-   },
-   "tr": {
-    "s": "Izgarayı 1’den sonuncuya kadar bir sayı zinciriyle doldur; her sayı bir sonrakine yandan ya da çaprazdan değsin, her kareden geçen bir yılan gibi.",
-    "h": "Hidato’yu 2005’te İsrailli matematikçi Gyora Benedek icat etti; adı İbranicede “bilmece” anlamına gelen kelimeden gelir. 2000’lerin sonunda gazeteler ve telefon uygulamalarıyla yayıldı; fikrin çaprazsız hâli Numbrix, bir başka adı da Hidoku’dur."
    }
   },
   "luban": {
@@ -835,27 +713,6 @@
     "h": "Montaj bulmacaları tahta yapı oyuncaklarından ve Solomon Golomb’un 1950’lerde ünlü yaptığı poliomino bulmacalarından doğdu."
    }
   },
-  "soma": {
-   "names": {
-    "en": "Soma Cube",
-    "zh": "索玛立方体",
-    "tr": "Soma Küpü",
-    "pinyin": "Suǒmǎ lìfāngtǐ",
-    "trad": "索瑪立方體"
-   },
-   "en": {
-    "s": "Seven pieces, every irregular shape you can make from three or four cubes, fit together into a 3×3×3 cube, and into hundreds of other figures.",
-    "h": "The Danish poet and scientist Piet Hein thought of the Soma cube in 1933 while listening to Werner Heisenberg lecture on quantum mechanics, wondering which shapes small groups of cubes could make."
-   },
-   "zh": {
-    "s": "七块拼块，包括所有能用三或四个小立方体拼成的不规则形状，可以组成一个3×3×3的立方体，以及几百种其他图形。",
-    "h": "丹麦诗人兼科学家皮特·海恩于1933年在听海森堡讲量子力学时想到了索玛立方体，他在琢磨几个小立方体能组成哪些形状。"
-   },
-   "tr": {
-    "s": "Üç ya da dört küpten yapılabilecek bütün düzensiz şekiller olan yedi parça, 3×3×3 bir küpte ve yüzlerce başka figürde birleşir.",
-    "h": "Danimarkalı şair ve bilim insanı Piet Hein, Soma küpünü 1933’te Werner Heisenberg’in kuantum mekaniği dersini dinlerken, birkaç küpün hangi şekilleri yapabileceğini düşünürken buldu."
-   }
-  },
   "snake-cube": {
    "names": {
     "en": "Snake Cube",
@@ -875,27 +732,6 @@
    "tr": {
     "s": "Yirmi yedi tahta küp esnek bir ipe dizilmiş. Zincir bazı küplerde kıvrılıyor; bütün yılan 3×3×3 bir küpe katlanana kadar eklemleri çevir.",
     "h": "Yılan küp, mucidi bilinmeyen geleneksel bir tahta oyuncaktır; kuşaklardır Avrupa’da ve Asya’da Kibble küpü, Cubra gibi adlarla satılır."
-   }
-  },
-  "numberlink": {
-   "names": {
-    "en": "Numberlink",
-    "zh": "数字连线",
-    "tr": "Sayı Bağla (Numberlink)",
-    "pinyin": "Shùzì liánxiàn",
-    "trad": "數字連線"
-   },
-   "en": {
-    "s": "Join each pair of equal numbers with a line through neighbouring squares. Lines never cross or share a square, and together they fill the whole grid.",
-    "h": "Puzzles of joining pairs without crossing go back at least to Sam Loyd and Henry Dudeney around 1900."
-   },
-   "zh": {
-    "s": "把每对相同的数字用一条经过相邻格子的线连起来。线不能交叉或共用格子，所有的线合起来要铺满整个方格。",
-    "h": "不交叉地连接成对的点，这类谜题至少可以追溯到1900年前后的萨姆·劳埃德和亨利·杜德尼。"
-   },
-   "tr": {
-    "s": "Her eşit sayı çiftini komşu karelerden geçen bir çizgiyle birleştir. Çizgiler kesişmez, aynı kareyi paylaşmaz ve hep birlikte bütün ızgarayı doldurur.",
-    "h": "Çiftleri kesiştirmeden birleştirme bulmacaları en az 1900 civarına, Sam Loyd ve Henry Dudeney’e kadar uzanır."
    }
   },
   "n-queens": {
@@ -982,27 +818,6 @@
     "h": "Bulmaca ilk kez 1950’lerde Amerika’da Dell bulmaca dergilerinde “Cross Sums” adıyla basıldı. 1980’lerde Japon yayıncı Nikoli ona “toplama çaprazı” anlamına gelen kasan kurosu’dan Kakuro adını verdi; Japonya’nın Sudoku’dan sonra en sevilen kalem bulmacalarından biri oldu."
    }
   },
-  "slitherlink": {
-   "names": {
-    "en": "Slitherlink",
-    "zh": "数回",
-    "tr": "Slitherlink",
-    "pinyin": "Shù huí",
-    "trad": "數回"
-   },
-   "en": {
-    "s": "Join the dots into one closed loop. A number in a square says how many of its four sides the loop uses.",
-    "h": "Slitherlink was created by the Japanese puzzle publisher Nikoli and first printed in its magazine in 1989."
-   },
-   "zh": {
-    "s": "把点连成一条闭合回路。格子里的数字表示这一格的四条边中有几条在回路上。",
-    "h": "数回由日本谜题出版社Nikoli创作，1989年首次刊登在其杂志上。"
-   },
-   "tr": {
-    "s": "Noktaları tek bir kapalı döngüyle birleştir. Bir karedeki sayı, döngünün o karenin dört kenarından kaçını kullandığını söyler.",
-    "h": "Slitherlink’i Japon bulmaca yayıncısı Nikoli yarattı; ilk kez 1989’da dergisinde basıldı."
-   }
-  },
   "nine-rings": {
    "names": {
     "en": "Nine Linked Rings",
@@ -1024,25 +839,6 @@
     "h": "Dokuz Halka Çin’in en eski mekanik bulmacalarından biridir."
    }
   },
-  "kenken": {
-   "names": {
-    "en": "KenKen",
-    "tr": "KenKen",
-    "zh": "聪明格"
-   },
-   "en": {
-    "s": "A Latin square with arithmetic: every row and column holds each number once, and each cage makes its target.",
-    "h": "Japanese maths teacher Tetsuya Miyamoto invented the puzzle in 2004 to help his students think, calling it “the art of teaching without teaching”."
-   },
-   "zh": {
-    "s": "带算术的拉丁方：每行每列数字各一次，每个笼子要算出目标数。",
-    "h": "日本数学老师宫本哲也在2004年发明了这种谜题，用来训练学生思考，称之为“不教而教的艺术”。"
-   },
-   "tr": {
-    "s": "Aritmetikli bir Latin karesi: her satır ve sütunda her sayı bir kez, her kafes de hedefini tutturur.",
-    "h": "Japon matematik öğretmeni Tetsuya Miyamoto bulmacayı 2004’te öğrencilerinin düşünmesine yardım etmek için icat etti ve “öğretmeden öğretme sanatı” dedi."
-   }
-  },
   "hashi": {
    "names": {
     "en": "Hashi (Bridges)",
@@ -1060,25 +856,6 @@
    "tr": {
     "s": "Adaları köprülerle bağla; her adanın tam sayısı kadar köprüsü olsun.",
     "h": "Hashiwokakero, yani “köprü kur”, 1990’da Sudoku’yu ünlü yapan Japon bulmaca şirketi Nikoli tarafından yayımlandı."
-   }
-  },
-  "sokoban": {
-   "names": {
-    "en": "Sokoban",
-    "tr": "Sokoban",
-    "zh": "推箱子"
-   },
-   "en": {
-    "s": "A warehouse keeper pushes boxes onto their places, one careful push at a time.",
-    "h": "Sokoban (“warehouse keeper” in Japanese) was created by Hiroyuki Imabayashi and published by Thinking Rabbit in 1982."
-   },
-   "zh": {
-    "s": "仓库管理员把箱子一个个推到指定位置，每一步都要小心。",
-    "h": "推箱子（日语“仓库番”）由今林宏行设计，1982年由Thinking Rabbit发行。"
-   },
-   "tr": {
-    "s": "Bir depo bekçisi kutuları tek tek, dikkatle iterek yerlerine yerleştirir.",
-    "h": "Sokoban (Japonca “depo bekçisi”) Hiroyuki Imabayashi tarafından tasarlandı ve 1982’de Thinking Rabbit tarafından yayımlandı."
    }
   },
   "g2048": {

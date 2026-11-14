@@ -28,7 +28,7 @@ const ACH_TR: Record<string, [string, string]> = {
   'Crowned': ['Dama çıktı', 'Dama’da İleri seviye bilgisayarı yen'],
   'Clearance': ['Masayı temizle', 'Bilardoda bilgisayara karşı bir üçgen kazan'],
   '101': ['101', 'Bir 101 Okey oyunu kazan'],
-  'Cubed': ['Küp ustası', 'Tamamen karışık bir 3×3 Rubik Küpü’nü yardımsız çöz'],
+  'Cubed': ['Küp ustası', 'Tamamen karışık bir 3×3 sihirli küpü yardımsız çöz'],
   'Seven boards': ['Yedi tahta', 'Beş tangram siluetini tamamla'],
 };
 function achievements(p: Profile): [string, string, string, string, boolean][] {
@@ -45,15 +45,15 @@ function achievements(p: Profile): [string, string, string, string, boolean][] {
     ['Top board', '棋逢对手', 'Beat the Expert AI at Gomoku', '五子棋战胜专家电脑', won('Expert')],
     ['Field cleared', '扫清雷区', 'Clear an Intermediate or Expert minefield', '完成中级或专家扫雷', hist('minesweeper').some(h => h.result === 'win' && /^(Intermediate|Expert)/.test(h.label))],
     ['Shortest path', '最短路径', 'Move a tower of 6 or more disks in the minimum moves', '用最少步数移动6个或更多盘的汉诺塔', hist('hanoi').some(h => h.label.includes('optimal') && parseInt(h.label) >= 6)],
-    ['Four down', '四子连珠', 'Beat the Expert AI at Connect Four', '四子棋战胜专家电脑', hist('connect-four').some(h => h.result === 'win' && h.label.includes('Expert AI'))],
-    ['Lights out', '一灯不留', 'Solve a 5×5 Lights Out in the fewest presses', '用最少次数完成5×5关灯游戏', hist('lights-out').some(h => h.label.startsWith('5×5') && h.label.includes('minimum'))],
+    ['Four down', '四子连珠', 'Beat the Expert AI at Four in a Row', '四子棋战胜专家电脑', hist('four-in-a-row').some(h => h.result === 'win' && h.label.includes('Expert AI'))],
+    ['Lights out', '一灯不留', 'Solve a 5×5 Lights Off in the fewest presses', '用最少次数完成5×5关灯游戏', hist('lights-off').some(h => h.label.startsWith('5×5') && h.label.includes('minimum'))],
     ['Escape', '义释曹操', 'Free Cao Cao in the classic Huarong Dao layout', '在经典布局“横刀立马”中救出曹操', hist('huarong').some(h => h.label.startsWith('classic'))],
     ['Tavla match', '双陆赛', 'Win a Tavla match', '赢得一场双陆棋比赛', hist('tavla').some(h => h.result === 'win')],
     ['Okey!', 'Okey!', 'Win a game of Okey', '赢得一场 Okey', hist('okey').some(h => h.result === 'win')],
     ['Crowned', '加冕', 'Beat the Advanced AI at Dama', '在土耳其跳棋中战胜高级电脑', hist('dama').some(h => h.result === 'win' && /(Advanced|Expert) AI/.test(h.label))],
     ['Clearance', '一杆清台', 'Win a rack of billiards against the computer', '在台球中战胜电脑赢下一局', hist('billiards').some(h => h.result === 'win' && h.label.includes(' AI'))],
     ['101', '101', 'Win a game of 101 Okey', '赢得一场 101 Okey', hist('okey-101').some(h => h.result === 'win')],
-    ['Cubed', '魔方达人', "Solve a fully scrambled 3×3 Rubik's Cube without help", '不借助提示复原完全打乱的三阶魔方', hist('rubik').some(h => h.label.startsWith('3×3'))],
+    ['Cubed', '魔方达人', "Solve a fully scrambled 3×3 magic cube without help", '不借助提示复原完全打乱的三阶魔方', hist('magic-cube').some(h => h.label.startsWith('3×3'))],
     ['Seven boards', '七巧玲珑', 'Complete five tangram silhouettes', '完成五个七巧板剪影', new Set(hist('tangram').map(h => h.label)).size >= 5],
   ];
 }

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
-import * as H from './hidato/rules';
-import * as N from './numberlink/rules';
+import * as H from './number-path/rules';
+import * as N from './link-numbers/rules';
 import * as Q from './queens/rules';
 import * as R from './river/rules';
 
 const time = <T,>(f: () => T): [T, number] => { const t = performance.now(); const r = f(); return [r, performance.now() - t]; };
 
-describe('hidato', () => {
+describe('number-path', () => {
   it('generates unique snakes', () => {
     for (const n of [5, 6, 7]) for (let s = 0; s < 3; s++) {
       const [p, ms] = time(() => H.generate(n, n, mulberry32(s * 5 + n)));
@@ -18,7 +18,7 @@ describe('hidato', () => {
     }
   });
 });
-describe('numberlink', () => {
+describe('link-numbers', () => {
   it('generates boards whose paths fill the grid', () => {
     for (const n of [5, 6, 7, 8]) for (let s = 0; s < 4; s++) {
       const [p, ms] = time(() => N.generate(n, mulberry32(s * 3 + n)));

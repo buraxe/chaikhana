@@ -140,6 +140,7 @@ export function Workshop({ incoming }: { incoming?: string }) {
           <label className="wk-f"><span>{t('Made by', '作者', 'Yapan')}</span><input id="wk-author" value={author} maxLength={40} onChange={e => setAuthor(e.target.value)} /></label>
           <label className="wk-f"><span>{t('A line for players (optional)', '给玩家的一句话（可选）', 'Oyunculara bir cümle (isteğe bağlı)')}</span><input id="wk-blurb" value={blurb} maxLength={140} onChange={e => setBlurb(e.target.value)} /></label>
           <button type="button" className="btn primary" id="wk-publish" disabled={!def.rules.length || !author.trim()} onClick={publish}>{t('Publish to “From you”', '发布到“你们的作品”', '“Sizden gelenler”e gönder')}</button>
+          <p className="muted small">{t('By publishing you accept the ', '发布即表示你接受', 'Yayınlayarak ')}<a href="#terms">{t('terms of use', '使用条款', 'kullanım şartlarını')}</a>{t(': publish only what you made yourself, with no brand names, characters or art that belong to others.', '：只发布你自己制作的内容，不使用属于他人的品牌名称、角色或美术。', ' kabul edersin: yalnızca kendi yaptığını yayınla; başkasına ait marka adı, karakter ya da görsel kullanma.')}</p>
           {pubNote && <p className="muted small" role="status">{pubNote.text} {pubNote.id && <a href={'#community-' + pubNote.id}>{t('Open', '打开', 'Aç')}</a>}</p>}
         </> : <p className="muted small">{t('Examples cannot be published. Change something and save it, and the copy becomes yours.', '示例不能发布。修改并保存后，副本就归你了。', 'Örnekler yayınlanamaz. Bir şeyi değiştirip kaydedince kopya senin olur.')}</p>}
       </div>
@@ -167,7 +168,7 @@ export function Workshop({ incoming }: { incoming?: string }) {
           <b>+ {t('New game', '新游戏', 'Yeni oyun')}</b><span>{t('A board and pieces to start from', '从棋盘和棋子开始', 'Tahta ve taşlarla başla')}</span>
         </button>
         <button type="button" className="wk-pick new" id="wk-new-words" onClick={() => newFrom(BLANK_WORDS, t('My word puzzle', '我的猜词游戏', 'Kelime bulmacam'))}>
-          <b>+ {t('New word puzzle', '新猜词游戏', 'Yeni kelime bulmacası')}</b><span>{t('Your own list, Wordle style', '用你自己的词表，Wordle 玩法', 'Kendi listen, Wordle usulü')}</span>
+          <b>+ {t('New word puzzle', '新猜词游戏', 'Yeni kelime bulmacası')}</b><span>{t('Your own words: guess, crossword, search, anagram', '用你自己的词：猜词、填字、找词、重组', 'Kendi kelimelerin: tahmin, bulmaca, av, anagram')}</span>
         </button>
       </div>
 

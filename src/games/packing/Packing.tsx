@@ -1,5 +1,5 @@
-import Poly from '../soma/Poly';
-import type { Figure } from '../soma/rules';
+import Poly from '../seven-cube/Poly';
+import type { Figure } from '../seven-cube/rules';
 import SETS from './sets.json';
 
 export default function Packing() {

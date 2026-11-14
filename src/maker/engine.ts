@@ -66,7 +66,7 @@ export interface CardsDef {
 export interface ZoneDef { name: Text; owner: 'each' | 'shared'; show: 'all' | 'owner' | 'count' | 'top' }
 export interface WordsDef {
   /**
-   * Which kind of word puzzle: guess (Wordle: a secret word, marked guesses), anagram (unscramble
+   * Which kind of word puzzle: guess (a secret word, marked guesses), anagram (unscramble
    * the secret), search (find hidden words in a grid of letters), cross (a crossword built from
    * the list and its clues). Default: guess.
    */
@@ -289,7 +289,7 @@ function placedIndex(st: GState, text: string): number {
 }
 /** Upper case in the game's own language (Turkish i → İ, ı → I). */
 export const upper = (def: GameDef, s: string) => s.toLocaleUpperCase(def.words?.locale || 'en');
-/** Wordle marks for a guess: g right letter in the right place, y in the word elsewhere, . not in it (repeats counted). */
+/** Colour marks for a guess: g right letter in the right place, y in the word elsewhere, . not in it (repeats counted). */
 export function markGuess(guess: string, secret: string): string {
   const g = [...guess], s = [...secret], out = g.map(() => '.'), left: Record<string, number> = {};
   g.forEach((ch, i) => { if (s[i] === ch) out[i] = 'g'; else left[s[i]] = (left[s[i]] ?? 0) + 1; });

@@ -70,7 +70,7 @@ export function Community({ id }: { id?: string }) {
         <h1>{t('From you', '你们的作品', 'Sizden gelenler')}</h1>
         <p className="lede">{t('Games and puzzles players made in the Workshop: board games, card games, logic puzzles and word puzzles. Play them here, or open a copy and make your own version.',
           '玩家在工坊里做的游戏和谜题：棋类、纸牌、逻辑谜题和猜词。可以在这里玩，也可以打开副本做自己的版本。',
-          'Oyuncuların Atölyede yaptığı oyunlar ve bulmacalar: tahta oyunları, kart oyunları, mantık ve kelime bulmacaları. Burada oyna ya da bir kopyasını açıp kendi sürümünü yap.')}</p>
+          'Oyuncuların Atölyede yaptığı oyunlar ve bulmacalar: tahta oyunları, kart oyunları, mantık ve kelime bulmacaları. Burada oyna ya da bir kopyasını açıp kendi sürümünü yap.')} <a href="#terms">{t('Terms of use', '使用条款', 'Kullanım şartları')}</a> · {t('To report a game, see the terms.', '如需举报游戏，请查看条款。', 'Bir oyunu bildirmek için şartlara bak.')}</p>
       </header>
       {!community().shared && <p className="wk-notice">{t('For now, published games are kept on this device only; when the site gets its server, they will be shown to everyone.', '目前已发布的游戏只保存在本设备上；网站接入服务器后，会向所有人展示。', 'Şimdilik yayınlanan oyunlar yalnızca bu cihazda tutuluyor; site sunucusuna kavuşunca herkese gösterilecek.')}</p>}
       <div className="wk-cfilter">

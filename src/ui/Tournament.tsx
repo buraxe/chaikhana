@@ -14,7 +14,7 @@ import { Section, Seg } from './bits';
  * league (everyone meets everyone) or a knockout. Each match is played in its own game in
  * same-device mode and the winner is entered here.
  */
-const GAMES = ['chess', 'weiqi', 'xiangqi', 'shogi', 'pisti', 'tavla', 'dama', 'mancala', 'morris', 'reversi', 'connect-four', 'gomoku', 'qubic', 'dots-boxes', 'tictactoe', 'battleship', 'billiards', 'bulls-cows'];
+const GAMES = ['chess', 'weiqi', 'xiangqi', 'shogi', 'pisti', 'tavla', 'dama', 'mancala', 'morris', 'reversi', 'four-in-a-row', 'gomoku', 'cube-ttt', 'dots-boxes', 'tictactoe', 'sea-battle', 'billiards', 'bulls-cows'];
 type Res = 'a' | 'b' | 'd';
 interface Fx { a: number; b: number; game: string; round: number; res?: Res }
 interface Tour { name: string; players: string[]; games: string[]; format: 'league' | 'knockout'; fixtures: Fx[]; champion?: number }
@@ -43,7 +43,7 @@ export function Tournament() {
   const t = useT(), lang = useLang();
   const [tour, setTour] = useState<Tour | null>(() => loadJSON<Tour | null>(KEY, null));
   const [names, setNames] = useState<string[]>(['', '', '', '']);
-  const [games, setGames] = useState<string[]>(['tavla', 'dama', 'connect-four']);
+  const [games, setGames] = useState<string[]>(['tavla', 'dama', 'four-in-a-row']);
   const [format, setFormat] = useState<'league' | 'knockout'>('league');
   const [title, setTitle] = useState('');
   const [ask, setAsk] = useState(false);

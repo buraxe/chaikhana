@@ -41,7 +41,7 @@ const ART: Record<string, JSX.Element> = {
       <rect className="k p" x="27" y="45" width="10" height="6" rx="1" />
     </>
   ),
-  'lights-out': (
+  'lights-off': (
     <>
       {range(9).map(i => {
         const on = [0, 2, 4, 6, 8].includes(i);
@@ -50,7 +50,7 @@ const ART: Record<string, JSX.Element> = {
       <path className="k w05" d="M32 7v3M32 22v3M23 16h3M38 16h3" />
     </>
   ),
-  mastermind: (
+  'code-breaker': (
     <>
       <rect className="k" x="6" y="14" width="52" height="36" rx="3" />
       {[0, 1].map(row => [0, 1, 2, 3].map(c => (
@@ -61,7 +61,7 @@ const ART: Record<string, JSX.Element> = {
       )))}
     </>
   ),
-  rubik: (
+  'magic-cube': (
     <>
       <path className="k w15" d="M32 8L54 20.5V45.5L32 58L10 45.5V20.5Z" />
       <path className="k w15" d="M10 20.5L32 33L54 20.5M32 33V58" />
@@ -131,7 +131,7 @@ const ART: Record<string, JSX.Element> = {
       <path className="k f r" d="M30 30h4v4h-4z" />
     </>
   ),
-  soma: (
+  'seven-cube': (
     <>
       <path className="k w15 p" d="M12 26l16 -8l16 8l-16 8z" /><path className="k w15 p" d="M12 26v16l16 8v-16z" /><path className="k w15 p" d="M28 34v16l16 -8v-16z" />
       <path className="k w05" d="M17 24l16 8M22 21l16 8M17 28v16M22 31v16M33 47l0 0M33 32v16M38 29v16" />
@@ -144,13 +144,13 @@ const ART: Record<string, JSX.Element> = {
       <path className="k w05" d="M10 44h16v-16h16v-16h8" />
     </>
   ),
-  hidato: (
+  'number-path': (
     <>
       {[[14, 14, '1'], [32, 14, '2'], [50, 14, '3'], [50, 32, '4'], [32, 32, '5'], [14, 50, '6'], [32, 50, '7'], [50, 50, '8']].map(([x, y, v]) => <g key={String(v)}><circle className="k w15 p" cx={x as number} cy={y as number} r="7" /><text className={v === '1' || v === '8' ? 't r-t' : 't'} x={x as number} y={(y as number) + 3.5} textAnchor="middle" style={{ fontSize: '9px' }}>{v}</text></g>)}
       <path className="k w05" d="M21 14h4M39 14h4M50 21v4M43 32h-4M27 37l-7 7M21 50h4M39 50h4" />
     </>
   ),
-  numberlink: (
+  'link-numbers': (
     <>
       <rect className="k w2" x="8" y="8" width="48" height="48" />
       <path className="r-s w2" d="M16 16h32v16" /><path className="k w2" d="M16 48V32h16v16h16" />
@@ -197,7 +197,7 @@ const ART: Record<string, JSX.Element> = {
       <text className="t" x="32" y="52" textAnchor="middle">1</text><text className="t" x="48" y="36" textAnchor="middle">2</text>
     </>
   ),
-  slitherlink: (
+  'loop-line': (
     <>
       {[12, 24, 36, 48].map(y => [12, 24, 36, 48].map(x => <circle key={x + '-' + y} className="k f" cx={x} cy={y} r="1.6" />))}
       <path className="r-s w2" d="M12 12h24v12h12v24h-24v-12h-12z" />
@@ -212,7 +212,7 @@ const ART: Record<string, JSX.Element> = {
       <path className="k w2" d="M8 52h48" />
     </>
   ),
-  kenken: (
+  'calcudoku': (
     <>
       <rect className="k w2 p" x="8" y="8" width="48" height="48" />
       <path className="k w05" d="M24 8v48M40 8v48M8 24h48M8 40h48" />
@@ -227,7 +227,7 @@ const ART: Record<string, JSX.Element> = {
       {[[16, 16, '3'], [48, 16, '3'], [16, 48, '2'], [48, 48, '4']].map(([x, y, n]) => <g key={String(x) + y}><circle className="k w15 p" cx={x as number} cy={y as number} r="7" /><text className="t" x={(x as number) - 3.4} y={(y as number) + 4}>{n}</text></g>)}
     </>
   ),
-  sokoban: (
+  'box-pusher': (
     <>
       <rect className="k w15 p" x="8" y="8" width="48" height="48" />
       <rect className="k w15 r" x="28" y="24" width="16" height="16" rx="2" /><path className="k w1" d="M28 24l16 16M44 24L28 40" />
@@ -366,7 +366,7 @@ const ART: Record<string, JSX.Element> = {
       <circle className="r" cx="14" cy="14" r="2" />
     </>
   ),
-  'connect-four': (
+  'four-in-a-row': (
     <>
       <rect className="k w15" x="6" y="12" width="52" height="40" rx="2" />
       <path className="k w15" d="M10 52v6M54 52v6" />
@@ -431,7 +431,7 @@ const ART: Record<string, JSX.Element> = {
       <text className="t s" x="8" y="51">5 6 7 8</text><text className="t s" x="42" y="51">+0</text><text className="t s" x="51" y="51">−1</text>
     </>
   ),
-  battleship: (
+  'sea-battle': (
     <>
       {[0, 1, 2, 3, 4, 5].map(i => <path key={i} className="k w05" d={`M${10 + i * 9} 10v45M10 ${10 + i * 9}h45`} />)}
       <path className="f" d="M12 31h33l-4 6H16z" /><rect className="f" x="24" y="26" width="10" height="5" /><path className="k w15" d="M29 26v-5" />
@@ -439,7 +439,7 @@ const ART: Record<string, JSX.Element> = {
       <path className="r-s w2" d="M47 14l6 6M53 14l-6 6" /><circle className="k" cx="18" cy="17" r="1.6" />
     </>
   ),
-  qubic: (
+  'cube-ttt': (
     <>
       {[0, 1, 2, 3].map(l => <path key={l} className="k w05" d={`M${10} ${46 - l * 11}l22-8 22 8-22 8z`} />)}
       <path className="k w05" d="M10 46v-33M54 46v-33M32 54v-33M32 38v-33" />
@@ -514,7 +514,7 @@ const ART: Record<string, JSX.Element> = {
       <path className="r-s w15" d="M8 9l46 40" strokeDasharray="2 2" />
     </>
   ),
-  wordle: (
+  'word-guess': (
     <>
       {range(3).map(r => range(5).map(c => {
         const m = [['x', 'y', 'x', 'g', 'x'], ['g', 'x', 'y', 'g', 'x'], ['g', 'g', 'g', 'g', 'g']][r][c];

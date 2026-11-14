@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
 import * as R from './reversi/rules';
 import * as N from './nonogram/rules';
-import * as M from './mastermind/rules';
+import * as M from './code-breaker/rules';
 import * as D from './dots/rules';
 
 describe('reversi', () => {
@@ -54,7 +54,7 @@ describe('nonograms', () => {
   });
 });
 
-describe('mastermind', () => {
+describe('code-breaker', () => {
   it('scores black and white pegs, counting repeats correctly', () => {
     expect(M.score([0, 1, 2, 3], [0, 1, 2, 3])).toEqual([4, 0]);
     expect(M.score([0, 1, 2, 3], [3, 2, 1, 0])).toEqual([0, 4]);

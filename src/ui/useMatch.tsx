@@ -1,6 +1,6 @@
 import { SLIP } from '../core/game';
 import { sfx, type Sfx } from '../core/sound';
-const MOVE_SOUND: Record<string, Sfx> = { dama: 'checker', 'dots-boxes': 'peg', tictactoe: 'peg', mancala: 'stone', 'connect-four': 'stone', reversi: 'stone', morris: 'stone', qubic: 'peg', checkers: 'checker', 'chinese-checkers': 'stone', 'ultimate-ttt': 'peg', nim: 'peg' };
+const MOVE_SOUND: Record<string, Sfx> = { dama: 'checker', 'dots-boxes': 'peg', tictactoe: 'peg', mancala: 'stone', 'four-in-a-row': 'stone', reversi: 'stone', morris: 'stone', 'cube-ttt': 'peg', checkers: 'checker', 'chinese-checkers': 'stone', 'ultimate-ttt': 'peg', nim: 'peg' };
 import { RivalPick, useRival } from './Cast';
 import { useEffect, useRef, useState } from 'react';
 import { pname, trLabel, useLang, useT, aiLabel, guestName } from '../core/i18n';

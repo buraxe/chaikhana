@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
 import * as L from './luban/rules';
 import LOCKS from './luban/locks.json';
-import * as S from './soma/rules';
+import * as S from './seven-cube/rules';
 import * as N from './snake/rules';
 
 describe('lu ban lock', () => {
@@ -18,7 +18,7 @@ describe('lu ban lock', () => {
     }
   });
 });
-describe('soma', () => {
+describe('seven-cube', () => {
   it('has the seven pieces, 27 cubes in all', () => {
     expect(S.PIECES.reduce((a, p) => a + p.cells.length, 0)).toBe(27);
     expect(S.orientations(S.PIECES[6].cells).length).toBe(8);

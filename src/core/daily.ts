@@ -8,8 +8,8 @@ import { byLevel } from './cast';
 export type TaskKind = 'sudoku' | 'f70' | 'rival' | 'puzzle' | 'board';
 export interface Task { id: TaskKind; game: string; level?: number; who?: number; league?: 'giants' | 'tr' | 'cn' }
 export const BOARD_PUZZLES = ['chess', 'xiangqi', 'shogi', 'weiqi'];
-const RIVAL_GAMES = ['chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'batak', 'king', 'tavla', 'dama', 'reversi', 'connect-four', 'gomoku', 'mancala', 'morris', 'dots-boxes', 'okey', 'battleship', 'billiards', 'qubic'];
-const PUZZLES = ['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'soma', 'snake-cube', 'hidato', 'numberlink', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'slitherlink', 'nine-rings', 'kenken', 'hashi', 'sokoban', 'minesweeper', 'nonogram', 'lights-out', 'hanoi', 'mastermind', 'bulls-cows', 'huarong', 'tangram', 'minesweeper-3d', 'rubik'];
+const RIVAL_GAMES = ['chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'batak', 'king', 'tavla', 'dama', 'reversi', 'four-in-a-row', 'gomoku', 'mancala', 'morris', 'dots-boxes', 'okey', 'sea-battle', 'billiards', 'cube-ttt'];
+const PUZZLES = ['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'seven-cube', 'snake-cube', 'number-path', 'link-numbers', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'loop-line', 'nine-rings', 'calcudoku', 'hashi', 'box-pusher', 'minesweeper', 'nonogram', 'lights-off', 'hanoi', 'code-breaker', 'bulls-cows', 'huarong', 'tangram', 'minesweeper-3d', 'magic-cube'];
 export function tasksFor(day: string): Task[] {
   const r = mulberry32(hashString('issue:' + day)), pick = <T,>(a: T[]) => a[Math.floor(r() * a.length)];
   const leagues = ['giants', 'tr', 'cn'] as const;

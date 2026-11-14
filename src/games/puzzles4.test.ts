@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
 import * as T from './g2048/rules';
-import * as S from './sokoban/rules';
+import * as S from './box-pusher/rules';
 import * as H from './hashi/rules';
-import * as K from './kenken/rules';
+import * as K from './calcudoku/rules';
 
 describe('2048', () => {
   it('merges once per move and scores', () => {
@@ -12,7 +12,7 @@ describe('2048', () => {
     expect(T.slide({ cells: [2, 4, 2, 4, 4, 2, 4, 2, 2, 4, 2, 4, 4, 2, 4, 2], score: 0, moves: 0 }, 'left')).toBeNull();
   });
 });
-describe('sokoban', () => {
+describe('box-pusher', () => {
   it('generated levels are solvable by reversing the pulls (search check on small ones)', () => {
     for (let k = 0; k < 6; k++) {
       const L = S.generate('small', mulberry32(k));
@@ -45,7 +45,7 @@ describe('hashi', () => {
     const b = H.cycle(p, {}, 0, 1)!; expect(H.cycle(p, b, 2, 3)).toBeNull();
   });
 });
-describe('kenken', () => {
+describe('calcudoku', () => {
   it('the generator’s own solution satisfies every cage', () => {
     for (const n of [4, 5, 6]) for (let k = 0; k < 10; k++) { const p = K.generate(n, mulberry32(k * 7 + n)); expect(K.solved(p, p.solution)).toBe(true); expect(p.cages.flatMap(c => c.cells).length).toBe(n * n); }
   });

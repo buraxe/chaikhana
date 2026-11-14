@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { mulberry32 } from '../core/rng';
 import * as T from './tictactoe/rules';
-import * as C from './connect-four/rules';
+import * as C from './four-in-a-row/rules';
 import * as M from './minesweeper/rules';
 import * as H from './hanoi/rules';
-import * as L from './lights-out/rules';
+import * as L from './lights-off/rules';
 
 describe('tic-tac-toe', () => {
   it('detects rows, columns and diagonals; ends in a draw when full', () => {

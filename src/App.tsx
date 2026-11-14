@@ -17,6 +17,8 @@ const ProfilePage = lazy(() => import('./ui/Profile').then(m => ({ default: m.Pr
 const Coffeehouse = lazy(() => import('./ui/Coffeehouse').then(m => ({ default: m.Coffeehouse })));
 const Community = lazy(() => import('./maker/Community').then(m => ({ default: m.Community })));
 const Workshop = lazy(() => import('./maker/Workshop').then(m => ({ default: m.Workshop })));
+const Licenses = lazy(() => import('./ui/Legal').then(m => ({ default: m.Licenses })));
+const Terms = lazy(() => import('./ui/Legal').then(m => ({ default: m.Terms })));
 const Tournament = lazy(() => import('./ui/Tournament').then(m => ({ default: m.Tournament })));
 
 // Routes are plain #names so a link to any page can be shared or bookmarked.
@@ -57,6 +59,8 @@ export default function App() {
   else if (route === 'tournament') page = <Tournament />;
   else if (route === 'workshop' || shared) page = <Workshop incoming={shared || undefined} />;
   else if (route === 'community' || communityId) page = <Community key={communityId} id={communityId || undefined} />;
+  else if (route === 'licenses') page = <Licenses />;
+  else if (route === 'terms') page = <Terms />;
   else page = <Home />;
 
   return (
@@ -93,6 +97,7 @@ export default function App() {
       <Toasts />
       <footer className="wrap foot">
         <span>{t('Everything here runs and saves on this device. Online play comes in a later phase.', '所有内容都在本设备上运行和保存。联网对战将在后续阶段推出。', 'Buradaki her şey bu cihazda çalışır ve kaydedilir. Çevrimiçi oyun sonraki bir aşamada gelecek.')}</span>
+        <span className="foot-links"><a href="#terms">{t('Terms of use', '使用条款', 'Kullanım şartları')}</a> · <a href="#licenses">{t('Licences', '许可', 'Lisanslar')}</a></span>
       </footer>
     </>
   );

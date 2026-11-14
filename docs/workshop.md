@@ -57,7 +57,7 @@ interpreted by the engine, so a game from a stranger is safe to open.
 
 | mode | what it is | key blocks |
 | --- | --- | --- |
-| `guess` | Wordle: a secret word, guesses marked green / yellow / grey | `pickWord`, `addGuess`, `secret`, `guesses`, `inList` |
+| `guess` | guess the secret word; each guess is marked green / yellow / grey | `pickWord`, `addGuess`, `secret`, `guesses`, `inList` |
 | `anagram` | unscramble the secret; `clues` give a hint | `pickWord`, `secret` |
 | `search` | words hidden in a grid (`size`, `count`, `diagonal`, `backwards`, optional themed `groups`) | `buildPuzzle`, `placed`, `markFound`, `found`, `total` |
 | `cross` | a crossword built from the clued words (`clues`, `size`, `count`); typing needs no rule | `buildPuzzle`, `crossDone`, `reveals` |

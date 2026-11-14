@@ -247,7 +247,7 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
                 else if (m === 'anagram') { x.words!.length = 0; x.rules = [{ on: 'start', do: [{ op: 'pickWord' }] }, { on: 'word', when: { op: 'eq', a: guessE, b: { op: 'secret' } }, do: [{ op: 'win' }] }]; }
                 else { x.words!.length = 5; x.rules = [{ on: 'start', do: [{ op: 'pickWord' }] }, { on: 'word', when: { op: 'eq', a: { op: 'len', text: guessE }, b: { op: 'wordLen' } }, do: [{ op: 'addGuess', text: guessE }, { op: 'if', test: { op: 'eq', a: guessE, b: { op: 'secret' } }, then: [{ op: 'win' }], else: [{ op: 'if', test: { op: 'ge', a: { op: 'guesses' }, b: 6 }, then: [{ op: 'lose' }] }] }] }]; }
               })}>
-                <option value="guess">{t('Guess the word (Wordle)', '猜单词（Wordle）', 'Kelimeyi tahmin et (Wordle)')}</option>
+                <option value="guess">{t('Guess the word', '猜单词', 'Kelimeyi tahmin et')}</option>
                 <option value="cross">{t('Crossword', '填字游戏', 'Kare bulmaca')}</option>
                 <option value="search">{t('Word search', '找词游戏', 'Kelime avı')}</option>
                 <option value="anagram">{t('Anagram', '字母重组', 'Anagram')}</option>
@@ -294,7 +294,7 @@ export function MaterialsEditor({ def, onSave }: { def: GameDef; onSave: (d: Gam
           )}
           {d.words.groups && <p className="muted small">{t(`This game uses ${d.words.groups.length} themes; each puzzle picks one. Themes are edited in JSON.`, `本游戏使用 ${d.words.groups.length} 个主题，每题随机选一个。主题在JSON中编辑。`, `Bu oyunda ${d.words.groups.length} tema var; her bulmaca birini seçer. Temalar JSON’da düzenlenir.`)}</p>}
           <p className="muted small">{t('A secret is drawn from the list with “pick a secret word”; guesses are typed on the keyboard and marked green, yellow or grey with “mark the guess”. Rules can also require that a guess be in the list.', '用“选一个谜底单词”从词表中抽出谜底；猜测用键盘输入，用“标出猜测”标成绿、黄或灰。规则还可以要求猜测必须在词表中。', '“Gizli bir kelime seç” bloğu listeden bir kelime çeker; tahminler klavyeyle yazılır ve “tahmini işaretle” ile yeşil, sarı ya da gri işaretlenir. Kurallar tahminin listede olmasını da şart koşabilir.')}</p>
-        </> : <p className="muted small">{t('Turn this on for Wordle-style puzzles: a word list, a keyboard and coloured guesses.', '开启后可做 Wordle 式谜题：词表、键盘和带颜色的猜测。', 'Wordle tarzı bulmacalar için aç: kelime listesi, klavye ve renkli tahminler.')}</p>}
+        </> : <p className="muted small">{t('Turn this on for word puzzles: guessing a word, crosswords, word searches or anagrams.', '开启后可做文字谜题：猜词、填字、找词或字母重组。', 'Kelime bulmacaları için aç: kelime tahmini, kare bulmaca, kelime avı ya da anagram.')}</p>}
       </Sec>
 
       <Sec title={t('Pieces', '棋子', 'Taşlar')}>
