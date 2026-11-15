@@ -1,0 +1,14 @@
+/* Styles that only games/rps uses; loaded with it. */
+.rp-arena { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rp-hand { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+.rp-hand.won { border-color: var(--gold); box-shadow: inset 0 0 0 2px var(--gold); }
+.rp-who { font-weight: 600; text-align: center; }
+.rp-sign { font-size: clamp(2.6rem, 10vw, 4rem); line-height: 1.1; }
+.rp-pips { display: flex; gap: 5px; }
+.rp-pips i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink); }
+.rp-pips i.on { background: var(--red); border-color: var(--red); }
+.rp-last { min-height: 1.4em; text-align: center; }
+.rp-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.rp-pick { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-block: 10px; }
+.rp-pick span { font-size: 1.8rem; }
+.rp-log { display: flex; flex-wrap: wrap; gap: 8px; }

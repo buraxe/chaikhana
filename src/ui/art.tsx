@@ -536,6 +536,44 @@ const ART: Record<string, JSX.Element> = {
       <circle className="f" cx="20.5" cy="37" r="2.6" /><path className="k w05" d="M17 37h7M20.5 33.5v7" />
       <path className="r" d="M41 33.5v8l5-2.5z" /><text className="t s" x="30" y="22">2</text><text className="t s r-t" x="40" y="47">3</text>
     </>
+  ),  zebra: (
+    <>
+      {range(4).map(i => <path key={i} className={'k ' + (i === 2 ? 'r' : 'p')} d={`M${6 + i * 13.5} 30l6.5-7 6.5 7v14h-13z`} />)}
+      <path className="k w05" d="M4 44h56" />
+      {range(4).map(i => <rect key={'w' + i} className="k sh" x={10.5 + i * 13.5} y="35" width="4" height="9" />)}
+      <path className="k w15" d="M10 52h18M10 57h12M34 52h20" /><path className="r-s w15" d="M44 8l4 4 8-8" style={{ strokeWidth: 2 }} />
+      <text className="t xs" x="8" y="16">1</text><text className="t xs" x="21.5" y="16">2</text><text className="t xs" x="35" y="16">3</text>
+    </>
+  ),
+  'sliding-block': (
+    <>
+      <rect className="k w2 f" x="7" y="7" width="50" height="50" rx="2" />
+      {range(16).map(i => i === 15 ? null : <g key={i}><rect className={i === 10 ? 'r' : 'p'} x={9.5 + (i % 4) * 11.5} y={9.5 + Math.floor(i / 4) * 11.5} width="10.5" height="10.5" rx="1" /><text className="t xs" x={14.75 + (i % 4) * 11.5} y={16.8 + Math.floor(i / 4) * 11.5} textAnchor="middle">{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 13, 14, 11][i]}</text></g>)}
+    </>
+  ),
+  pentomino: (
+    <>
+      <rect className="k w15" x="6" y="14" width="52" height="36" />
+      {([[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]] as number[][]).map(([x, y], i) => <rect key={'t' + i} className="k r" x={6 + x * 10.4} y={14 + y * 12} width="10.4" height="12" />)}
+      {([[3, 0], [4, 0], [3, 1], [3, 2], [2, 2]] as number[][]).map(([x, y], i) => <rect key={'z' + i} className="k sh2" x={6 + x * 10.4} y={14 + y * 12} width="10.4" height="12" />)}
+      {([[0, 1], [0, 2], [2, 1], [4, 1], [4, 2]] as number[][]).map(([x, y], i) => <rect key={'p' + i} className="k p" x={6 + x * 10.4} y={14 + y * 12} width="10.4" height="12" />)}
+    </>
+  ),
+  't-puzzle': (
+    <>
+      <path className="k w15 r" d="M8 10h15l-10 10H8z" /><path className="k w15 p" d="M28 10h12v12H28z" />
+      <path className="k w15 sh2" d="M23 10h5v15l-10 10V20h-5z" transform="translate(4 0)" />
+      <path className="k w15 p" d="M32 25v25H22V35z" />
+      <path className="k w05" d="M46 30l10 10-10 10" />
+    </>
+  ),
+  rps: (
+    <>
+      <circle className="k w15 sh2" cx="16" cy="40" r="9" /><path className="k w05" d="M10 37h12M10 41h12" />
+      <rect className="k w15 p" x="26" y="14" width="13" height="18" rx="1.5" /><path className="k w05" d="M29 19h7M29 23h7M29 27h5" />
+      <circle className="k w15" cx="45" cy="48" r="3.5" /><circle className="k w15" cx="54" cy="48" r="3.5" />
+      <path className="k w15" d="M47 45.5L56 30M52 45.5L43 30" /><path className="r-s w15" d="M22 46c6 6 14 6 18 2M34 30c2-6 6-8 10-6M18 30c0-8 4-12 8-12" />
+    </>
   ),
 };
 

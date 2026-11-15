@@ -2,7 +2,7 @@ import type { Category, GameMeta } from './game';
 import type { Lang } from './store';
 
 /** Games that are built and playable. Everything else in the catalogue is roadmap. */
-export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'seven-cube', 'snake-cube', 'number-path', 'link-numbers', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'loop-line', 'nine-rings', 'mahjong', 'sifeng', 'calcudoku', 'hashi', 'box-pusher', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'four-in-a-row', 'tictactoe', 'hanoi', 'lights-off', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'magic-cube', 'reversi', 'nonogram', 'code-breaker', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'sea-battle', 'cube-ttt', 'football-70', 'minesweeper-3d', 'checkers', 'chinese-checkers', 'dominoes', 'ultimate-ttt', 'nim', 'crossword', 'word-search', 'word-guess', 'anagram']);
+export const PLAYABLE = new Set(['kongming', 'burr', 'packing-3d', 'assembly-3d', 'luban', 'seven-cube', 'snake-cube', 'number-path', 'link-numbers', 'n-queens', 'river-crossing', 'futoshiki', 'binary', 'kakuro', 'loop-line', 'nine-rings', 'mahjong', 'sifeng', 'calcudoku', 'hashi', 'box-pusher', 'g2048', 'chess', 'xiangqi', 'shogi', 'weiqi', 'pisti', 'king', 'batak', 'poker', 'sudoku', 'gomoku', 'minesweeper', 'four-in-a-row', 'tictactoe', 'hanoi', 'lights-off', 'huarong', 'tangram', 'tavla', 'dama', 'okey', 'billiards', 'okey-101', 'magic-cube', 'reversi', 'nonogram', 'code-breaker', 'dots-boxes', 'mancala', 'morris', 'bulls-cows', 'sea-battle', 'cube-ttt', 'football-70', 'minesweeper-3d', 'checkers', 'chinese-checkers', 'dominoes', 'ultimate-ttt', 'nim', 'crossword', 'word-search', 'word-guess', 'anagram', 'zebra', 'sliding-block', 'pentomino', 't-puzzle', 'rps']);
 
 type Row = [id: string, name: string, zh: string, cat: Category, minP: number, maxP: number,
   minutes: number, depth: 1 | 2 | 3, trad: 0 | 1, dim: 2 | 3, phase: number, tr: string];
@@ -30,7 +30,7 @@ const ROWS: Row[] = [
   ['n-queens', 'N-Queens', 'N皇后', 'logic', 1, 1, 10, 2, 1, 2, 2, 'N Vezir'],
   ['code-breaker', 'Code Breaker', '猜颜色密码', 'logic', 1, 2, 10, 1, 0, 2, 2, 'Renk Şifresi'],
   ['bulls-cows', 'Bulls and Cows', '猜数字', 'logic', 1, 2, 5, 1, 1, 2, 2, 'Sayı Bulmaca'],
-  ['einstein', "Einstein's Riddle", '爱因斯坦谜题', 'logic', 1, 1, 20, 3, 0, 2, 2, 'Einstein Bilmecesi'],
+  ['zebra', 'Zebra Puzzle', '斑马谜题', 'logic', 1, 1, 20, 3, 0, 2, 2, 'Zebra Bilmecesi'],
   ['river-crossing', 'River Crossing', '过河问题', 'logic', 1, 1, 5, 1, 1, 2, 2, 'Nehirden Geçiş'],
   ['matchstick', 'Matchstick Puzzles', '火柴棍谜题', 'logic', 1, 1, 5, 1, 1, 2, 2, 'Kibrit Bulmacaları'],
   ['minesweeper-3d', '3D Minesweeper', '3D扫雷', 'spatial', 1, 1, 10, 2, 0, 3, 3, '3B Mayın Tarlası'],
@@ -39,9 +39,9 @@ const ROWS: Row[] = [
   ['snake-cube', 'Snake Cube', '蛇形立方', 'spatial', 1, 1, 10, 2, 0, 3, 3, 'Yılan Küp'],
   ['burr', 'Burr Puzzles', '插接谜题', 'spatial', 1, 1, 20, 3, 1, 3, 3, 'Geçme Bulmacalar'],
   ['disentanglement', 'Disentanglement Puzzles', '解环谜题', 'spatial', 1, 1, 15, 3, 1, 3, 3, 'Halka Ayırma Bulmacaları'],
-  ['sliding-block', 'Sliding Block Puzzles', '滑块谜题', 'spatial', 1, 1, 10, 2, 1, 2, 3, 'Kaydırmalı Blok Bulmacaları'],
+  ['sliding-block', 'Sliding Tiles', '数字华容道', 'spatial', 1, 1, 10, 2, 1, 2, 3, 'Kaydırmalı Sayılar'],
   ['packing-3d', '3D Packing Puzzles', '3D装箱谜题', 'spatial', 1, 1, 15, 2, 0, 3, 3, '3B Yerleştirme Bulmacaları'],
-  ['pentomino', 'Pentomino & Polyominoes', '五连块', 'spatial', 1, 1, 15, 2, 0, 2, 3, 'Pentomino ve Poliominolar'],
+  ['pentomino', 'Pentominoes', '五连块', 'spatial', 1, 1, 15, 2, 0, 2, 3, 'Pentomino'],
   ['t-puzzle', 'T-Puzzle', 'T字谜', 'spatial', 1, 1, 5, 1, 1, 2, 3, 'T Bulmacası'],
   ['assembly-3d', '3D Assembly Puzzles', '3D拼装谜题', 'spatial', 1, 1, 20, 3, 0, 3, 3, '3B Montaj Bulmacaları'],
   ['huarong', 'Huarong Dao', '华容道', 'chinese', 1, 1, 15, 3, 1, 2, 2, 'Huarong Dao'],

@@ -1,0 +1,15 @@
+/* Styles that only games/zebra uses; loaded with it. */
+.zb-wrap { overflow-x: auto; }
+.zb-grid { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: .78rem; }
+.zb-grid th { font-weight: 600; padding: 4px; text-align: center; color: var(--muted); }
+.zb-grid tbody th { text-align: left; width: 4.6em; }
+.zb-grid td { border: 1px solid var(--line); padding: 3px; vertical-align: top; background: var(--surface); }
+.zb-grid td.set { background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+.zb-v { display: block; width: 100%; padding: 2px 3px; margin-block: 1px; border: 0; border-radius: 3px; background: none; color: var(--ink); font: inherit; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.zb-v:hover { background: var(--paper-rule, var(--line)); }
+.zb-v.x { color: var(--muted); text-decoration: line-through; opacity: .45; }
+.zb-v.o { background: var(--ink); color: var(--surface); font-weight: 600; }
+.zb-grid.n5 { font-size: .72rem; }
+.zb-clues { display: flex; flex-direction: column; gap: 6px; padding-left: 1.4em; line-height: 1.45; }
+.zb-clues li { cursor: pointer; }
+.zb-clues li.done { color: var(--muted); text-decoration: line-through; }

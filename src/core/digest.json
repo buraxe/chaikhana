@@ -587,6 +587,66 @@
     "h": "Anagram, harfli yazı kadar eskidir: Yunan şair Lykophron MÖ üçüncü yüzyılda anagram yapmıştı; on yedinci yüzyılda Galileo gibi bilim insanları buluşlarını yayımlamadan önce sahiplenmek için anagramlara gizlerdi."
    }
   },
+  "zebra": {
+   "names": {
+    "en": "Zebra Puzzle",
+    "zh": "斑马谜题",
+    "tr": "Zebra Bilmecesi",
+    "pinyin": "bānmǎ mítí"
+   },
+   "en": {
+    "s": "Houses in a row, a list of clues, one answer: work out who lives where and what each one drinks, keeps and plays.",
+    "h": "A puzzle of this kind appeared in Life International magazine in December 1962, ending with the question “who owns the zebra?”, which gave the whole family its name."
+   },
+   "zh": {
+    "s": "一排房子、一串线索、唯一的答案：推出谁住哪里，各自喝什么、养什么、玩什么。",
+    "h": "1962年12月，《生活》国际版杂志刊登了这类谜题，结尾问道“谁养斑马？”，这一类谜题因此得名。"
+   },
+   "tr": {
+    "s": "Yan yana evler, bir ipucu listesi ve tek bir cevap: kimin nerede oturduğunu, ne içtiğini, ne beslediğini ve ne oynadığını bul.",
+    "h": "Bu türden bir bulmaca Aralık 1962’de Life International dergisinde yayımlandı ve “zebra kimin?” sorusuyla bitiyordu; bütün aile adını buradan aldı."
+   }
+  },
+  "pentomino": {
+   "names": {
+    "en": "Pentominoes",
+    "zh": "五连块",
+    "tr": "Pentomino",
+    "pinyin": "wǔ lián kuài"
+   },
+   "en": {
+    "s": "Twelve shapes, each made of five squares: fit them together to fill a rectangle.",
+    "h": "The puzzle-maker Henry Dudeney used a set of these shapes in a puzzle of 1907, and the mathematician Solomon Golomb gave them the name “pentominoes” in 1953 and made them famous with his book on polyominoes."
+   },
+   "zh": {
+    "s": "十二种形状，每种由五个正方形组成：把它们拼起来填满一个长方形。",
+    "h": "谜题作家亨利·杜德尼在1907年的一道谜题中用到了这套形状；数学家所罗门·格隆布在1953年为它们取名“pentomino”，并通过关于多连块的著作使其闻名。"
+   },
+   "tr": {
+    "s": "Her biri beş kareden oluşan on iki şekil: onları birleştirip bir dikdörtgeni doldur.",
+    "h": "Bulmaca yazarı Henry Dudeney 1907’de bir bulmacasında bu şekilleri kullandı; matematikçi Solomon Golomb 1953’te onlara “pentomino” adını verdi ve poliominolar üzerine kitabıyla ünlendirdi."
+   }
+  },
+  "rps": {
+   "names": {
+    "en": "Rock Paper Scissors",
+    "zh": "石头剪刀布",
+    "tr": "Taş Kâğıt Makas",
+    "pinyin": "shítou jiǎndāo bù"
+   },
+   "en": {
+    "s": "Rock, paper or scissors at the same moment: first to three wins.",
+    "h": "Hand games of this kind were played in China under the Han dynasty, two thousand years ago, and the three-sign game with a rock, paper and scissors took its modern form in Japan as jan-ken in the 19th century before spreading round the world in the 20th."
+   },
+   "zh": {
+    "s": "同时出石头、剪刀或布：先赢三局者胜。",
+    "h": "早在两千年前的汉代，中国就有这类手势游戏；以石头、剪刀、布三种手势定胜负的现代玩法在19世纪的日本定型，称为“jan-ken”，20世纪传遍世界。"
+   },
+   "tr": {
+    "s": "Aynı anda taş, kâğıt ya da makas: üç sayıya ilk ulaşan kazanır.",
+    "h": "Bu türden el oyunları iki bin yıl önce Han hanedanı döneminde Çin’de oynanıyordu; taş, kâğıt ve makaslı üç işaretli oyun bugünkü biçimini 19. yüzyılda Japonya’da jan-ken adıyla aldı ve 20. yüzyılda bütün dünyaya yayıldı."
+   }
+  },
   "futoshiki": {
    "names": {
     "en": "Futoshiki",

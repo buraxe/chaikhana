@@ -74,6 +74,11 @@ export const SCREENS: Record<string, LazyExoticComponent<ComponentType<{ daily?:
   'word-search': lazy(() => import('../games/words/WordSearch')),
   'word-guess': lazy(() => import('../games/words/WordGuess')),
   anagram: lazy(() => import('../games/words/Anagram')),
+  zebra: lazy(() => import('../games/zebra/Zebra')),
+  'sliding-block': lazy(() => import('../games/sliding/Sliding')),
+  pentomino: lazy(() => import('../games/pentomino/Pentomino')),
+  't-puzzle': lazy(() => import('../games/t-puzzle/TPuzzle')),
+  rps: lazy(() => import('../games/rps/Rps')),
 };
 
 /** How a best-time key reads on screen. Most keys are already labels; some games store an id. */

@@ -1,0 +1,11 @@
+/* Styles that only games/pentomino uses; loaded with it. */
+.pt-board { display: block; width: min(100%, 640px); height: auto; touch-action: manipulation; user-select: none; }
+.pt-cell { fill: var(--surface); stroke: var(--line); stroke-width: .03; }
+.pt-piece rect, .pt-tp rect { fill: hsl(var(--hue) 55% 52%); stroke: var(--surface); stroke-width: .06; }
+.pt-piece text { font: 700 .5px var(--body); text-anchor: middle; fill: #fff; pointer-events: none; }
+.pt-ghost rect { fill: hsl(var(--hue) 55% 52% / .45); stroke: hsl(var(--hue) 55% 40%); stroke-width: .05; pointer-events: none; }
+.pt-ghost.bad rect { fill: color-mix(in srgb, var(--bad) 30%, transparent); stroke: var(--bad); }
+.pt-tray { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
+.pt-tp { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; cursor: pointer; font-size: .74rem; color: var(--muted); }
+.pt-tp svg { width: 44px; height: 44px; }
+.pt-tp.on { border-color: var(--red); box-shadow: inset 0 0 0 1px var(--red); color: var(--ink); }

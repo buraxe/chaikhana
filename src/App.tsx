@@ -6,6 +6,7 @@ import { Avatar } from './ui/bits';
 import { GamePage } from './ui/GamePage';
 import { Home } from './ui/Home';
 import { Toasts } from './ui/Frame';
+import { renameRoute } from './core/migrate';
 
 // Every page but the front page loads in its own file when it is first opened.
 const Learn = lazy(() => import('./ui/Learn').then(m => ({ default: m.Learn })));
@@ -28,7 +29,12 @@ const NAV: [route: string, en: string, zh: string, tr: string][] = [
   ['coffeehouse', 'Coffeehouse', '茶馆', 'Kahvehane'], ['workshop', 'Workshop', '工坊', 'Atölye'], ['community', 'From you', '你们的作品', 'Sizden gelenler'], ['learn', 'Learn', '学习', 'Öğren'], ['profile', 'Profile', '我的', 'Profil'],
 ];
 const LANGS: [Lang, string, string, string][] = [['en', 'EN', 'English', 'en'], ['tr', 'TR', 'Türkçe', 'tr'], ['zh', '中', '中文', 'zh-Hans']];
-const read = () => location.hash.replace(/^#/, '') || 'home';
+const read = () => {
+  const r = location.hash.replace(/^#/, '') || 'home', now = renameRoute(r);
+  // Old links to renamed games still land on the right page, under its new address.
+  if (now !== r) history.replaceState(null, '', '#' + now);
+  return now;
+};
 
 export default function App() {
   const [route, setRoute] = useState(read);

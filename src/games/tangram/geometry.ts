@@ -6,7 +6,7 @@
  */
 export type PieceId = 'L1' | 'L2' | 'M' | 'S1' | 'S2' | 'Q' | 'P';
 export type Pt = [number, number];
-export interface Place { id: PieceId; x: number; y: number; rot: number; flip: boolean }
+export interface Place { id: string; x: number; y: number; rot: number; flip: boolean }
 
 /** The pieces as they sit in the solved 4×4 square. */
 export const STANDARD: Record<PieceId, Pt[]> = {
@@ -20,14 +20,17 @@ export const STANDARD: Record<PieceId, Pt[]> = {
 };
 export const IDS = Object.keys(STANDARD) as PieceId[];
 export const centroid = (pts: Pt[]): Pt => [pts.reduce((a, p) => a + p[0], 0) / pts.length, pts.reduce((a, p) => a + p[1], 0) / pts.length];
-const LOCAL = Object.fromEntries(IDS.map(id => {
-  const [cx, cy] = centroid(STANDARD[id]);
-  return [id, STANDARD[id].map(([x, y]) => [x - cx, y - cy] as Pt)];
-})) as Record<PieceId, Pt[]>;
 
-export function polygon(p: Place): Pt[] {
+/** Piece outlines around their own centroids, for any set of pieces (tangram, T-puzzle…). */
+export const localOf = (standard: Record<string, Pt[]>): Record<string, Pt[]> => Object.fromEntries(Object.entries(standard).map(([id, pts]) => {
+  const [cx, cy] = centroid(pts);
+  return [id, pts.map(([x, y]) => [x - cx, y - cy] as Pt)];
+}));
+const LOCAL = localOf(STANDARD);
+export const polygon = (p: Place): Pt[] => polygonIn(LOCAL, p);
+export function polygonIn(local: Record<string, Pt[]>, p: Place): Pt[] {
   const a = (p.rot * Math.PI) / 4, ca = Math.cos(a), sa = Math.sin(a);
-  return LOCAL[p.id].map(([x0, y]) => {
+  return local[p.id].map(([x0, y]) => {
     const x = p.flip ? -x0 : x0;
     return [p.x + x * ca - y * sa, p.y + x * sa + y * ca];
   });
@@ -71,9 +74,9 @@ export function compare(target: Pt[][], pieces: Pt[][], step = 0.1) {
 export const SOLVED_ERROR = 0.025;
 
 /** Snap a dragged piece so its nearest vertex meets a nearby target or piece vertex. */
-export function snap(p: Place, anchors: Pt[], radius = 0.45): Place {
+export function snap(p: Place, anchors: Pt[], radius = 0.45, poly: (p: Place) => Pt[] = polygon): Place {
   let best: Pt | null = null, bestD = radius;
-  for (const [vx, vy] of polygon(p)) for (const [ax, ay] of anchors) {
+  for (const [vx, vy] of poly(p)) for (const [ax, ay] of anchors) {
     const d = Math.hypot(ax - vx, ay - vy);
     if (d < bestD) { bestD = d; best = [ax - vx, ay - vy]; }
   }
