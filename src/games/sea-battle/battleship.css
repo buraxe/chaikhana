@@ -9,7 +9,7 @@
 .bs-cell.ship { background: #8a949c; }
 .bs-cell.miss::after { content: ""; position: absolute; inset: 38%; border-radius: 50%; background: #e8eef2; }
 .bs-cell.hit { background: #c8302a; }
-.bs-cell.hit::after { content: "✕"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff3e0; font: 700 .8em/1 var(--body); }
+.bs-cell.hit::after { content: "\2715 "; position: absolute; inset: 0; display: grid; place-items: center; color: #fff3e0; font: 700 .8em/1 var(--body); }
 .bs-cell.sunk { background: #6e1a16; }
 .bs-cell.last { outline: 2px solid #f2c14e; outline-offset: -1px; z-index: 1; }
 .bs-setup { margin-top: 4px; }

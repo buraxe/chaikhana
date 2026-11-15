@@ -25,7 +25,7 @@
 .tt-name { display: flex; align-items: center; gap: 5px; max-width: 100%; }
 .tt-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tt-seat.turn .tt-name b { color: var(--lamp-on); }
-.tt-seat.turn .tt-name::before { content: "●"; color: var(--lamp-on); animation: blink 1s steps(2) infinite; }
+.tt-seat.turn .tt-name::before { content: "\25CF "; color: var(--lamp-on); animation: blink 1s steps(2) infinite; }
 .tt-info { color: #d9cfb5; font-size: .76rem; }
 .tt-backs { display: flex; }
 .tt-backs .pc + .pc { margin-left: -20px; }

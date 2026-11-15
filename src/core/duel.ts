@@ -9,7 +9,7 @@ import { loadJSON, removeKey, saveJSON } from './storage';
  */
 export const RACE_KEYS: Record<string, string[]> = {
   sudoku: ['gp.sudoku.free'], minesweeper: ['gp.mines'], nonogram: ['gp.nonogram'], hanoi: ['gp.hanoi'],
-  'lights-off': ['gp.lights'], huarong: ['gp.huarong'], tangram: ['gp.tangram'], 'magic-cube': ['gp.rubik'], 'code-breaker': ['gp.mastermind'], 'minesweeper-3d': ['gp.cubemines'], 'calcudoku': ['gp.kenken'], hashi: ['gp.hashi'], zebra: ['gp.zebra'], 'sliding-block': ['gp.sliding'], pentomino: ['gp.pentomino'], 't-puzzle': ['gp.tpuzzle'], 'box-pusher': ['gp.sokoban'],
+  'lights-off': ['gp.lights'], huarong: ['gp.huarong'], tangram: ['gp.tangram'], 'magic-cube': ['gp.rubik'], 'code-breaker': ['gp.mastermind'], 'minesweeper-3d': ['gp.cubemines'], 'calcudoku': ['gp.kenken'], hashi: ['gp.hashi'], zebra: ['gp.zebra'], 'sliding-block': ['gp.sliding'], pentomino: ['gp.pentomino'], 't-puzzle': ['gp.tpuzzle'], matchstick: ['gp.matchstick'], 'box-pusher': ['gp.sokoban'],
   futoshiki: ['gp.futoshiki'], 'number-path': ['gp.hidato'], luban: ['gp.luban'], kongming: ['gp.kongming'], burr: ['gp.burr'], 'packing-3d': ['gp.packing'], 'assembly-3d': ['gp.assembly'], 'seven-cube': ['gp.soma'], 'snake-cube': ['gp.snake'], 'link-numbers': ['gp.numberlink'], 'n-queens': ['gp.queens'], 'river-crossing': ['gp.river'], binary: ['gp.binary'], kakuro: ['gp.kakuro'], 'loop-line': ['gp.slither'], 'nine-rings': ['gp.ninerings'],
 };
 export interface RaceResult { ok: boolean; ms?: number; label?: string }

@@ -1,0 +1,8 @@
+/* Styles that only games/table-tennis uses; loaded with it. */
+.tt-board { display: flex; flex-direction: column; gap: 6px; }
+.tt-score { display: flex; justify-content: space-between; font-weight: 600; }
+.tt-score b { font: 700 1.5rem var(--display); }
+.tt-score .srv::after { content: ' \2022'; color: var(--red); }
+.tt-score span:last-child.srv::after { content: ''; }
+.tt-score span:last-child.srv::before { content: '\2022  '; color: var(--red); }
+.tt-canvas { display: block; width: 100%; aspect-ratio: 4.64 / 1.94; border-radius: 6px; touch-action: none; cursor: crosshair; background: #efe6d4; }

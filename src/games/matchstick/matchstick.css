@@ -1,0 +1,15 @@
+/* Styles that only games/matchstick uses; loaded with it. */
+.mc-board { display: block; width: min(100%, 620px); height: auto; margin-inline: auto; padding: 8px; background: #2e2a26; border-radius: 6px; user-select: none; }
+.mc-stick { stroke: #e8c98c; stroke-width: .11; stroke-linecap: round; }
+.mc-head { fill: #b8352a; }
+.mc-hit { stroke: transparent; stroke-width: .38; stroke-linecap: round; cursor: pointer; }
+.mc-match.held .mc-stick { stroke: #f6e7c6; stroke-width: .14; opacity: .55; stroke-dasharray: .08 .06; }
+.mc-match.held .mc-head { opacity: .5; }
+.mc-ghost { stroke: rgba(255, 255, 255, .07); stroke-width: .11; stroke-linecap: round; pointer-events: none; }
+.mc-slot:not(.live) .mc-hit { pointer-events: none; }
+.mc-slot.live .mc-ghost { stroke: rgba(246, 231, 198, .4); stroke-dasharray: .06 .07; }
+.mc-slot.live:hover .mc-ghost { stroke: rgba(246, 231, 198, .8); stroke-width: .14; }
+.mc-eq line { stroke: #9a8f80; stroke-width: .11; stroke-linecap: round; }
+.mc-board.miss { animation: mc-shake .35s; }
+.mc-board.done .mc-stick { stroke: #f2d48a; }
+@keyframes mc-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }

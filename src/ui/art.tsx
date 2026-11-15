@@ -574,6 +574,31 @@ const ART: Record<string, JSX.Element> = {
       <circle className="k w15" cx="45" cy="48" r="3.5" /><circle className="k w15" cx="54" cy="48" r="3.5" />
       <path className="k w15" d="M47 45.5L56 30M52 45.5L43 30" /><path className="r-s w15" d="M22 46c6 6 14 6 18 2M34 30c2-6 6-8 10-6M18 30c0-8 4-12 8-12" />
     </>
+  ),  matchstick: (
+    <>
+      {([[6, 22, 6, 32], [6, 34, 6, 44], [8, 20, 16, 20], [8, 46, 16, 46], [18, 22, 18, 32], [18, 34, 18, 44], [8, 33, 16, 33], [24, 33, 32, 33], [28, 29, 28, 37], [38, 30, 46, 30], [38, 36, 46, 36], [52, 22, 52, 32], [52, 34, 52, 44]] as number[][]).map(([x1, y1, x2, y2], i) => (
+        <g key={i}><path className={'k w2' + (i === 8 ? ' r-s' : '')} d={`M${x1} ${y1}L${x2} ${y2}`} />{i !== 8 && i < 13 && <circle className="r" cx={x2} cy={y2} r="1.4" />}</g>
+      ))}
+      <path className="r-s w15" d="M28 26c2-6 8-8 12-6" /><path className="r-s w15" d="M38 18l2 2-3 1" />
+    </>
+  ),
+  'air-hockey': (
+    <>
+      <rect className="k w2 p" x="14" y="5" width="36" height="54" rx="5" />
+      <path className="k w05" d="M14 32h36" /><circle className="k w05" cx="32" cy="32" r="6" />
+      <path className="k w2" d="M25 5h14M25 59h14" />
+      <circle className="r" cx="28" cy="48" r="5" /><circle className="k sh2" cx="38" cy="15" r="5" />
+      <circle className="f" cx="34" cy="31" r="2.6" /><path className="r-s w05" d="M30 44l3-11" style={{ strokeDasharray: '1.5 1.5' }} />
+    </>
+  ),
+  'table-tennis': (
+    <>
+      <path className="k w2" d="M4 40h56" /><path className="k w15" d="M32 40v-7" />
+      <path className="k w05" d="M10 40v14M54 40v14" />
+      <ellipse className="r" cx="9" cy="28" rx="4" ry="6" /><path className="k w15" d="M8 33l-2 6" />
+      <ellipse className="f" cx="55" cy="26" rx="4" ry="6" /><path className="k w15" d="M56 31l2 6" />
+      <circle className="k p" cx="40" cy="20" r="2.2" /><path className="r-s w05" d="M14 27c8-12 18-14 24-8M38 21l6 19" style={{ strokeDasharray: '1.5 1.5' }} />
+    </>
   ),
 };
 

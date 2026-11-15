@@ -1,0 +1,7 @@
+/* Styles that only games/air-hockey uses; loaded with it. */
+.ah-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ah-table { display: block; width: min(100%, calc((100svh - 260px) / 1.6), 460px); aspect-ratio: 1 / 1.6; min-width: 240px; border: 10px solid #22313d; border-radius: 14px; touch-action: none; cursor: none; background: #dfeef2; }
+.ah-score { display: flex; gap: 10px; align-items: baseline; font-weight: 600; }
+.ah-score b { font: 700 1.4rem var(--display); }
+.ah-score.top b { color: #2d5d8a; }
+.ah-score.bottom b { color: var(--red); }

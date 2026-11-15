@@ -647,6 +647,26 @@
     "h": "Bu türden el oyunları iki bin yıl önce Han hanedanı döneminde Çin’de oynanıyordu; taş, kâğıt ve makaslı üç işaretli oyun bugünkü biçimini 19. yüzyılda Japonya’da jan-ken adıyla aldı ve 20. yüzyılda bütün dünyaya yayıldı."
    }
   },
+  "matchstick": {
+   "names": {
+    "en": "Matchstick Puzzles",
+    "zh": "火柴棍谜题",
+    "tr": "Kibrit Bulmacaları",
+    "pinyin": "huǒcháigùn mítí"
+   },
+   "en": {
+    "s": "A sum made of matches is wrong. Move one match, or two, and make it right.",
+    "h": "Puzzles with matches became popular soon after safety matches spread in the late 19th century: a box in every pocket was a puzzle kit."
+   },
+   "zh": {
+    "s": "一道用火柴摆的算式是错的。移动一根（或两根）火柴，让它成立。",
+    "h": "19世纪末安全火柴普及后，火柴谜题随之流行：人人口袋里一盒火柴，就是一套谜题道具。"
+   },
+   "tr": {
+    "s": "Kibritlerle yazılmış bir işlem yanlış. Bir ya da iki kibriti oynatıp doğru yap.",
+    "h": "19. yüzyılın sonunda güvenli kibrit yaygınlaşınca kibrit bulmacaları da sevildi: her cepteki bir kutu kibrit bir bulmaca takımıydı."
+   }
+  },
   "futoshiki": {
    "names": {
     "en": "Futoshiki",
