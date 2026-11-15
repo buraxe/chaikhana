@@ -55,6 +55,23 @@ describe('air hockey', () => {
     expect(r.goals).toBeGreaterThan(2);
     expect(r.out).toBe(0);
   });
+  it('the computer gets a resting puck out of its corners and off its end wall', () => {
+    for (const lv of [0, 2, 4]) for (const spot of [{ x: AH.PR, y: AH.PR }, { x: AH.W - AH.PR, y: AH.PR }, { x: AH.W / 2 + 0.25, y: AH.PR }, { x: AH.PR, y: 0.4 }]) {
+      const rnd = seeded(lv * 13 + Math.round(spot.x * 100)), t = AH.newTable(2); t.pause = 0; t.puck = { ...spot }; t.pv = { x: 0, y: 0 };
+      t.m[0] = { x: AH.W / 2, y: AH.H - 0.1 };
+      let target = t.m[1], clock = 0, stuck = 0, back = 0, freed = false;
+      for (let i = 0; i < 60 * 6 && !freed; i++) {
+        const dt = 1 / 60; clock -= dt;
+        stuck = AH.aiStuck(t, stuck, dt); if (stuck > 1.1) { back = 0.6; stuck = 0; }
+        if (back > 0) { back -= dt; target = { x: AH.W / 2, y: 0.1 }; } else if (clock <= 0) { clock = AH.LEVELS[lv].react; target = AH.aiTarget(t, lv, rnd); }
+        const m = t.m[1], c = AH.clampMallet(target, 1), dx = c.x - m.x, dy = c.y - m.y, d = Math.hypot(dx, dy), st = Math.min(d, AH.aiSpeed(t, lv) * dt);
+        const n = d ? { x: m.x + dx / d * st, y: m.y + dy / d * st } : m; t.mv[1] = { x: (n.x - m.x) / dt, y: (n.y - m.y) / dt }; t.m[1] = n;
+        AH.step(t, dt);
+        if (t.puck.y > AH.H / 2 || t.score[0] + t.score[1] > 0) freed = true;
+      }
+      expect(freed, `level ${lv} at ${spot.x.toFixed(2)},${spot.y.toFixed(2)}`).toBe(true);
+    }
+  });
   it('the expert beats the beginner', () => {
     let wins = 0;
     for (let s = 1; s <= 3; s++) { const r = play(0, 4, s * 7); if (r.t.winner === 2 || r.t.score[1] > r.t.score[0]) wins++; }
@@ -73,7 +90,8 @@ describe('table tennis', () => {
         const L = TT.LEVELS[k === 0 ? l1 : l2], a = TT.aiTarget(g, k), tg = TT.clampPaddle({ x: a.x, y: a.y + off[k] }, k), p = g.p[k];
         const dx = tg.x - p.x, dy = tg.y - p.y, d = Math.hypot(dx, dy), m = Math.min(d, L.speed * dt * TT.SLOW);
         if (d) g.p[k] = { x: p.x + dx / d * m, y: p.y + dy / d * m };
-        if (TT.canHit(g, k) && TT.atStrikingPoint(g, k)) { TT.strike(g, k, L.pace, rnd() * 0.4, L.err, rnd, true); hits++; }
+        g.pz[k] = TT.clampZ(a.z);
+        if (TT.canHit(g, k) && TT.atStrikingPoint(g, k)) { TT.strike(g, k, L.pace, rnd() * 0.4, L.err, rnd, true, (rnd() - 0.5) * 0.8); hits++; }
       }
       TT.step(g, dt * TT.SLOW);
     }
@@ -102,5 +120,12 @@ describe('table tennis', () => {
   });
   it('the expert beats the beginner', () => {
     expect(match(0, 4, 5).g.winner).toBe(2);
+  });
+  it('balls aimed across the table land on it', () => {
+    const lateral = TT.newGame(1); lateral.phase = 'rally'; lateral.ball = { x: 0.05, y: 0.25 };
+    TT.strike(lateral, 0, 0.5, 0, 0, () => 0.5, true, 0.6);
+    for (let i = 0; i < 400 && lateral.bounces[1] === 0 && lateral.phase === 'rally'; i++) TT.step(lateral, 1 / 240);
+    expect(lateral.bounces[1]).toBe(1);
+    expect(Math.abs(lateral.bz - 0.6)).toBeLessThan(0.05);
   });
 });

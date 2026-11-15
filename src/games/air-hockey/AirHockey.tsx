@@ -7,9 +7,10 @@ import { loadJSON, saveJSON } from '../../core/storage';
 import { activeOf, getData, noteStarted } from '../../core/store';
 import { Seg } from '../../ui/bits';
 import { RivalPick, useRival } from '../../ui/Cast';
-import { aiSpeed, aiTarget, clampMallet, GOAL, H, LEVELS, MR, newTable, PR, step, TARGET, W, type Table, type V2 } from './physics';
+import { aiSpeed, aiStuck, aiTarget, clampMallet, GOAL, H, LEVELS, MR, newTable, PR, step, TARGET, W, type Table, type V2 } from './physics';
 
 const HAND = 7; // how fast a mallet can follow the finger, table units per second
+const RAIL = 0.05; // the wooden rail round the table, drawn on the canvas
 
 export default function AirHockey() {
   const t = useT(), lang = useLang();
@@ -32,8 +33,9 @@ export default function AirHockey() {
     const want: [V2, V2] = [{ ...tb.m[0] }, { ...tb.m[1] }];
     const keys = new Set<string>();
     const fingers = new Map<number, 0 | 1>();
-    const scale = () => cv.clientWidth / W;
-    const toTable = (e: PointerEvent): V2 => { const r = cv.getBoundingClientRect(), s = r.width / W; return { x: (e.clientX - r.left) / s, y: (e.clientY - r.top) / s }; };
+    const scale = () => cv.clientWidth / (W + 2 * RAIL);
+    const toTable = (e: PointerEvent): V2 => { const r = cv.getBoundingClientRect(), s = r.width / (W + 2 * RAIL); return { x: (e.clientX - r.left) / s - RAIL, y: (e.clientY - r.top) / s - RAIL }; };
+    let stuck = 0, backOff = 0;
     const down = (e: PointerEvent) => {
       const p = toTable(e), side: 0 | 1 = cfg.opponent === 'local' && p.y < H / 2 ? 1 : 0;
       fingers.set(e.pointerId, side); cv.setPointerCapture(e.pointerId); want[side] = p;
@@ -58,22 +60,27 @@ export default function AirHockey() {
     };
     const draw = () => {
       const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
-      if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
       const s = scale() * dpr;
-      ctx.setTransform(s, 0, 0, s, 0, 0);
+      ctx.setTransform(s, 0, 0, s, RAIL * s, RAIL * s);
+      // Rails, with each goal a slot cut into the end rail, flush with the playing surface.
+      ctx.fillStyle = '#22313d'; ctx.fillRect(-RAIL, -RAIL, W + 2 * RAIL, H + 2 * RAIL);
+      ctx.fillStyle = '#0b0f13'; ctx.fillRect(W / 2 - GOAL / 2, -RAIL, GOAL, RAIL); ctx.fillRect(W / 2 - GOAL / 2, H, GOAL, RAIL);
       ctx.fillStyle = '#dfeef2'; ctx.fillRect(0, 0, W, H);
       ctx.strokeStyle = '#b5303a'; ctx.lineWidth = 0.008; ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
       ctx.beginPath(); ctx.arc(W / 2, H / 2, 0.14, 0, Math.PI * 2); ctx.stroke();
       ctx.strokeStyle = '#2d5d8a';
       for (const y of [0, H]) { ctx.beginPath(); ctx.arc(W / 2, y, GOAL / 2 + 0.05, 0, Math.PI * 2); ctx.stroke(); }
-      ctx.fillStyle = '#1f2a33'; ctx.fillRect(W / 2 - GOAL / 2, -0.01, GOAL, 0.018); ctx.fillRect(W / 2 - GOAL / 2, H - 0.008, GOAL, 0.018);
       // Tiny air holes.
       ctx.fillStyle = 'rgba(40,70,90,.13)';
       for (let y = 0.05; y < H; y += 0.08) for (let x = 0.05; x < W; x += 0.08) { ctx.beginPath(); ctx.arc(x, y, 0.004, 0, Math.PI * 2); ctx.fill(); }
       const mallet = (p: V2, c: string) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(p.x, p.y, MR, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(p.x, p.y, MR * 0.45, 0, Math.PI * 2); ctx.fill(); };
       mallet(tb.m[0], '#b5303a'); mallet(tb.m[1], '#2d5d8a');
+      // The puck is drawn only over the playing surface: once over the goal line it has gone into the goal.
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
       ctx.fillStyle = '#14181c'; ctx.beginPath(); ctx.arc(tb.puck.x, tb.puck.y, PR, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = '#e0b84a'; ctx.lineWidth = 0.006; ctx.beginPath(); ctx.arc(tb.puck.x, tb.puck.y, PR * 0.6, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
     };
     const frame = (now: number) => {
       const dt = Math.min(0.033, (now - last) / 1000); last = now;
@@ -81,7 +88,11 @@ export default function AirHockey() {
         follow(0, want[0], HAND, dt);
         if (cfg.opponent === 'ai') {
           aiClock -= dt;
-          if (aiClock <= 0) { aiGoal = aiTarget(tb, cfg.level); aiClock = LEVELS[cfg.level].react; }
+          // Leaning on a slow puck for over a second: step back towards the goal, then come again.
+          stuck = aiStuck(tb, stuck, dt);
+          if (stuck > 1.1) { backOff = 0.6; stuck = 0; }
+          if (backOff > 0) { backOff -= dt; aiGoal = { x: W / 2, y: 0.1 }; }
+          else if (aiClock <= 0) { aiGoal = aiTarget(tb, cfg.level); aiClock = LEVELS[cfg.level].react; }
           follow(1, aiGoal, aiSpeed(tb, cfg.level), dt);
         } else {
           if (keys.size) { const k = 1.8 * dt; want[1] = { x: tb.m[1].x + (keys.has('d') ? k * 4 : 0) - (keys.has('a') ? k * 4 : 0), y: tb.m[1].y + (keys.has('s') ? k * 4 : 0) - (keys.has('w') ? k * 4 : 0) }; }

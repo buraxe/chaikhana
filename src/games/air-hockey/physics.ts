@@ -52,9 +52,21 @@ export function step(t: Table, dt: number): Table {
         capSpeed(t.pv);
       }
     }
+    // A mallet can push the puck into a wall but never through it.
+    if (t.puck.x < PR) { t.puck.x = PR; t.pv.x = Math.abs(t.pv.x) * 0.9; }
+    if (t.puck.x > W - PR) { t.puck.x = W - PR; t.pv.x = -Math.abs(t.pv.x) * 0.9; }
+    const mouth = Math.abs(t.puck.x - W / 2) < GOAL / 2;
+    if (!mouth && t.puck.y < PR) { t.puck.y = PR; t.pv.y = Math.abs(t.pv.y) * 0.9; }
+    if (!mouth && t.puck.y > H - PR) { t.puck.y = H - PR; t.pv.y = -Math.abs(t.pv.y) * 0.9; }
   }
   // Air cushion: very little friction.
   const f = Math.exp(-0.35 * dt); t.pv.x *= f; t.pv.y *= f;
+  // The air also lifts a puck that has come to rest against a wall a little way off it, so it is never stuck there.
+  if (Math.hypot(t.pv.x, t.pv.y) < 0.12) {
+    const near = 0.012;
+    if (t.puck.x < PR + near) t.pv.x += 0.5 * dt; else if (t.puck.x > W - PR - near) t.pv.x -= 0.5 * dt;
+    if (t.puck.y < PR + near) t.pv.y += 0.5 * dt; else if (t.puck.y > H - PR - near) t.pv.y -= 0.5 * dt;
+  }
   return t;
 }
 
@@ -96,8 +108,19 @@ export function aiTarget(t: Table, level: number, rnd: () => number = Math.rando
   }
   // Slow or moving away on our side: go behind it and push through towards the target.
   const aimX = L.aim > 0.6 && rnd() < 0.4 ? (p.x < W / 2 ? W * 0.9 : W * 0.1) : W / 2;
-  const tx = aimX - p.x, ty = H + 0.2 - p.y, tl = Math.hypot(tx, ty);
-  const behind: V2 = { x: p.x - (tx / tl) * (MR + PR + 0.02), y: p.y - (ty / tl) * (MR + PR + 0.02) };
+  let tx = aimX - p.x, ty = H + 0.2 - p.y, tl = Math.hypot(tx, ty);
+  const reach = MR + PR + 0.02;
+  let behind: V2 = { x: p.x - (tx / tl) * reach, y: p.y - (ty / tl) * reach };
+  // Against a wall there is no room behind the puck, and pushing it into the wall only pins it.
+  // Come at it along the wall instead: up the table off a side wall, towards the middle off our end.
+  const c = clampMallet(behind, 1);
+  if (Math.hypot(c.x - behind.x, c.y - behind.y) > 0.015) {
+    const nearEnd = p.y < MR + PR + 0.03, nearSide = p.x < MR + PR + 0.03 || p.x > W - MR - PR - 0.03;
+    tx = nearEnd ? Math.sign(W / 2 - p.x) || 1 : 0; ty = nearEnd && !nearSide ? 0.25 : 1;
+    if (nearEnd && nearSide) { tx = Math.sign(W / 2 - p.x); ty = 1; }
+    tl = Math.hypot(tx, ty);
+    behind = { x: p.x - (tx / tl) * reach, y: p.y - (ty / tl) * reach };
+  }
   const m = t.m[1], d = Math.hypot(m.x - behind.x, m.y - behind.y);
   return d < 0.03 ? { x: p.x + (tx / tl) * 0.12, y: p.y + (ty / tl) * 0.12 } : behind;
 }
@@ -106,4 +129,13 @@ export function aiTarget(t: Table, level: number, rnd: () => number = Math.rando
 export function aiSpeed(t: Table, level: number): number {
   const L = LEVELS[level], m = t.m[1], near = Math.hypot(t.puck.x - m.x, t.puck.y - m.y) < 0.22;
   return near && t.puck.y < H / 2 && Math.hypot(t.pv.x, t.pv.y) < 1.2 ? L.shot : L.speed;
+}
+
+/**
+ * Has the computer been leaning on a slow puck for a while? Then it should step back and come
+ * again: `since` is how long the puck has been slow and close to its mallet.
+ */
+export function aiStuck(t: Table, since: number, dt: number): number {
+  const close = Math.hypot(t.puck.x - t.m[1].x, t.puck.y - t.m[1].y) < MR + PR + 0.04;
+  return close && Math.hypot(t.pv.x, t.pv.y) < 0.4 && t.puck.y < H / 2 ? since + dt : 0;
 }
