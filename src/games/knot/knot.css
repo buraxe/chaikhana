@@ -1,0 +1,9 @@
+/* Styles that only games/knot uses; loaded with it. */
+.kn-board { display: block; width: min(100%, 560px); aspect-ratio: 1; margin-inline: auto; user-select: none; }
+.kn-bg { fill: #3a2a20; }
+.kn-cell { fill: #4a372a; }
+.kn-tile.turnable { cursor: pointer; }
+.kn-tile.loose .kn-cell { fill: #5d3f2e; }
+.kn-cord { fill: none; stroke: #c8102e; stroke-width: .2; stroke-linecap: round; }
+.kn-board.done .kn-cord { stroke: #e0283f; }
+.kn-board.done .kn-cell { fill: #4f3a2b; }

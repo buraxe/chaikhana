@@ -1,0 +1,10 @@
+/* Styles that only games/peg uses; loaded with it. */
+.pg-board { display: block; width: min(100%, 480px); height: auto; margin-inline: auto; user-select: none; }
+.pg-wood { fill: #b98a55; }
+.pg-pit { fill: #6e4a26; stroke: #8f6436; stroke-width: .04; }
+.pg-hole { cursor: pointer; }
+.pg-peg { fill: #f3e2bd; stroke: #5b3a1a; stroke-width: .04; }
+.pg-hole.sel .pg-peg { fill: var(--gold, #d6a83a); }
+.pg-hole.target .pg-pit { fill: #e9c97f; }
+.pg-hole.hint .pg-pit { stroke: #b5303a; stroke-width: .1; }
+.pg-hole.centre .pg-pit { stroke: #e9c97f; stroke-dasharray: .1 .08; }

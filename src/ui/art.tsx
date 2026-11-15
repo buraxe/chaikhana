@@ -600,6 +600,27 @@ const ART: Record<string, JSX.Element> = {
       <circle className="k p" cx="40" cy="20" r="2.2" /><path className="r-s w05" d="M14 27c8-12 18-14 24-8M38 21l6 19" style={{ strokeDasharray: '1.5 1.5' }} />
     </>
   ),
+  'peg-solitaire': (
+    <>
+      {([[2, 0], [3, 0], [4, 0], [2, 1], [3, 1], [4, 1], [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [2, 5], [3, 5], [4, 5], [2, 6], [3, 6], [4, 6]] as number[][]).map(([c, r], k) => {
+        const peg = ![[3, 3], [2, 2], [5, 3], [3, 6], [0, 4]].some(([a, b]) => a === c && b === r);
+        return <circle key={k} className={peg ? (c === 3 && r === 2 ? 'r' : 'f') : 'k p w05'} cx={11 + c * 7} cy={11 + r * 7} r={peg ? 2.6 : 2} />;
+      })}
+    </>
+  ),
+  untangle: (
+    <>
+      {([[12, 14, 50, 46], [50, 14, 12, 46], [32, 8, 32, 56], [12, 30, 52, 30], [12, 14, 32, 8], [50, 46, 32, 56]] as number[][]).map(([a, b, c, d], k) => <path key={k} className={k < 2 ? 'r-s w15' : 'k w15'} d={`M${a} ${b}L${c} ${d}`} />)}
+      {([[12, 14], [50, 14], [12, 46], [50, 46], [32, 8], [32, 56], [12, 30], [52, 30]] as number[][]).map(([x, y], k) => <circle key={'d' + k} className="k p w15" cx={x} cy={y} r="3.4" />)}
+    </>
+  ),
+  rope: (
+    <>
+      <path className="r-s" style={{ strokeWidth: 5 }} d="M16 24h20v24H16zM28 16h20v24H28z" strokeLinejoin="round" />
+      <path className="r-s" style={{ strokeWidth: 3 }} d="M32 48v8M29 54l3 4 3-4" />
+      <path className="k w05" d="M30 21h4M34 43h-4" />
+    </>
+  ),
 };
 
 export function GameArt({ id, className }: { id: string; className?: string }) {

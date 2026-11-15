@@ -30,9 +30,9 @@ export function LocalPlay() {
       <Section title={t('Same-device games', '同机对战游戏', 'Aynı cihazda oyunlar')}>
         <div className="cols">{local.filter(g => g.status === 'playable').map(g => <Tile key={g.id} g={g} />)}</div>
       </Section>
-      <Section title={t('Planned multiplayer games', '计划中的多人游戏', 'Planlanan çok oyunculu oyunlar')}>
+      {local.some(g => g.status === 'planned') && <Section title={t('Planned multiplayer games', '计划中的多人游戏', 'Planlanan çok oyunculu oyunlar')}>
         <div className="ads">{local.filter(g => g.status === 'planned').map(g => <Tile key={g.id} g={g} />)}</div>
-      </Section>
+      </Section>}
     </>
   );
 }

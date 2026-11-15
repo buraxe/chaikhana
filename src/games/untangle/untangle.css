@@ -1,0 +1,10 @@
+/* Styles that only games/untangle uses; loaded with it. */
+.un-board { display: block; width: min(100%, 560px); aspect-ratio: 1; margin-inline: auto; touch-action: none; user-select: none; }
+.un-bg { fill: var(--surface); stroke: var(--line); stroke-width: .004; }
+.un-edge { stroke: var(--ink); stroke-width: .007; stroke-linecap: round; }
+.un-edge.bad { stroke: var(--red); }
+.un-edge.hot { stroke-width: .011; }
+.un-dot { fill: var(--gold, #d6a83a); stroke: var(--ink); stroke-width: .006; cursor: grab; }
+.un-dot.drag { fill: var(--red); cursor: grabbing; }
+.un-board.done .un-edge { stroke: #2f6b4f; }
+.un-hit { fill: transparent; cursor: grab; }

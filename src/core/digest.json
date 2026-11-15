@@ -667,6 +667,46 @@
     "h": "19. yüzyılın sonunda güvenli kibrit yaygınlaşınca kibrit bulmacaları da sevildi: her cepteki bir kutu kibrit bir bulmaca takımıydı."
    }
   },
+  "untangle": {
+   "names": {
+    "en": "Untangle",
+    "zh": "解线团",
+    "tr": "Çizgi Çöz",
+    "pinyin": "jiě xiàntuán"
+   },
+   "en": {
+    "s": "Dots joined by threads, all in a tangle: drag the dots until no two threads cross.",
+    "h": "Mathematicians call a network that can be drawn without crossings planar, and in 1948 István Fáry proved that any such network can be drawn with straight lines alone."
+   },
+   "zh": {
+    "s": "圆点之间用线相连，乱成一团：拖动圆点，直到没有任何两条线交叉。",
+    "h": "数学家把能画成没有交叉的网络称为平面图。"
+   },
+   "tr": {
+    "s": "Çizgilerle birbirine bağlı noktalar, hepsi birbirine dolanmış: hiçbir iki çizgi kesişmeyene kadar noktaları sürükle.",
+    "h": "Matematikçiler kesişmeden çizilebilen bir ağa düzlemsel der; 1948’de Fáry István böyle her ağın yalnızca düz çizgilerle çizilebileceğini kanıtladı."
+   }
+  },
+  "rope": {
+   "names": {
+    "en": "Chinese Knot",
+    "zh": "中国结",
+    "tr": "Çin Düğümü",
+    "pinyin": "Zhōngguó jié"
+   },
+   "en": {
+    "s": "Turn the tiles until the red cord closes into loops with no loose ends.",
+    "h": "Knotted cords are older than writing in China: the Book of Changes says that in high antiquity people kept records by tying knots."
+   },
+   "zh": {
+    "s": "旋转格子，让红绳闭合成没有线头的绳圈。",
+    "h": "在中国，打结的绳子比文字还古老：《易经·系辞》说“上古结绳而治”。"
+   },
+   "tr": {
+    "s": "Kırmızı ip açık ucu kalmayan ilmiklere kapanana kadar kareleri döndür.",
+    "h": "Çin’de düğümlü ipler yazıdan eskidir: Değişimler Kitabı, en eski çağlarda insanların kayıtlarını düğüm atarak tuttuğunu söyler."
+   }
+  },
   "futoshiki": {
    "names": {
     "en": "Futoshiki",

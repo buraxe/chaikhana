@@ -41,7 +41,7 @@ export function Library({ title, categories }: { title: string; categories: Cate
       <Masthead small edition={t(`${title} supplement`, `${title}副刊`, `${title} eki`)} />
       <header className="page-head supp-head">
         <h1>{title}</h1>
-        <p className="lede">{t(`${nPlay} playable, ${nPlan} planned. Planned games show the phase they are scheduled for.`, `${nPlay}款可玩，${nPlan}款计划中。计划中的游戏标注了预定推出的阶段。`, `${nPlay} oynanabilir, ${nPlan} planlı. Planlı oyunlar hangi aşamaya alındıklarını gösterir.`)}</p>
+        <p className="lede">{nPlan ? t(`${nPlay} playable, ${nPlan} planned. Planned games show the phase they are scheduled for.`, `${nPlay}款可玩，${nPlan}款计划中。计划中的游戏标注了预定推出的阶段。`, `${nPlay} oynanabilir, ${nPlan} planlı. Planlı oyunlar hangi aşamaya alındıklarını gösterir.`) : t(`All ${nPlay} games here are ready to play.`, `这里的${nPlay}款游戏全部可以玩了。`, `Buradaki ${nPlay} oyunun hepsi oynanmaya hazır.`)}</p>
       </header>
       <form className="filters index-box" onSubmit={e => e.preventDefault()} role="search">
         <p className="index-flag">{t('Index', '索引', 'Fihrist')}</p>
