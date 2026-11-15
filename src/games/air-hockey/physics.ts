@@ -27,7 +27,13 @@ function capSpeed(v: V2) { const s = len(v); if (s > MAX) { v.x *= MAX / s; v.y 
 /** Advance the table by dt seconds (mallet positions already set for this step, with their velocities). */
 export function step(t: Table, dt: number): Table {
   if (t.winner) return t;
-  if (t.pause > 0) { t.pause = Math.max(0, t.pause - dt); return t; }
+  if (t.pause > 0) {
+    // The puck waits before it is in play, but a mallet that reaches it starts play at once: it is
+    // never allowed to slide through the waiting puck and end up on the wrong side of it.
+    const touched = t.m.some(m => Math.hypot(t.puck.x - m.x, t.puck.y - m.y) < PR + MR);
+    if (!touched) { t.pause = Math.max(0, t.pause - dt); return t; }
+    t.pause = 0;
+  }
   const sub = 6, h = dt / sub;
   for (let s = 0; s < sub; s++) {
     t.puck.x += t.pv.x * h; t.puck.y += t.pv.y * h;
@@ -96,19 +102,30 @@ export const LEVELS: (Level & { speed: number; react: number; aim: number; miss:
  */
 export function aiTarget(t: Table, level: number, rnd: () => number = Math.random): V2 {
   const L = LEVELS[level], p = t.puck, v = t.pv;
+  // Before the puck is in play, wait at home; then go for it.
+  if (t.pause > 0) return { x: W / 2, y: 0.14 };
   // Weaker players guard the goal less exactly.
   const home: V2 = { x: W / 2 + (p.x - W / 2) * 0.55 + (rnd() - 0.5) * L.miss, y: 0.12 };
   if (p.y > H / 2 + 0.05) return home;
-  if (v.y < -0.9 && p.y > 0.3) {
-    // Coming at us: meet it on the line between it and our goal.
-    const tt = Math.max(0, (p.y - 0.2) / -v.y);
+  if (v.y < -0.5) {
+    // Coming at us: meet it on the line between it and our goal, never chase it.
+    const lineY = Math.max(0.1, Math.min(0.2, p.y - 0.12));
+    const tt = Math.max(0, (p.y - lineY) / -v.y);
     let x = p.x + v.x * tt;
     while (x < 0 || x > W) x = x < 0 ? -x : 2 * W - x; // bank off the walls
-    return { x: x + (rnd() - 0.5) * 2 * L.miss, y: 0.2 };
+    // A slow puck is easier to stop than a fast one.
+    const speed = Math.hypot(v.x, v.y);
+    return { x: x + (rnd() - 0.5) * 2 * L.miss * Math.min(1, 0.35 + speed / 3.2), y: lineY };
   }
   // Slow or moving away on our side: go behind it and push through towards the target.
-  const aimX = L.aim > 0.6 && rnd() < 0.4 ? (p.x < W / 2 ? W * 0.9 : W * 0.1) : W / 2;
-  let tx = aimX - p.x, ty = H + 0.2 - p.y, tl = Math.hypot(tx, ty);
+  // Aim for the side of the goal the other mallet is not covering, or off the far wall. A shot
+  // straight at a waiting mallet only comes back into our own goal.
+  const open = t.m[0].x < W / 2 ? 1 : -1;
+  const bank = L.aim > 0.4 && rnd() < 0.35;
+  let tx: number, ty: number;
+  if (bank) { const gx = W / 2 + open * GOAL * 0.3, wallX = open > 0 ? W : 0; tx = (2 * wallX - gx) - p.x; ty = H - p.y; }
+  else { tx = W / 2 + open * GOAL * (0.2 + 0.2 * L.aim) - p.x; ty = H + 0.05 - p.y; }
+  let tl = Math.hypot(tx, ty);
   const reach = MR + PR + 0.02;
   let behind: V2 = { x: p.x - (tx / tl) * reach, y: p.y - (ty / tl) * reach };
   // Against a wall there is no room behind the puck, and pushing it into the wall only pins it.

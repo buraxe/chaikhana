@@ -51,9 +51,26 @@ describe('air hockey', () => {
     return { t, goals, out };
   }
   it('goals are scored and the puck never leaves the table sideways', () => {
-    const r = play(2, 2, 3);
-    expect(r.goals).toBeGreaterThan(2);
-    expect(r.out).toBe(0);
+    // Two computers defend each other well, so pit one against a player who just stands guard.
+    // After a goal the puck goes to the guard, who never plays it, so each game counts its first goal.
+    let goals = 0, out = 0;
+    for (let seed = 1; seed <= 6; seed++) {
+      const rnd = seeded(seed * 3), t = AH.newTable(2); t.m[0] = { x: AH.W / 2, y: AH.H - 0.15 };
+      let goal = t.m[1], clock = 0, stuck = 0, back = 0;
+      for (let i = 0; i < 60 * 15; i++) {
+        const dt = 1 / 60; clock -= dt; t.mv[0] = { x: 0, y: 0 };
+        stuck = AH.aiStuck(t, stuck, dt); if (stuck > 1.1) { back = 0.6; stuck = 0; }
+        if (back > 0) { back -= dt; goal = { x: AH.W / 2, y: 0.1 }; } else if (clock <= 0) { clock = AH.LEVELS[2].react; goal = AH.aiTarget(t, 2, rnd); }
+        const m = t.m[1], c = AH.clampMallet(goal, 1), dx = c.x - m.x, dy = c.y - m.y, d = Math.hypot(dx, dy), st = Math.min(d, AH.aiSpeed(t, 2) * dt);
+        const n = d ? { x: m.x + dx / d * st, y: m.y + dy / d * st } : m; t.mv[1] = { x: (n.x - m.x) / dt, y: (n.y - m.y) / dt }; t.m[1] = n;
+        AH.step(t, dt);
+        if (t.puck.x < 0 || t.puck.x > AH.W) out++;
+        if (t.score[0] + t.score[1] > 0) { goals++; break; }
+      }
+    }
+    expect(goals).toBeGreaterThanOrEqual(3);
+    expect(out).toBe(0);
+    void play;
   });
   it('the computer gets a resting puck out of its corners and off its end wall', () => {
     for (const lv of [0, 2, 4]) for (const spot of [{ x: AH.PR, y: AH.PR }, { x: AH.W - AH.PR, y: AH.PR }, { x: AH.W / 2 + 0.25, y: AH.PR }, { x: AH.PR, y: 0.4 }]) {
@@ -72,10 +89,42 @@ describe('air hockey', () => {
       expect(freed, `level ${lv} at ${spot.x.toFixed(2)},${spot.y.toFixed(2)}`).toBe(true);
     }
   });
-  it('the expert beats the beginner', () => {
-    let wins = 0;
-    for (let s = 1; s <= 3; s++) { const r = play(0, 4, s * 7); if (r.t.winner === 2 || r.t.score[1] > r.t.score[0]) wins++; }
-    expect(wins).toBeGreaterThanOrEqual(2);
+  it('at kick-off the computer never puts the puck in its own goal', () => {
+    for (let lv = 0; lv < 5; lv++) for (let seed = 1; seed <= 15; seed++) {
+      const rnd = seeded(seed * 11 + lv), t = AH.newTable(2); t.m[0] = { x: -5, y: AH.H - 0.1 };
+      let goal = t.m[1], clock = 0;
+      for (let i = 0; i < 60 * 4; i++) {
+        const dt = 1 / 60; clock -= dt; if (clock <= 0) { clock = AH.LEVELS[lv].react; goal = AH.aiTarget(t, lv, rnd); }
+        const m = t.m[1], c = AH.clampMallet(goal, 1), dx = c.x - m.x, dy = c.y - m.y, d = Math.hypot(dx, dy), st = Math.min(d, AH.aiSpeed(t, lv) * dt);
+        const n = d ? { x: m.x + dx / d * st, y: m.y + dy / d * st } : m; t.mv[1] = { x: (n.x - m.x) / dt, y: (n.y - m.y) / dt }; t.m[1] = n;
+        AH.step(t, dt);
+        expect(t.score[0], `level ${lv} seed ${seed}`).toBe(0);
+        if (t.puck.y > AH.H / 2) break;
+      }
+    }
+  });
+  it('good shots go in far more often against the beginner than the expert', () => {
+    const rate = (lv: number) => {
+      const rnd = seeded(9 + lv); let goals = 0;
+      for (let n = 0; n < 200; n++) {
+        const t = AH.newTable(1); t.pause = 0;
+        t.puck = { x: 0.15 + rnd() * 0.7, y: AH.H * 0.55 + rnd() * 0.3 };
+        const bank = rnd() < 0.4, gx = AH.W / 2 + (rnd() - 0.5) * AH.GOAL * 0.9, tx = bank ? (gx < AH.W / 2 ? -gx : 2 * AH.W - gx) : gx;
+        const dx = tx - t.puck.x, dy = -t.puck.y, d = Math.hypot(dx, dy), sp = 2.6 + rnd() * 0.6;
+        t.pv = { x: dx / d * sp, y: dy / d * sp }; t.m[0] = { x: -5, y: AH.H - 0.1 };
+        t.m[1] = { x: AH.W / 2 + (rnd() - 0.5) * 0.3, y: 0.12 + rnd() * 0.25 };
+        let clock = rnd() * AH.LEVELS[lv].react, target = t.m[1];
+        for (let i = 0; i < 180; i++) {
+          clock -= 1 / 60; if (clock <= 0) { clock = AH.LEVELS[lv].react; target = AH.aiTarget(t, lv, rnd); }
+          const m = t.m[1], c = AH.clampMallet(target, 1), ex = c.x - m.x, ey = c.y - m.y, dd = Math.hypot(ex, ey), st = Math.min(dd, AH.aiSpeed(t, lv) / 60);
+          const nm = dd ? { x: m.x + ex / dd * st, y: m.y + ey / dd * st } : m; t.mv[1] = { x: (nm.x - m.x) * 60, y: (nm.y - m.y) * 60 }; t.m[1] = nm;
+          const b0 = t.score.slice(); AH.step(t, 1 / 60);
+          if (t.score[0] > b0[0]) { goals++; break; } if (t.score[1] > b0[1]) break;
+        }
+      }
+      return goals / 200;
+    };
+    expect(rate(0)).toBeGreaterThan(rate(4) + 0.15);
   });
 });
 

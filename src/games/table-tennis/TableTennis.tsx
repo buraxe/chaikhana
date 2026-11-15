@@ -78,6 +78,8 @@ export default function TableTennis() {
       g.pv[k] = { x: (nx - p.x) / dt, y: (ny - p.y) / dt }; g.p[k] = { x: nx, y: ny };
     };
     let lastPz = 0, pvz = 0;
+    // The last few places the ball has been, drawn as a fading trail so it is easy to follow.
+    const trail: { x: number; y: number; z: number }[] = [];
     const humanStrike = (k: 0 | 1) => {
       const v = g.pv[k], speed = Math.hypot(v.x, v.y, fp && k === 0 ? pvz : 0);
       // Side view: the aim across the table is free. First person: where the paddle moves sideways, the ball goes.
@@ -117,7 +119,12 @@ export default function TableTennis() {
         quad([P(T / 2, 0, -ext), P(T / 2, NET, -ext), P(T / 2, NET, ext), P(T / 2, 0, ext)], 'rgba(30,30,30,.35)');
         line(P(T / 2, NET, -ext), P(T / 2, NET, ext), white, 2);
       };
-      const ball = () => { const q = P(g.ball.x, g.ball.y, g.bz); ctx.fillStyle = '#f7f3e9'; ctx.strokeStyle = '#d07a1f'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(q.u, q.v, Math.max(2.5, BR * 1.4 * q.s), 0, Math.PI * 2); ctx.fill(); ctx.stroke(); };
+      const ball = () => {
+        trail.forEach((b, i) => { const q = P(b.x, b.y, b.z); ctx.fillStyle = `rgba(255,140,26,${(0.05 + 0.3 * i / trail.length).toFixed(2)})`; ctx.beginPath(); ctx.arc(q.u, q.v, Math.max(3, BR * 1.8 * q.s), 0, Math.PI * 2); ctx.fill(); });
+        const q = P(g.ball.x, g.ball.y, g.bz), r = Math.min(15, Math.max(5, BR * 2.2 * q.s));
+        ctx.fillStyle = '#ff8c1a'; ctx.strokeStyle = '#6b3000'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(q.u, q.v, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.beginPath(); ctx.arc(q.u - r * 0.3, q.v - r * 0.3, r * 0.3, 0, Math.PI * 2); ctx.fill();
+      };
       // Far things first.
       const items: [number, () => void][] = [[g.p[1].x, () => paddle(g.p[1].x, g.p[1].y, g.pz[1], '#222', 1)], [T / 2, net], [g.ball.x, ball]];
       items.sort((a, b) => b[0] - a[0]).forEach(([, fn]) => fn());
@@ -140,9 +147,10 @@ export default function TableTennis() {
       ctx.fillStyle = 'rgba(30,30,30,.55)'; ctx.fillRect(T / 2 - 0.006, 0, 0.012, NET);
       ctx.fillStyle = '#f4f1e8'; ctx.fillRect(T / 2 - 0.012, NET - 0.012, 0.024, 0.012);
       // Ball shadow on the table, then ball.
-      if (g.ball.x > 0 && g.ball.x < T && g.ball.y > 0) { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(g.ball.x, 0.002, BR * 1.3, BR * 0.35, 0, 0, Math.PI * 2); ctx.fill(); }
-      ctx.fillStyle = '#f7f3e9'; ctx.strokeStyle = '#d07a1f'; ctx.lineWidth = 0.008;
-      ctx.beginPath(); ctx.arc(g.ball.x, g.ball.y, BR * 1.35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      if (g.ball.x > 0 && g.ball.x < T && g.ball.y > 0) { ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(g.ball.x, 0.004, BR * 2, BR * 0.5, 0, 0, Math.PI * 2); ctx.fill(); }
+      trail.forEach((b, i) => { ctx.fillStyle = `rgba(255,140,26,${(0.05 + 0.3 * i / trail.length).toFixed(2)})`; ctx.beginPath(); ctx.arc(b.x, b.y, BR * 1.6, 0, Math.PI * 2); ctx.fill(); });
+      ctx.fillStyle = '#ff8c1a'; ctx.strokeStyle = '#6b3000'; ctx.lineWidth = 0.012;
+      ctx.beginPath(); ctx.arc(g.ball.x, g.ball.y, BR * 2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       // Paddles: a round blade on a short handle.
       const paddle = (p: V2, k: 0 | 1, c: string) => {
         const dir = k === 0 ? -1 : 1;
@@ -182,6 +190,7 @@ export default function TableTennis() {
           sync();
         } else if (phase !== g.phase) sync();
       }
+      if (g.phase === 'rally' || g.phase === 'dead') { trail.push({ x: g.ball.x, y: g.ball.y, z: g.bz }); if (trail.length > 9) trail.shift(); } else trail.length = 0;
       draw();
       raf = requestAnimationFrame(frame);
     };
